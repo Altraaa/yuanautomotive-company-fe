@@ -1,14 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Plus } from "lucide-react";
+import { Check, ShoppingCart } from "lucide-react";
 import type { ProductCardData } from "@/types/ui/product";
+import { CtaButton } from "@/components/common/cta-button";
 import { useCart } from "@/features/preorder/store/cart-context";
 import { cn } from "@/lib/utils";
 
 /**
- * QuickAddButton — compact "add to cart" affordance for a ProductCard.
+ * QuickAddButton — full-width red "add to cart" CTA for a ProductCard footer.
  * Passed into ProductCard's `action` slot so the card stays presentational.
+ * Icon + label make the affordance explicit; a transient check confirms the add.
  */
 export function QuickAddButton({ product }: { product: ProductCardData }) {
   const { addItem } = useCart();
@@ -17,22 +19,29 @@ export function QuickAddButton({ product }: { product: ProductCardData }) {
   function onAdd() {
     addItem(product, 1);
     setAdded(true);
-    window.setTimeout(() => setAdded(false), 1200);
+    window.setTimeout(() => setAdded(false), 1400);
   }
 
   return (
-    <button
+    <CtaButton
       type="button"
       onClick={onAdd}
+      variant={added ? "whatsapp" : "primary"}
+      size="sm"
       aria-label={`Tambah ${product.name} ke keranjang`}
-      className={cn(
-        "grid h-9 w-9 place-items-center border transition-colors",
-        added
-          ? "border-whatsapp bg-whatsapp text-fg"
-          : "border-gold/50 bg-surface-black/70 text-gold backdrop-blur hover:border-gold hover:bg-gold hover:text-bg"
-      )}
+      className={cn("w-full", added && "pointer-events-none")}
     >
-      {added ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-    </button>
+      {added ? (
+        <>
+          <Check className="h-4 w-4" />
+          Ditambahkan
+        </>
+      ) : (
+        <>
+          <ShoppingCart className="h-4 w-4" />
+          Tambah ke Keranjang
+        </>
+      )}
+    </CtaButton>
   );
 }

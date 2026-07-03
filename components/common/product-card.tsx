@@ -33,7 +33,6 @@ export function ProductCard({ product, action }: ProductCardProps) {
             <Badge intent="red">{product.badge}</Badge>
           </span>
         ) : null}
-        {action ? <div className="absolute right-2.5 top-2.5 z-20">{action}</div> : null}
       </div>
 
       <div className="flex flex-1 flex-col gap-1.5 p-4">
@@ -51,6 +50,7 @@ export function ProductCard({ product, action }: ProductCardProps) {
         <span className="mt-auto pt-1 font-display text-[15px] font-bold text-gold">
           {formatIDR(product.price)}
         </span>
+        {action ? <div className="relative z-20 pt-3">{action}</div> : null}
       </div>
     </div>
   );
