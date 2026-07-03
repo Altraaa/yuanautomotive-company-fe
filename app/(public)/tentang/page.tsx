@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Target, Compass } from "lucide-react";
 import { PageHero } from "@/components/common/page-hero";
 import { StatsStrip } from "@/components/common/stats-strip";
 import { Eyebrow } from "@/components/common/eyebrow";
@@ -18,6 +19,16 @@ const stats = [
   { value: "100%", label: "Spesifikasi Tercantum" },
   { value: "Grosir", label: "Harga Dealer" },
   { value: "< 15'", label: "Respon WhatsApp" },
+];
+
+const vision =
+  "Menjadi pusat sparepart & aksesoris mobil listrik paling tepercaya di Indonesia — mempercepat adopsi kendaraan listrik melalui komponen berkualitas, spesifikasi transparan, dan layanan yang mengutamakan pelanggan.";
+
+const missions = [
+  "Menyediakan katalog sparepart & aksesoris EV yang terkurasi, terverifikasi kompatibilitasnya, dan lengkap spesifikasi teknis.",
+  "Memberikan harga grosir yang adil bagi komunitas, bengkel, dealer, dan reseller dengan pasokan stok yang berkelanjutan.",
+  "Mengedepankan konsultasi teknis yang jujur agar setiap pelanggan mendapat komponen yang benar-benar sesuai kebutuhannya.",
+  "Membangun dukungan purna jual yang andal — garansi, pemasangan, dan penggantian — demi performa kendaraan yang optimal.",
 ];
 
 const steps = [
@@ -56,6 +67,50 @@ export default function CompanyPage() {
       <section className="bg-bg">
         <div className="mx-auto max-w-6xl px-4 py-12 md:px-8">
           <StatsStrip stats={stats} />
+        </div>
+      </section>
+
+      <section className="bg-bg">
+        <div className="mx-auto max-w-6xl px-4 pb-4 md:px-8 md:pb-8">
+          <div className="flex flex-col gap-3">
+            <Eyebrow tone="gold">Arah Kami</Eyebrow>
+            <h2 className="font-display text-2xl font-bold italic uppercase text-fg md:text-4xl">
+              Visi &amp; <span className="text-gold">Misi</span>
+            </h2>
+          </div>
+
+          <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_1.15fr] lg:gap-6">
+            {/* Visi */}
+            <div className="flex flex-col gap-4 border border-border border-t-[3px] border-t-gold bg-surface p-6 md:p-8">
+              <div className="flex items-center gap-3">
+                <span className="grid h-11 w-11 place-items-center bg-gold/10 text-gold">
+                  <Compass className="h-5 w-5" />
+                </span>
+                <h3 className="font-display text-xl font-bold italic uppercase text-fg">Visi</h3>
+              </div>
+              <p className="font-sans text-base leading-relaxed text-fg-muted">{vision}</p>
+            </div>
+
+            {/* Misi */}
+            <div className="flex flex-col gap-4 border border-border border-t-[3px] border-t-red bg-surface p-6 md:p-8">
+              <div className="flex items-center gap-3">
+                <span className="grid h-11 w-11 place-items-center bg-red/10 text-red-soft">
+                  <Target className="h-5 w-5" />
+                </span>
+                <h3 className="font-display text-xl font-bold italic uppercase text-fg">Misi</h3>
+              </div>
+              <ul className="flex flex-col gap-4">
+                {missions.map((item, i) => (
+                  <li key={item} className="flex gap-3.5">
+                    <span className="font-display text-sm font-bold italic text-gold">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <p className="font-sans text-sm leading-relaxed text-fg-muted">{item}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
