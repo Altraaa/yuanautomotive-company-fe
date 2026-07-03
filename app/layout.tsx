@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Chakra_Petch, Barlow, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
@@ -48,6 +48,10 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   alternates: { canonical: site.url },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#141416",
 };
 
 export default function RootLayout({
