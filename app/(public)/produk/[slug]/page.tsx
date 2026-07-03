@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/common/section-heading";
 import { ProductCard } from "@/components/common/product-card";
 import { ProductGallery } from "@/features/products/components/product-gallery";
 import { ProductTabs } from "@/features/products/components/product-tabs";
+import { AddToCartButton } from "@/features/preorder/components/add-to-cart-button";
 import {
   getAllProductSlugs,
   getProductBySlug,
@@ -124,18 +125,26 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
               {product.description}
             </p>
 
-            <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-              <CtaButton href={waLink(orderMessage)} target="_blank" rel="noopener" size="lg">
-                Pesan Sekarang
-              </CtaButton>
+            <div className="mt-2 flex flex-col gap-3">
+              <AddToCartButton
+                product={{
+                  slug: product.slug,
+                  name: product.name,
+                  category: product.category,
+                  price: product.price,
+                  imageUrl: product.imageUrl,
+                  badge: product.badge,
+                }}
+              />
               <CtaButton
-                href={waLink()}
+                href={waLink(orderMessage)}
                 target="_blank"
                 rel="noopener"
                 variant="whatsapp"
                 size="lg"
+                className="w-full sm:w-fit"
               >
-                Chat Sales
+                Pesan via WhatsApp
               </CtaButton>
             </div>
 
