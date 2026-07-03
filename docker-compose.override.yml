@@ -1,0 +1,7 @@
+services:
+  web:
+    # Di VPS ini port 3000 (API) dan 3001 (Electronics) sudah dipakai,
+    # jadi web Automotive di-map ke 3002.
+    # !override mengganti list port dasar (default-nya list digabung oleh compose).
+    ports: !override
+      - "127.0.0.1:3002:3000"

@@ -1,0 +1,25 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # NEXT_PUBLIC_* dibutuhkan saat build (di-inline ke bundle client).
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    image: yuan-automotive-web:latest
+    container_name: yuan-automotive-web
+    restart: unless-stopped
+    # Map ke port lokal (default untuk dev/lokal). Di VPS di-override ke 3002
+    # lewat docker-compose.override.yml; reverse proxy (Nginx) yang handle 80/443.
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      NODE_ENV: production
+      # Dipakai saat runtime oleh app/api/revalidate/route.ts.
+      REVALIDATE_SECRET: ${REVALIDATE_SECRET:-}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s

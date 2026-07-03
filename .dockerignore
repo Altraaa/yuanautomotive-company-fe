@@ -1,0 +1,38 @@
+# Dependencies & build output
+node_modules
+.next
+out
+build
+dist
+
+# Env & secrets
+.env*
+!.env.local.example
+!.env.production.example
+
+# Version control & meta
+.git
+.gitignore
+.gitattributes
+
+# Editor / OS
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Logs & caches
+*.log
+npm-debug.log*
+.eslintcache
+tsconfig.tsbuildinfo
+
+# Project tooling / artefak agen (tidak perlu di image)
+docs
+memory
+README.md
