@@ -23,11 +23,11 @@ export function Logo({ className, variant = "default" }: LogoProps) {
           {site.name.toUpperCase()}
         </span>
       ) : (
-        <span className="flex flex-col leading-none">
-          <span className="font-display text-[15px] font-bold italic tracking-wide text-fg">
+        <span className="flex flex-col leading-tight">
+          <span className="font-display text-[15px] font-bold italic tracking-wide text-red">
             {site.shortName.toUpperCase()}
           </span>
-          <span className="font-sans text-[9.5px] font-semibold tracking-[0.34em] text-gold">
+          <span className="font-display text-[15px] font-bold italic tracking-wide text-red">
             {site.tagline}
           </span>
         </span>
