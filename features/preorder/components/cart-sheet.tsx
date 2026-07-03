@@ -7,7 +7,7 @@ import { Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
 import { PreorderForm } from "@/features/preorder/components/preorder-form";
 import { useCart } from "@/features/preorder/store/cart-context";
-import { formatIDR } from "@/lib/utils";
+import { cn, formatIDR } from "@/lib/utils";
 
 type Stage = "cart" | "checkout";
 
@@ -18,19 +18,35 @@ type Stage = "cart" | "checkout";
 export function CartSheet() {
   const { items, isOpen, close, removeItem, setQty, subtotal, count } = useCart();
   const [stage, setStage] = useState<Stage>("cart");
+  const [mounted, setMounted] = useState(false);
+  const [closing, setClosing] = useState(false);
 
-  // Reset to the cart list whenever the drawer closes; lock body scroll while open.
+  // Keep the drawer mounted through its slide-out animation, then unmount and
+  // reset to the cart list stage.
   useEffect(() => {
-    if (!isOpen) {
-      setStage("cart");
+    if (isOpen) {
+      setMounted(true);
+      setClosing(false);
       return;
     }
+    if (!mounted) return;
+    setClosing(true);
+    const t = window.setTimeout(() => {
+      setMounted(false);
+      setStage("cart");
+    }, 260);
+    return () => window.clearTimeout(t);
+  }, [isOpen, mounted]);
+
+  // Lock body scroll while the drawer is on screen.
+  useEffect(() => {
+    if (!mounted) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
     };
-  }, [isOpen]);
+  }, [mounted]);
 
   // Close via Escape.
   useEffect(() => {
@@ -42,7 +58,7 @@ export function CartSheet() {
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen, close]);
 
-  if (!isOpen) return null;
+  if (!mounted) return null;
 
   const empty = items.length === 0;
 
@@ -52,10 +68,18 @@ export function CartSheet() {
         type="button"
         aria-label="Tutup keranjang"
         onClick={close}
-        className="absolute inset-0 bg-surface-black/70"
+        className={cn(
+          "absolute inset-0 bg-surface-black/70",
+          closing ? "animate-fade-out" : "animate-fade-in"
+        )}
       />
 
-      <div className="absolute inset-y-0 right-0 flex w-full max-w-md flex-col border-l-2 border-l-gold bg-bg shadow-2xl shadow-black/50">
+      <div
+        className={cn(
+          "absolute inset-y-0 right-0 flex w-full max-w-md flex-col border-l-2 border-l-gold bg-bg shadow-2xl shadow-black/50",
+          closing ? "animate-slide-out-right" : "animate-slide-in-right"
+        )}
+      >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
           <div className="flex items-center gap-2.5">
@@ -85,7 +109,7 @@ export function CartSheet() {
           <>
             <ul className="flex-1 divide-y divide-border overflow-y-auto">
               {items.map((item) => (
-                <li key={item.slug} className="flex gap-3 p-4">
+                <li key={item.slug} className="flex animate-fade-up gap-3 p-4">
                   <Link
                     href={`/produk/${item.slug}`}
                     onClick={close}

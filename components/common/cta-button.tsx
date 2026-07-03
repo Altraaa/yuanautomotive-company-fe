@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
  * The outer element is skewed -8deg; children are un-skewed +8deg so text stays upright.
  */
 export const ctaButtonVariants = cva(
-  "inline-grid place-items-center whitespace-nowrap -skew-x-[8deg] font-display font-bold uppercase tracking-wide transition-colors disabled:pointer-events-none disabled:opacity-50",
+  "inline-grid place-items-center whitespace-nowrap -skew-x-[8deg] font-display font-bold uppercase tracking-wide transition-[transform,background-color,border-color,color] duration-200 ease-sport hover:-translate-y-0.5 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {

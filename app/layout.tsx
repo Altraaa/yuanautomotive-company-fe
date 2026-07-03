@@ -63,7 +63,7 @@ export default function RootLayout({
     <html
       lang="id"
       suppressHydrationWarning
-      className={`${chakra.variable} ${barlow.variable} ${barlowCondensed.variable}`}
+      className={`${chakra.variable} ${barlow.variable} ${barlowCondensed.variable} scroll-smooth`}
     >
       <body className="bg-bg font-sans text-fg antialiased">
         <Providers>{children}</Providers>

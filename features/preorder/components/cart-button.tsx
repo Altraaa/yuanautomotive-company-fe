@@ -17,7 +17,7 @@ export function CartButton() {
     >
       <ShoppingCart className="h-5 w-5" />
       {showBadge ? (
-        <span className="absolute -right-0.5 -top-0.5 grid h-[18px] min-w-[18px] place-items-center bg-red px-1 font-display text-[10px] font-bold leading-none text-fg">
+        <span className="absolute -right-0.5 -top-0.5 grid h-[18px] min-w-[18px] animate-scale-in place-items-center bg-red px-1 font-display text-[10px] font-bold leading-none text-fg">
           {count > 99 ? "99+" : count}
         </span>
       ) : null}

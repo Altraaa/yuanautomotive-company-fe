@@ -25,7 +25,7 @@ export function MobileNav() {
       </button>
 
       {open ? (
-        <div className="fixed inset-x-0 top-[73px] z-40 border-t border-border bg-bg px-4 py-6 shadow-xl">
+        <div className="fixed inset-x-0 top-[73px] z-40 animate-fade-up border-t border-border bg-bg px-4 py-6 shadow-xl">
           <nav className="flex flex-col">
             {navLinks.map((link) => {
               const active =
