@@ -205,20 +205,29 @@ export function getRelatedProducts(slug: string, category: ProductCategory): Pro
     .slice(0, 4);
 }
 
-export type PriceRangeKey = "under-1" | "1-5" | "5-15" | "over-15";
+/** Cheapest → most expensive across the whole catalog — the slider's rail bounds. */
+export const priceBounds: { min: number; max: number } = (() => {
+  const prices = products.map((p) => p.price);
+  return { min: Math.min(...prices), max: Math.max(...prices) };
+})();
 
-export const priceRanges: { key: PriceRangeKey; label: string; min: number; max: number }[] = [
-  { key: "under-1", label: "< Rp 1 jt", min: 0, max: 1_000_000 },
-  { key: "1-5", label: "Rp 1 – 5 jt", min: 1_000_000, max: 5_000_000 },
-  { key: "5-15", label: "Rp 5 – 15 jt", min: 5_000_000, max: 15_000_000 },
-  { key: "over-15", label: "> Rp 15 jt", min: 15_000_000, max: Number.POSITIVE_INFINITY },
+/** Step size for the price slider (Rp). */
+export const PRICE_STEP = 50_000;
+
+/** Quick-click presets — clamped to the live catalog bounds. */
+export const pricePresets: { label: string; min: number; max: number }[] = [
+  { label: "< Rp 1 jt", min: priceBounds.min, max: 1_000_000 },
+  { label: "Rp 1 – 5 jt", min: 1_000_000, max: 5_000_000 },
+  { label: "Rp 5 – 15 jt", min: 5_000_000, max: 15_000_000 },
+  { label: "> Rp 15 jt", min: 15_000_000, max: priceBounds.max },
 ];
 
 export type ProductSort = "terbaru" | "termurah" | "termahal";
 
 export type ProductFilters = {
   category?: string;
-  price?: string;
+  priceMin?: number;
+  priceMax?: number;
   sort?: string;
   page?: number;
 };
@@ -230,11 +239,10 @@ function matchesCategory(p: ProductCardData, category?: string): boolean {
   return p.category.toLowerCase() === category.toLowerCase();
 }
 
-function matchesPrice(p: ProductCardData, priceKey?: string): boolean {
-  if (!priceKey) return true;
-  const range = priceRanges.find((r) => r.key === priceKey);
-  if (!range) return true;
-  return p.price >= range.min && p.price < range.max;
+function matchesPrice(p: ProductCardData, min?: number, max?: number): boolean {
+  if (min != null && p.price < min) return false;
+  if (max != null && p.price > max) return false;
+  return true;
 }
 
 /** Filter + sort + paginate the mock catalog (mirrors what the list service will do). */
@@ -245,7 +253,9 @@ export function queryProducts(filters: ProductFilters): {
   page: number;
 } {
   const all = getAllProductCards().filter(
-    (p) => matchesCategory(p, filters.category) && matchesPrice(p, filters.price)
+    (p) =>
+      matchesCategory(p, filters.category) &&
+      matchesPrice(p, filters.priceMin, filters.priceMax)
   );
 
   const sorted = [...all];

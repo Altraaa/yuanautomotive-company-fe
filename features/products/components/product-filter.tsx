@@ -1,10 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SlidersHorizontal, X } from "lucide-react";
-import { productCategories, priceRanges } from "@/features/products/data";
+import {
+  productCategories,
+  pricePresets,
+  priceBounds,
+  PRICE_STEP,
+} from "@/features/products/data";
 import { Eyebrow } from "@/components/common/eyebrow";
+import { PriceRangeSlider } from "@/components/common/price-range-slider";
 import { cn } from "@/lib/utils";
 
 type Row = { key: string | undefined; label: string };
@@ -14,10 +20,9 @@ const categoryRows: Row[] = [
   ...productCategories.map((c) => ({ key: c.toLowerCase(), label: c })),
 ];
 
-const priceRows: Row[] = [
-  { key: undefined, label: "Semua Harga" },
-  ...priceRanges.map((r) => ({ key: r.key, label: r.label })),
-];
+function clampToBounds(n: number): number {
+  return Math.max(priceBounds.min, Math.min(priceBounds.max, n));
+}
 
 /**
  * ProductFilter — category + price filter driven by URL search params (so the
@@ -31,7 +36,21 @@ export function ProductFilter() {
   const [open, setOpen] = useState(false);
 
   const activeCategory = searchParams.get("kategori") ?? undefined;
-  const activePrice = searchParams.get("harga") ?? undefined;
+  const urlMin = searchParams.get("hargaMin");
+  const urlMax = searchParams.get("hargaMax");
+
+  const activeMin = urlMin ? clampToBounds(Number(urlMin)) : priceBounds.min;
+  const activeMax = urlMax ? clampToBounds(Number(urlMax)) : priceBounds.max;
+  const priceActive = Boolean(urlMin || urlMax);
+
+  // Local slider value; commit to the URL only when the user settles.
+  const [range, setRange] = useState<[number, number]>([activeMin, activeMax]);
+
+  // Re-sync when the URL changes externally (reset, back/forward).
+  useEffect(() => {
+    setRange([activeMin, activeMax]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urlMin, urlMax]);
 
   function setParam(param: string, value: string | undefined) {
     const params = new URLSearchParams(searchParams.toString());
@@ -41,7 +60,23 @@ export function ProductFilter() {
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   }
 
-  const activeCount = (activeCategory ? 1 : 0) + (activePrice ? 1 : 0);
+  function commitPrice([lo, hi]: [number, number]) {
+    const params = new URLSearchParams(searchParams.toString());
+    if (lo > priceBounds.min) params.set("hargaMin", String(lo));
+    else params.delete("hargaMin");
+    if (hi < priceBounds.max) params.set("hargaMax", String(hi));
+    else params.delete("hargaMax");
+    params.delete("page");
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  }
+
+  function applyPreset(min: number, max: number) {
+    const pair: [number, number] = [clampToBounds(min), clampToBounds(max)];
+    setRange(pair);
+    commitPrice(pair);
+  }
+
+  const activeCount = (activeCategory ? 1 : 0) + (priceActive ? 1 : 0);
 
   const panel = (
     <div className="flex flex-col gap-8">
@@ -51,12 +86,40 @@ export function ProductFilter() {
         active={activeCategory}
         onSelect={(key) => setParam("kategori", key)}
       />
-      <FilterGroup
-        title="Rentang Harga"
-        rows={priceRows}
-        active={activePrice}
-        onSelect={(key) => setParam("harga", key)}
-      />
+
+      <div className="flex flex-col gap-4">
+        <Eyebrow>Rentang Harga</Eyebrow>
+        <PriceRangeSlider
+          min={priceBounds.min}
+          max={priceBounds.max}
+          step={PRICE_STEP}
+          value={range}
+          onChange={setRange}
+          onCommit={commitPrice}
+        />
+        <div className="flex flex-wrap gap-2">
+          {pricePresets.map((preset) => {
+            const selected =
+              range[0] === clampToBounds(preset.min) && range[1] === clampToBounds(preset.max);
+            return (
+              <button
+                key={preset.label}
+                type="button"
+                onClick={() => applyPreset(preset.min, preset.max)}
+                className={cn(
+                  "-skew-x-[8deg] border px-2.5 py-1.5 font-sans text-xs transition-colors",
+                  selected
+                    ? "border-gold bg-gold/10 text-gold"
+                    : "border-border bg-surface text-fg-muted hover:border-gold/60 hover:text-fg"
+                )}
+              >
+                <span className="inline-block skew-x-[8deg]">{preset.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {activeCount > 0 ? (
         <button
           type="button"

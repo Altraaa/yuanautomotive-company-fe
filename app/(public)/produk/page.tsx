@@ -4,6 +4,7 @@ import { ProductCard } from "@/components/common/product-card";
 import { Pagination } from "@/components/common/pagination";
 import { ProductFilter } from "@/features/products/components/product-filter";
 import { ProductSort } from "@/features/products/components/product-sort";
+import { QuickAddButton } from "@/features/preorder/components/quick-add-button";
 import { queryProducts } from "@/features/products/data";
 import { site } from "@/lib/site";
 
@@ -19,7 +20,8 @@ export const revalidate = 3600;
 
 type SearchParams = Promise<{
   kategori?: string;
-  harga?: string;
+  hargaMin?: string;
+  hargaMax?: string;
   urut?: string;
   page?: string;
 }>;
@@ -32,7 +34,8 @@ export default async function ProductListPage({
   const sp = await searchParams;
   const { items, total, totalPages, page } = queryProducts({
     category: sp.kategori,
-    price: sp.harga,
+    priceMin: sp.hargaMin ? Number(sp.hargaMin) : undefined,
+    priceMax: sp.hargaMax ? Number(sp.hargaMax) : undefined,
     sort: sp.urut,
     page: sp.page ? Number(sp.page) : 1,
   });
@@ -64,7 +67,11 @@ export default async function ProductListPage({
             {items.length > 0 ? (
               <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-5">
                 {items.map((product) => (
-                  <ProductCard key={product.slug} product={product} />
+                  <ProductCard
+                    key={product.slug}
+                    product={product}
+                    action={<QuickAddButton product={product} />}
+                  />
                 ))}
               </div>
             ) : (
@@ -78,7 +85,12 @@ export default async function ProductListPage({
             <div className="pt-2">
               <Pagination
                 basePath="/produk"
-                params={{ kategori: sp.kategori, harga: sp.harga, urut: sp.urut }}
+                params={{
+                  kategori: sp.kategori,
+                  hargaMin: sp.hargaMin,
+                  hargaMax: sp.hargaMax,
+                  urut: sp.urut,
+                }}
                 page={page}
                 totalPages={totalPages}
               />
