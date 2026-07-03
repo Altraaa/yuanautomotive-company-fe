@@ -1,0 +1,51 @@
+import type { Metadata } from "next";
+import { HeroSection } from "@/features/home/components/hero-section";
+import { CategorySection } from "@/features/home/components/category-section";
+import { FeaturedProductsSection } from "@/features/home/components/featured-products-section";
+import { WhyUsSection } from "@/features/home/components/why-us-section";
+import { AboutBlogSection } from "@/features/home/components/about-blog-section";
+import { SocialProofSection } from "@/features/home/components/social-proof-section";
+import { site } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: `${site.name} — Sparepart & Aksesoris Mobil Listrik`,
+  description: site.description,
+  alternates: { canonical: site.url },
+};
+
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: site.name,
+  url: site.url,
+  description: site.description,
+  email: site.email,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Denpasar",
+    addressRegion: "Bali",
+    addressCountry: "ID",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "sales",
+    telephone: `+${site.whatsapp.number}`,
+  },
+};
+
+export default function HomePage() {
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
+      />
+      <HeroSection />
+      <CategorySection />
+      <FeaturedProductsSection />
+      <WhyUsSection />
+      <AboutBlogSection />
+      <SocialProofSection />
+    </>
+  );
+}

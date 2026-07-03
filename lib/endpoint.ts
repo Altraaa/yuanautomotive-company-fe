@@ -1,0 +1,108 @@
+/**
+ * ENDPOINT REGISTRY
+ * 
+ * Single source of truth for all backend API paths.
+ * - No `/api` prefix
+ * - No `/admin` segment (role separation is by JWT)
+ * - Public detail endpoints use SLUG (SEO)
+ * - Admin endpoints use UUID (internal)
+ * 
+ * Usage: endpoints.products.list, endpoints.products.detailBySlug(slug)
+ */
+
+export const endpoints = {
+  // ═══════════════════════════════════════════════════════════
+  // AUTH
+  // ═══════════════════════════════════════════════════════════
+  auth: {
+    login: "/auth/login",
+    me: "/auth/me",
+    refresh: "/auth/refresh",
+    logout: "/auth/logout",
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // PRODUCTS — Public (by slug) + Admin (by uuid)
+  // ═══════════════════════════════════════════════════════════
+  products: {
+    // Public
+    list: "/products",
+    detailBySlug: (slug: string) => `/products/slug/${slug}`,
+
+    // Admin
+    adminList: "/products",
+    adminDetail: (uuid: string) => `/products/${uuid}`,
+    adminCreate: "/products",
+    adminUpdate: (uuid: string) => `/products/${uuid}`,
+    adminDelete: (uuid: string) => `/products/${uuid}`,
+    adminBulkDelete: "/products/bulk/delete",
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // CATEGORIES
+  // ═══════════════════════════════════════════════════════════
+  categories: {
+    list: "/categories",
+    detail: (uuid: string) => `/categories/${uuid}`,
+    create: "/categories",
+    update: (uuid: string) => `/categories/${uuid}`,
+    delete: (uuid: string) => `/categories/${uuid}`,
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // BLOGS — Public (by slug) + Admin (by uuid)
+  // ═══════════════════════════════════════════════════════════
+  blogs: {
+    // Public
+    list: "/blogs",
+    detailBySlug: (slug: string) => `/blogs/slug/${slug}`,
+
+    // Admin
+    adminList: "/blogs",
+    adminDetail: (uuid: string) => `/blogs/${uuid}`,
+    adminCreate: "/blogs",
+    adminUpdate: (uuid: string) => `/blogs/${uuid}`,
+    adminDelete: (uuid: string) => `/blogs/${uuid}`,
+    adminBulkDelete: "/blogs/bulk/delete",
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // CONTACTS (LEAD GENERATION)
+  // ═══════════════════════════════════════════════════════════
+  contacts: {
+    create: "/contacts", // Public
+    adminList: "/contacts",
+    adminDetail: (uuid: string) => `/contacts/${uuid}`,
+    adminUpdate: (uuid: string) => `/contacts/${uuid}`,
+    adminDelete: (uuid: string) => `/contacts/${uuid}`,
+    adminBulkDelete: "/contacts/bulk/delete",
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // ORDERS (PRE-ORDER)
+  // ═══════════════════════════════════════════════════════════
+  orders: {
+    create: "/orders", // Public
+    adminList: "/orders",
+    adminDetail: (uuid: string) => `/orders/${uuid}`,
+    adminUpdate: (uuid: string) => `/orders/${uuid}`,
+    adminDelete: (uuid: string) => `/orders/${uuid}`,
+    adminBulkDelete: "/orders/bulk/delete",
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // MEDIA (UPLOAD)
+  // ═══════════════════════════════════════════════════════════
+  media: {
+    upload: "/media/upload", // multipart/form-data
+    delete: (uuid: string) => `/media/${uuid}`,
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // CMS (DYNAMIC CONTENT)
+  // ═══════════════════════════════════════════════════════════
+  cms: {
+    bySection: (key: string) => `/cms/${key}`,
+    update: (key: string) => `/cms/${key}`,
+  },
+} as const;
