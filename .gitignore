@@ -42,6 +42,7 @@ build/
 .code-review-graph/
 
 # AI/agent context & internal docs (not committed)
+.claude/
 .mcp.json
 AGENTS.md
 DESIGN.md
