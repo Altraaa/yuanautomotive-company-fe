@@ -3,19 +3,19 @@
 export const whyUsStats = [
   {
     value: "100%",
-    label: "Spesifikasi & kompatibilitas tercantum di setiap produk",
+    label: "Jaminan produk original — kualitas terjamin",
     accent: "red" as const,
     valueTone: "fg" as const,
   },
   {
-    value: "Grosir",
-    label: "Harga khusus dealer & reseller untuk order besar",
+    value: "Afordable",
+    label: "Harga terjangkau & bersaing untuk setiap produk",
     accent: "gold" as const,
     valueTone: "gold" as const,
   },
   {
-    value: "< 15'",
-    label: "Respon WhatsApp di jam kerja",
+    value: "PO Satuan",
+    label: "Bisa melakukan pre-order untuk pembelian satuan",
     accent: "gradient" as const,
     valueTone: "fg" as const,
   },
@@ -23,10 +23,10 @@ export const whyUsStats = [
 
 export const homeTestimonial = {
   quote:
-    "Order grosir aksesoris interior lancar, harga dealer kompetitif, dan spek produknya jujur sesuai deskripsi.",
-  authorName: "Komunitas EV Nusantara",
+    "Produk original sesuai deskripsi, harga bersaing, dan bisa PO satuan — sangat membantu kebutuhan bengkel kami.",
+  authorName: "Bengkel Mitra Nusantara",
   authorLocation: "Jakarta",
-  authorInitials: "EV",
+  authorInitials: "MN",
 };
 
-export const homePartners = ["Partner", "Partner", "Partner"];
+export const homePartners = ["Dealer Resmi", "Bengkel Umum", "Customer"];

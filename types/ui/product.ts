@@ -5,11 +5,7 @@
 
 export type ProductBadge = "BARU" | "HOT" | "TERLARIS" | "PRE-ORDER";
 
-export type ProductCategory =
-  | "Sparepart"
-  | "Aksesoris"
-  | "Interior"
-  | "Eksterior";
+export type ProductCategory = "Sparepart" | "Body Part" | "Aksesoris";
 
 export type ProductCardData = {
   slug: string;

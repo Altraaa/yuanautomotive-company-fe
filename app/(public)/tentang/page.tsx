@@ -10,25 +10,24 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Tentang Kami — Profil Perusahaan",
-  description: `${site.name} adalah pusat sparepart & aksesoris mobil listrik untuk komunitas EV, bengkel, dan jaringan dealer di Indonesia.`,
+  description: `${site.name} adalah pusat sparepart, body part, dan aksesoris original untuk mobil buatan China yang beredar di Indonesia — melayani dealer resmi, bengkel, dan customer.`,
   alternates: { canonical: `${site.url}/tentang` },
 };
 
 const stats = [
-  { value: "80+", label: "SKU Produk EV" },
-  { value: "100%", label: "Spesifikasi Tercantum" },
-  { value: "Grosir", label: "Harga Dealer" },
+  { value: "100%", label: "Produk Original" },
+  { value: "PO", label: "Sparepart Langka" },
+  { value: "Afordable", label: "Harga Terjangkau" },
   { value: "< 15'", label: "Respon WhatsApp" },
 ];
 
 const vision =
-  "Menjadi pusat sparepart & aksesoris mobil listrik paling tepercaya di Indonesia — mempercepat adopsi kendaraan listrik melalui komponen berkualitas, spesifikasi transparan, dan layanan yang mengutamakan pelanggan.";
+  "Memberikan kemudahan bagi masyarakat Indonesia untuk mendapatkan dan menikmati sparepart, body part, dan aksesoris original mobil buatan Negeri China yang beredar di Indonesia.";
 
 const missions = [
-  "Menyediakan katalog sparepart & aksesoris EV yang terkurasi, terverifikasi kompatibilitasnya, dan lengkap spesifikasi teknis.",
-  "Memberikan harga grosir yang adil bagi komunitas, bengkel, dealer, dan reseller dengan pasokan stok yang berkelanjutan.",
-  "Mengedepankan konsultasi teknis yang jujur agar setiap pelanggan mendapat komponen yang benar-benar sesuai kebutuhannya.",
-  "Membangun dukungan purna jual yang andal — garansi, pemasangan, dan penggantian — demi performa kendaraan yang optimal.",
+  "Memberikan layanan Pre-Order untuk sparepart mobil China yang langka dan sulit dicari di Indonesia.",
+  "Memberikan harga yang afordable untuk pembelian sparepart, body part, dan aksesoris mobil China yang beredar di Indonesia.",
+  "Memberikan kemudahan mengakses pembelian sparepart, body part, dan aksesoris melalui pemesanan via website dan WhatsApp.",
 ];
 
 const steps = [
@@ -40,17 +39,17 @@ const steps = [
   {
     no: "02",
     title: "Konsultasi Teknis",
-    body: "Tim kami membantu memastikan komponen sesuai dengan model EV dan kebutuhan Anda via WhatsApp.",
+    body: "Tim kami membantu memastikan komponen sesuai dengan model mobil China Anda via WhatsApp.",
   },
   {
     no: "03",
-    title: "Harga Grosir",
-    body: "Dealer dan reseller mendapat harga khusus untuk order besar dengan dukungan stok berkelanjutan.",
+    title: "Harga Terjangkau",
+    body: "Dapatkan harga terjangkau untuk setiap pembelian sparepart, body part, dan aksesoris mobil China.",
   },
   {
     no: "04",
-    title: "Dukungan Purna Jual",
-    body: "Bantuan pemasangan, garansi, dan penggantian untuk menjaga performa kendaraan tetap optimal.",
+    title: "Keuntungan Purna Jual",
+    body: "Setiap pembelian dilengkapi garansi produk.",
   },
 ];
 
@@ -59,9 +58,9 @@ export default function CompanyPage() {
     <>
       <PageHero
         eyebrow="Tentang Kami"
-        title="Mendorong Ekosistem EV Indonesia,"
-        accent="Satu Komponen Sekaligus."
-        description={`${site.name} — pusat sparepart & aksesoris mobil listrik untuk komunitas EV, bengkel, dan jaringan dealer di seluruh Indonesia. Kami percaya setiap komponen berkualitas mempercepat adopsi kendaraan listrik.`}
+        title="Sparepart Original Mobil China,"
+        accent="Mudah & Terjangkau."
+        description={`${site.name} — pusat sparepart, body part, dan aksesoris original untuk mobil buatan China yang beredar di Indonesia. Kami hadir memberikan kemudahan, harga terjangkau, dan layanan pre-order untuk komponen yang langka.`}
       />
 
       <section className="bg-bg">
@@ -141,7 +140,7 @@ export default function CompanyPage() {
       <CtaBanner
         title="Daftar Bermitra"
         accent="Dengan Kami"
-        description="Jadi bagian dari jaringan dealer & reseller kami. Dapatkan harga grosir dan dukungan penuh."
+        description="Jadi bagian dari jaringan dealer & reseller kami. Dapatkan harga terjangkau dan dukungan penuh."
         ctaLabel="Chat Sales"
         ctaHref={waLink("Halo, saya ingin mendaftar bermitra (dealer/reseller) dengan Yuan Dewata Automotive.")}
         external

@@ -12,7 +12,10 @@ export function SocialProofSection() {
           authorLocation={homeTestimonial.authorLocation}
           authorInitials={homeTestimonial.authorInitials}
         />
-        <PartnerStrip partners={homePartners} />
+        <PartnerStrip
+          label="Dipercaya oleh dealer resmi, bengkel umum & customer"
+          partners={homePartners}
+        />
       </div>
     </section>
   );

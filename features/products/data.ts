@@ -12,9 +12,8 @@ import type {
 
 export const productCategories: ProductCategory[] = [
   "Sparepart",
+  "Body Part",
   "Aksesoris",
-  "Interior",
-  "Eksterior",
 ];
 
 export const products: ProductDetailData[] = [
@@ -62,7 +61,7 @@ export const products: ProductDetailData[] = [
   {
     slug: "velg-aero-18-gunmetal",
     name: 'Velg Aero 18" Gunmetal',
-    category: "Eksterior",
+    category: "Body Part",
     price: 12900000,
     imageUrl: "/placeholder-product-3.png",
     badge: "HOT",
@@ -85,7 +84,7 @@ export const products: ProductDetailData[] = [
   {
     slug: "karpet-premium-full-set-ev",
     name: "Karpet Premium Full-Set EV",
-    category: "Interior",
+    category: "Aksesoris",
     price: 950000,
     imageUrl: "/placeholder-product-4.png",
     description:
@@ -120,7 +119,7 @@ export const products: ProductDetailData[] = [
   {
     slug: "cover-jok-kulit-sintetis-ev",
     name: "Cover Jok Kulit Sintetis EV",
-    category: "Interior",
+    category: "Aksesoris",
     price: 1750000,
     imageUrl: "/placeholder-product-6.png",
     description:
@@ -137,7 +136,7 @@ export const products: ProductDetailData[] = [
   {
     slug: "spoiler-belakang-carbon-look",
     name: "Spoiler Belakang Carbon Look",
-    category: "Eksterior",
+    category: "Body Part",
     price: 2200000,
     imageUrl: "/placeholder-product-1.png",
     badge: "HOT",

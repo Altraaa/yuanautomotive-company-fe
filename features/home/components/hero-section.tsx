@@ -21,18 +21,16 @@ export function HeroSection() {
       <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[1.05fr_1fr] md:items-center md:px-8 md:py-16">
         <div className="flex flex-col">
           <Badge intent="red" skew className="mb-5 w-fit px-3.5 py-1.5 text-[11px] tracking-[0.16em]">
-            Promo Peluncuran
+            Importir Langsung
           </Badge>
 
-          <h1 className="font-display text-4xl font-bold italic uppercase leading-[1.06] text-fg md:text-5xl lg:text-[54px]">
-            Upgrade EV-mu.
-            <br />
-            <span className="text-gold">Tanpa Kompromi.</span>
+          <h1 className="font-display text-3xl font-bold italic uppercase leading-[1.08] text-fg md:text-[42px] lg:text-5xl">
+            Pastikan Kendaraan Anda Mendapatkan{" "}
+            <span className="text-gold">Sparepart Original Terbaik</span>
           </h1>
 
           <p className="mt-4 max-w-md font-sans text-base leading-relaxed text-fg-muted md:text-[17px]">
-            Sparepart &amp; aksesoris mobil listrik dengan spesifikasi teknis lengkap — untuk
-            komunitas, bengkel, dan reseller.
+            One-stop shopping spare part, body parts, dan aksesoris mobil Cina di Indonesia.
           </p>
 
           <div className="mt-7 flex flex-col gap-3.5 sm:flex-row">
