@@ -32,10 +32,11 @@ export default {
           soft: "#E85B5B",
           dark: "#B02525",
         },
+        // Ferrari yellow (Giallo Modena / Pantone 116)
         gold: {
-          DEFAULT: "#D4A53C",
-          soft: "#E0BE6E",
-          dark: "#B8892A",
+          DEFAULT: "#FFCD00",
+          soft: "#FFDE52",
+          dark: "#D9A800",
         },
         whatsapp: "#25D366",
         // Text
