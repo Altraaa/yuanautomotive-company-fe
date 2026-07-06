@@ -1,6 +1,7 @@
 import type {
   ActivityItem,
   AdminNavGroup,
+  AdminProductDetail,
   AdminProductRow,
   BarItem,
   DashboardStat,
@@ -130,3 +131,89 @@ export const adminProductRows: AdminProductRow[] = [
 ];
 
 export const ADMIN_PRODUCTS_TOTAL = 42;
+
+/** Full detail record for the flagship product (matches the design comp). */
+const chargerDetail: AdminProductDetail = {
+  uuid: "yd-chg-7k2",
+  slug: "charger-portable-7kw",
+  name: "Charger Portable 7kW Type 2",
+  nameAccent: "7kW Type 2",
+  sku: "YD-CHG-7K2",
+  category: "Sparepart",
+  status: "Published",
+  badge: "BARU",
+  retailPrice: 8450000,
+  wholesalePrice: 7900000,
+  stock: 24,
+  description:
+    "Charger portable 7 kW dengan konektor Type 2 standar IEC — solusi charging di rumah tanpa instalasi wallbox. Proteksi lengkap, tas penyimpanan termasuk.",
+  specs: [
+    { label: "Daya output", value: "7 kW (32 A, 1 fasa)" },
+    { label: "Konektor", value: "Type 2 (IEC 62196-2)" },
+    { label: "Input", value: "220–240 V AC" },
+    { label: "Panjang kabel", value: "5 meter" },
+    { label: "Proteksi", value: "IP65, over-current, over-heat" },
+    { label: "Garansi", value: "12 bulan resmi distributor" },
+  ],
+  compatibility: ["BYD Atto 3", "Wuling Air EV", "Hyundai Ioniq 5", "MG 4 EV", "Universal Type 2"],
+  featured: true,
+  views: 1240,
+  leads: 18,
+  preorders: 24,
+  createdAt: "12 Jun 2026 · 09.24",
+  updatedAt: "5 Jul 2026 · 14.02",
+  author: "Admin Utama",
+};
+
+const detailOverrides: Record<string, AdminProductDetail> = {
+  [chargerDetail.uuid]: chargerDetail,
+};
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/["']/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
+/**
+ * Resolve an admin product detail by uuid. Returns the rich flagship record when
+ * available, otherwise synthesises one from the list row so every detail/edit
+ * route works against the mock catalog. Swap for `services/products.getAdminDetail`.
+ */
+export function getAdminProductDetail(uuid: string): AdminProductDetail | undefined {
+  if (detailOverrides[uuid]) return detailOverrides[uuid];
+
+  const row = adminProductRows.find((r) => r.uuid === uuid);
+  if (!row) return undefined;
+
+  return {
+    uuid: row.uuid,
+    slug: slugify(row.name),
+    name: row.name,
+    sku: row.sku,
+    category: row.category,
+    status: row.status,
+    badge: row.badge,
+    retailPrice: row.price,
+    wholesalePrice: Math.round(row.price * 0.93),
+    stock: 12,
+    description: "Deskripsi produk belum dilengkapi. Perbarui melalui halaman edit produk.",
+    specs: [
+      { label: "Kategori", value: row.category },
+      { label: "SKU", value: row.sku },
+    ],
+    compatibility: ["Universal EV"],
+    featured: false,
+    views: 0,
+    leads: 0,
+    preorders: 0,
+    createdAt: "—",
+    updatedAt: "—",
+    author: "Admin Utama",
+  };
+}
+
+export function getAdminProductUuids(): string[] {
+  return adminProductRows.map((r) => r.uuid);
+}

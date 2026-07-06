@@ -4,7 +4,7 @@
  * by mappers in the service layer once the API is wired.
  */
 
-import type { ProductBadge, ProductCategory } from "@/types/ui/product";
+import type { ProductBadge, ProductCategory, ProductSpec } from "@/types/ui/product";
 
 /** Shared colour intents used by charts, pills and legends → mapped to design tokens. */
 export type Tone = "red" | "gold" | "green" | "grey" | "muted";
@@ -86,4 +86,30 @@ export type AdminProductRow = {
   price: number;
   badge?: ProductBadge;
   status: ProductStatus;
+};
+
+/** Full admin-facing product record for the detail + edit screens. */
+export type AdminProductDetail = {
+  uuid: string;
+  slug: string;
+  name: string;
+  /** Optional trailing substring of `name` rendered in gold on the detail hero. */
+  nameAccent?: string;
+  sku: string;
+  category: ProductCategory;
+  status: ProductStatus;
+  badge?: ProductBadge;
+  retailPrice: number;
+  wholesalePrice: number;
+  stock: number;
+  description: string;
+  specs: ProductSpec[];
+  compatibility: string[];
+  featured: boolean;
+  views: number;
+  leads: number;
+  preorders: number;
+  createdAt: string;
+  updatedAt: string;
+  author: string;
 };
