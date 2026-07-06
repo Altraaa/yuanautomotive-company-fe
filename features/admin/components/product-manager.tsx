@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Check, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/common/badge";
 import type { AdminProductRow, ProductStatus } from "@/types/ui/admin";
@@ -114,7 +115,12 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
                       <span className="h-4 w-3/5 rounded-sm bg-surface-black/80" />
                     </div>
                     <div className="min-w-0">
-                      <div className="truncate font-sans text-[13px] font-semibold text-fg">{row.name}</div>
+                      <Link
+                        href={`/dashboard/produk/${row.uuid}`}
+                        className="block truncate font-sans text-[13px] font-semibold text-fg transition-colors hover:text-gold"
+                      >
+                        {row.name}
+                      </Link>
                       <div className="font-sans text-[10.5px] text-fg-subtle">{row.sku}</div>
                     </div>
                   </div>
@@ -132,7 +138,7 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
                   </span>
 
                   <div className="flex items-center justify-end gap-1.5">
-                    <RowAction label="Edit" tone="gold">
+                    <RowAction label="Edit" tone="gold" href={`/dashboard/produk/${row.uuid}/edit`}>
                       <Pencil className="h-3.5 w-3.5" />
                     </RowAction>
                     <RowAction label="Hapus" tone="red">
@@ -186,21 +192,26 @@ function RowAction({
   children,
   label,
   tone,
+  href,
 }: {
   children: React.ReactNode;
   label: string;
   tone: "gold" | "red";
+  href?: string;
 }) {
+  const className = cn(
+    "grid h-[30px] w-[30px] place-items-center border border-border bg-surface-sunken transition-colors hover:border-border-strong",
+    tone === "gold" ? "text-gold" : "text-red-soft"
+  );
+  if (href) {
+    return (
+      <Link href={href} title={label} aria-label={label} className={className}>
+        {children}
+      </Link>
+    );
+  }
   return (
-    <button
-      type="button"
-      title={label}
-      aria-label={label}
-      className={cn(
-        "grid h-[30px] w-[30px] place-items-center border border-border bg-surface-sunken transition-colors hover:border-border-strong",
-        tone === "gold" ? "text-gold" : "text-red-soft"
-      )}
-    >
+    <button type="button" title={label} aria-label={label} className={className}>
       {children}
     </button>
   );
