@@ -1,0 +1,130 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AtSign, Check, KeyRound } from "lucide-react";
+import { CtaButton } from "@/components/common/cta-button";
+import { loginSchema, type LoginFormValues } from "@/features/auth/schema";
+import { cn } from "@/lib/utils";
+
+const fieldWrap =
+  "flex h-[50px] items-center gap-3 border border-border bg-surface-sunken px-4 transition-colors focus-within:border-gold";
+const inputClass =
+  "flex-1 bg-transparent font-sans text-sm text-fg outline-none placeholder:text-fg-faint";
+const labelClass =
+  "font-sans text-[11px] font-semibold uppercase tracking-[0.1em] text-fg-muted";
+
+export function LoginForm() {
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "", remember: true },
+  });
+
+  const remember = watch("remember");
+
+  async function onSubmit(_values: LoginFormValues) {
+    setSubmitError(null);
+    // TODO: replace with services/auth.login() once the backend is wired.
+    // For now this mocks a successful session and routes to the dashboard.
+    router.push("/dashboard");
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[18px]" noValidate>
+      <label className="flex flex-col gap-[7px]">
+        <span className={labelClass}>Email</span>
+        <div className={fieldWrap}>
+          <AtSign className="h-4 w-4 shrink-0 text-gold" />
+          <input
+            {...register("email")}
+            type="email"
+            autoComplete="email"
+            placeholder="admin@yuandewata.id"
+            className={inputClass}
+          />
+        </div>
+        {errors.email && <span className="font-sans text-xs text-red-soft">{errors.email.message}</span>}
+      </label>
+
+      <label className="flex flex-col gap-[7px]">
+        <span className={labelClass}>Password</span>
+        <div className={fieldWrap}>
+          <KeyRound className="h-4 w-4 shrink-0 text-gold" />
+          <input
+            {...register("password")}
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            placeholder="••••••••••"
+            className={cn(inputClass, "tracking-[0.16em]")}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-fg-faint transition-colors hover:text-fg-soft"
+          >
+            {showPassword ? "Sembunyi" : "Tampilkan"}
+          </button>
+        </div>
+        {errors.password && (
+          <span className="font-sans text-xs text-red-soft">{errors.password.message}</span>
+        )}
+      </label>
+
+      <div className="flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => setValue("remember", !remember)}
+          className="flex items-center gap-2.5"
+        >
+          <span
+            className={cn(
+              "grid h-4 w-4 place-items-center border transition-colors",
+              remember ? "border-red bg-red text-fg" : "border-border-strong bg-transparent"
+            )}
+          >
+            {remember && <Check className="h-2.5 w-2.5" strokeWidth={3} />}
+          </span>
+          <span className="font-sans text-[12.5px] text-fg-muted">Ingat perangkat ini</span>
+        </button>
+        <Link
+          href="/login"
+          className="font-sans text-[12.5px] font-semibold text-gold transition-colors hover:text-gold-soft"
+        >
+          Lupa password?
+        </Link>
+      </div>
+
+      {submitError && (
+        <p className="border border-red/50 bg-red/10 px-4 py-2.5 font-sans text-sm text-red-soft">
+          {submitError}
+        </p>
+      )}
+
+      <CtaButton size="lg" disabled={isSubmitting} className="mt-1.5 w-full">
+        {isSubmitting ? "Memproses…" : "Masuk ke Dashboard →"}
+      </CtaButton>
+
+      <div className="mt-0.5 flex items-center gap-3">
+        <span className="h-px flex-1 bg-border" />
+        <span className="font-sans text-[10.5px] tracking-[0.14em] text-fg-faint">AKSES TERBATAS</span>
+        <span className="h-px flex-1 bg-border" />
+      </div>
+      <p className="text-center font-sans text-[11.5px] leading-relaxed text-fg-faint">
+        Hanya untuk administrator terdaftar. Aktivitas login tercatat.
+      </p>
+    </form>
+  );
+}
