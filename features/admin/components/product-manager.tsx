@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -9,11 +9,29 @@ import { Badge } from "@/components/common/badge";
 import type { AdminProductRow, ProductStatus } from "@/types/ui/admin";
 import type { ProductBadge } from "@/types/ui/product";
 import { cn, formatIDR } from "@/lib/utils";
-import { ADMIN_PRODUCTS_TOTAL } from "@/features/admin/data";
 import { bulkDeleteProductsAction, deleteProductAction } from "@/features/admin/actions";
 import { AdminPagination } from "./admin-pagination";
+import {
+  ProductFilterBar,
+  defaultProductFilters,
+  type ProductListFilters,
+} from "./product-filter-bar";
 
 const GRID = "grid grid-cols-[40px_2.4fr_1fr_1.1fr_0.9fr_1fr_96px] items-center gap-3.5";
+const PAGE_SIZE = 10;
+
+function filterRows(rows: AdminProductRow[], f: ProductListFilters): AdminProductRow[] {
+  const q = f.search.trim().toLowerCase();
+  const result = rows.filter((r) => {
+    if (q && !`${r.name} ${r.sku}`.toLowerCase().includes(q)) return false;
+    if (f.category !== "Semua" && r.category !== f.category) return false;
+    if (f.status !== "Semua" && r.status !== f.status) return false;
+    return true;
+  });
+  if (f.sort === "Termurah") return [...result].sort((a, b) => a.price - b.price);
+  if (f.sort === "Termahal") return [...result].sort((a, b) => b.price - a.price);
+  return result;
+}
 
 const badgeIntent: Record<ProductBadge, "red" | "gold"> = {
   BARU: "red",
@@ -30,9 +48,21 @@ const statusStyle: Record<ProductStatus, string> = {
 export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
   const router = useRouter();
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [filters, setFilters] = useState<ProductListFilters>(defaultProductFilters);
+  const [page, setPage] = useState(1);
   const [isPending, startTransition] = useTransition();
 
-  const allSelected = rows.length > 0 && selected.size === rows.length;
+  const filtered = useMemo(() => filterRows(rows, filters), [rows, filters]);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pageRows = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  const allSelected = pageRows.length > 0 && pageRows.every((r) => selected.has(r.uuid));
+
+  function updateFilters(next: ProductListFilters) {
+    setFilters(next);
+    setPage(1);
+  }
 
   function toggle(uuid: string) {
     setSelected((prev) => {
@@ -44,7 +74,12 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
   }
 
   function toggleAll() {
-    setSelected(allSelected ? new Set() : new Set(rows.map((r) => r.uuid)));
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allSelected) pageRows.forEach((r) => next.delete(r.uuid));
+      else pageRows.forEach((r) => next.add(r.uuid));
+      return next;
+    });
   }
 
   function handleDelete(uuid: string) {
@@ -72,6 +107,8 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
 
   return (
     <div className="flex flex-col gap-[18px]">
+      <ProductFilterBar filters={filters} onChange={updateFilters} />
+
       {/* Bulk action bar */}
       {selected.size > 0 && (
         <div className="flex animate-fade-in flex-wrap items-center justify-between gap-3 border border-border border-l-[3px] border-l-red bg-gradient-to-r from-red/12 to-gold/10 px-4 py-2.5">
@@ -120,7 +157,7 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
             </div>
 
             {/* Rows */}
-            {rows.map((row) => {
+            {pageRows.map((row) => {
               const isChecked = selected.has(row.uuid);
               return (
                 <div
@@ -190,14 +227,21 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
                 </div>
               );
             })}
+
+            {pageRows.length === 0 && (
+              <div className="px-[18px] py-12 text-center font-sans text-sm text-fg-muted">
+                Tidak ada produk yang cocok dengan filter.
+              </div>
+            )}
           </div>
         </div>
 
         <AdminPagination
-          rangeLabel={`1–${rows.length}`}
-          totalLabel={String(ADMIN_PRODUCTS_TOTAL)}
-          pages={4}
-          current={1}
+          page={currentPage}
+          totalPages={totalPages}
+          total={filtered.length}
+          pageSize={PAGE_SIZE}
+          onPageChange={setPage}
         />
       </div>
     </div>

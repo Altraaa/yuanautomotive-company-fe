@@ -3,7 +3,6 @@ import { Plus, Upload } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
 import { listAdminProducts } from "@/services/admin/products";
 import { AdminTopbar } from "@/features/admin/components/admin-topbar";
-import { ProductFilterBar } from "@/features/admin/components/product-filter-bar";
 import { ProductManager } from "@/features/admin/components/product-manager";
 
 export const metadata: Metadata = {
@@ -11,7 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default async function ManageProductsPage() {
-  const { items } = await listAdminProducts({ page: 1 });
+  // Load the catalog (max backend limit) and filter/sort/paginate client-side.
+  const { items } = await listAdminProducts({ page: 1, limit: 100 });
   return (
     <>
       <AdminTopbar
@@ -30,7 +30,6 @@ export default async function ManageProductsPage() {
       />
 
       <div className="flex flex-col gap-[18px] p-4 md:p-8">
-        <ProductFilterBar />
         <ProductManager rows={items} />
       </div>
     </>
