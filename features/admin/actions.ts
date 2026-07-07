@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { apiClient, ApiError } from "@/services/api";
 import { endpoints } from "@/lib/endpoint";
 import { listCategories } from "@/services/categories";
@@ -58,7 +58,7 @@ export async function saveProductAction(
     } else {
       await apiClient.post(endpoints.products.adminCreate, payload, { auth: true });
     }
-    revalidateTag("products", "max");
+    updateTag("products"); // immediate expiry → public pages refresh in one load
     return { ok: true };
   } catch (err) {
     if (err instanceof ApiError) {
@@ -71,7 +71,7 @@ export async function saveProductAction(
 export async function deleteProductAction(uuid: string): Promise<void> {
   try {
     await apiClient.delete(endpoints.products.adminDelete(uuid), { auth: true });
-    revalidateTag("products", "max");
+    updateTag("products"); // immediate expiry → public pages refresh in one load
   } catch (err) {
     if (err instanceof ApiError) throw err;
   }
@@ -80,7 +80,7 @@ export async function deleteProductAction(uuid: string): Promise<void> {
 export async function bulkDeleteProductsAction(ids: string[]): Promise<void> {
   try {
     await apiClient.post(endpoints.products.adminBulkDelete, { ids }, { auth: true });
-    revalidateTag("products", "max");
+    updateTag("products"); // immediate expiry → public pages refresh in one load
   } catch (err) {
     if (err instanceof ApiError) throw err;
   }
