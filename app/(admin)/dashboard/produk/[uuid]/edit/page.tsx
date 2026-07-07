@@ -46,6 +46,7 @@ export default async function EditProductPage({ params }: { params: Params }) {
       <ProductEditForm
         productUuid={detail.uuid}
         defaultValues={toProductFormValues(detail)}
+        initialImages={detail.galleryMedia}
         redirectTo={backHref}
       />
     </>

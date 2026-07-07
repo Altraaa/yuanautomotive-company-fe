@@ -88,6 +88,9 @@ export type AdminProductRow = {
   status: ProductStatus;
 };
 
+/** A product image with its media uuid (for editable galleries). */
+export type ProductMedia = { uuid: string; url: string };
+
 /** Full admin-facing product record for the detail + edit screens. */
 export type AdminProductDetail = {
   uuid: string;
@@ -105,6 +108,8 @@ export type AdminProductDetail = {
   description: string;
   specs: ProductSpec[];
   compatibility: string[];
+  /** Existing product images (uuid + url), in display order. */
+  galleryMedia: ProductMedia[];
   featured: boolean;
   views: number;
   leads: number;

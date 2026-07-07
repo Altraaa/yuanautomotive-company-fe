@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDown, Plus, X } from "lucide-react";
@@ -10,7 +11,8 @@ import {
   productFormSchema,
   type ProductFormValues,
 } from "@/features/admin/product-schema";
-import { saveProductAction } from "@/features/admin/actions";
+import { saveProductAction, uploadImageAction } from "@/features/admin/actions";
+import type { ProductMedia } from "@/types/ui/admin";
 import { cn } from "@/lib/utils";
 import { SectionCard } from "./section-card";
 
@@ -25,6 +27,8 @@ type ProductEditFormProps = {
   /** Product uuid when editing; null when creating. */
   productUuid: string | null;
   defaultValues: ProductFormValues;
+  /** Existing product images (uuid + url) to pre-load in edit mode. */
+  initialImages?: ProductMedia[];
   /** Where to navigate after a successful save. */
   redirectTo: string;
   /** Shared id so the topbar "Simpan" button can submit this form. */
@@ -37,12 +41,44 @@ const categoryOptions = ["Sparepart", "Body Part", "Aksesoris"];
 export function ProductEditForm({
   productUuid,
   defaultValues,
+  initialImages = [],
   redirectTo,
   formId = "product-form",
 }: ProductEditFormProps) {
   const router = useRouter();
   const [compatDraft, setCompatDraft] = useState("");
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [images, setImages] = useState<ProductMedia[]>(initialImages);
+  // Only send `image_uuids` (authoritative) once the user actually changes the
+  // gallery — otherwise omit it so the backend leaves existing photos intact.
+  const [imagesDirty, setImagesDirty] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  async function handleFiles(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setSaveError(null);
+    setUploading(true);
+    for (const file of Array.from(files)) {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await uploadImageAction(fd);
+      if (res.ok) {
+        setImages((prev) => [...prev, { uuid: res.id, url: res.url }]);
+        setImagesDirty(true);
+      } else {
+        setSaveError(res.message);
+      }
+    }
+    setUploading(false);
+    if (fileRef.current) fileRef.current.value = "";
+  }
+
+  function removeImage(uuid: string) {
+    setImages((prev) => prev.filter((img) => img.uuid !== uuid));
+    setImagesDirty(true);
+  }
 
   const {
     register,
@@ -79,7 +115,11 @@ export function ProductEditForm({
 
   async function onSubmit(values: ProductFormValues) {
     setSaveError(null);
-    const result = await saveProductAction(productUuid, values);
+    const result = await saveProductAction(
+      productUuid,
+      values,
+      imagesDirty ? images.map((img) => img.uuid) : null
+    );
     if (!result.ok) {
       setSaveError(result.message);
       return;
@@ -268,21 +308,74 @@ export function ProductEditForm({
         </SectionCard>
 
         <SectionCard title="Media Produk" bodyClassName="flex flex-col gap-3">
-          <div className="relative grid h-[150px] place-items-center border border-border bg-gradient-to-br from-border to-surface-sunken">
-            <div className="h-14 w-[48%] rounded-[16px_40px_8px_8px] bg-surface-black/85" />
-            <span className="absolute left-2.5 top-2.5 bg-surface-black/60 px-1.5 py-1 font-display text-[8.5px] font-bold tracking-[0.1em] text-gold">
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            multiple
+            hidden
+            onChange={handleFiles}
+          />
+
+          {/* Main preview */}
+          <div className="relative grid h-[150px] place-items-center overflow-hidden border border-border bg-gradient-to-br from-border to-surface-sunken">
+            {images[0] ? (
+              <Image
+                src={images[0].url}
+                alt="Foto utama produk"
+                fill
+                sizes="320px"
+                className="object-cover"
+              />
+            ) : (
+              <div className="h-14 w-[48%] rounded-[16px_40px_8px_8px] bg-surface-black/85" />
+            )}
+            <span className="absolute left-2.5 top-2.5 z-10 bg-surface-black/60 px-1.5 py-1 font-display text-[8.5px] font-bold tracking-[0.1em] text-gold">
               UTAMA
             </span>
+            {images[0] && (
+              <button
+                type="button"
+                onClick={() => removeImage(images[0].uuid)}
+                aria-label="Hapus foto utama"
+                className="absolute right-2 top-2 z-10 grid h-5 w-5 place-items-center bg-surface-black/70 text-red-soft"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            )}
           </div>
+
+          {/* Thumbnails + add button */}
           <div className="grid grid-cols-3 gap-2">
-            <div className="h-14 border border-border bg-gradient-to-br from-border to-surface-sunken" />
-            <div className="h-14 border border-border bg-gradient-to-br from-border to-surface-sunken" />
-            <button type="button" aria-label="Tambah media" className="grid h-14 place-items-center border border-dashed border-border-strong bg-surface-sunken text-gold">
-              <Plus className="h-5 w-5" />
+            {images.slice(1).map((img) => (
+              <div key={img.uuid} className="relative h-14 overflow-hidden border border-border">
+                <Image src={img.url} alt="" fill sizes="120px" className="object-cover" />
+                <button
+                  type="button"
+                  onClick={() => removeImage(img.uuid)}
+                  aria-label="Hapus gambar"
+                  className="absolute right-0.5 top-0.5 z-10 grid h-4 w-4 place-items-center bg-surface-black/70 text-red-soft"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              disabled={uploading}
+              aria-label="Tambah gambar"
+              className="grid h-14 place-items-center border border-dashed border-border-strong bg-surface-sunken text-gold transition-colors hover:border-gold disabled:opacity-50"
+            >
+              {uploading ? (
+                <span className="font-sans text-[10px] text-fg-subtle">Uploading…</span>
+              ) : (
+                <Plus className="h-5 w-5" />
+              )}
             </button>
           </div>
           <span className="font-sans text-[11px] leading-relaxed text-fg-faint">
-            JPG / PNG · maks 2 MB · rasio 4:3 disarankan
+            JPG / PNG / WebP · maks 2 MB · rasio 4:3 disarankan
           </span>
         </SectionCard>
 

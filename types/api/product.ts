@@ -43,6 +43,8 @@ export type ApiAdminProductDetail = {
   specs: ApiProductSpec[];
   compatibility: string[];
   gallery: string[];
+  /** Same images/order as `gallery`, but each item carries its media uuid. */
+  gallery_media?: { uuid: string; url: string }[];
   view_count: number;
   lead_count: number;
   preorder_count: number;

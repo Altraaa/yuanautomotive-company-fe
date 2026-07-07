@@ -46,6 +46,7 @@ function toDetail(d: ApiAdminProductDetail): AdminProductDetail {
     description: d.description,
     specs: d.specs,
     compatibility: d.compatibility,
+    galleryMedia: d.gallery_media ?? [],
     featured: d.is_featured,
     views: d.view_count,
     leads: d.lead_count,
@@ -96,11 +97,17 @@ export function getAdminProduct(uuid: string): Promise<AdminProductDetail | unde
 
 const digits = (s: string) => s.replace(/[^\d]/g, "");
 
-/** Map the form values → backend create/update payload (name→category_id, clean price, enum). */
+/**
+ * Map the form values → backend create/update payload (name→category_id, clean
+ * price, enum). `imageUuids` is authoritative when provided:
+ * - `null`  → omit `image_uuids` entirely (backend leaves the gallery untouched)
+ * - `T[]`   → send exactly these uuids in this order (backend relinks; missing
+ *             old media get unlinked; `[]` clears all images)
+ */
 export function toProductPayload(
   v: ProductFormValues,
   categories: CategoryOption[],
-  imageUuids: string[] = []
+  imageUuids: string[] | null = null
 ) {
   const cat = categories.find((c) => c.name === v.category);
   return {
@@ -117,7 +124,7 @@ export function toProductPayload(
     specs: v.specs
       .filter((s) => s.label && s.value)
       .map((s, i) => ({ label: s.label, value: s.value, sort_order: i })),
-    image_uuids: imageUuids.length ? imageUuids : undefined,
+    image_uuids: imageUuids ?? undefined,
     is_featured: v.featured,
     is_published: v.status === "Published",
   };
