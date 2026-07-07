@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, Check, KeyRound } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
 import { loginSchema, type LoginFormValues } from "@/features/auth/schema";
+import { loginAction } from "@/features/auth/actions";
 import { cn } from "@/lib/utils";
 
 const fieldWrap =
@@ -35,11 +36,15 @@ export function LoginForm() {
 
   const remember = watch("remember");
 
-  async function onSubmit(_values: LoginFormValues) {
+  async function onSubmit(values: LoginFormValues) {
     setSubmitError(null);
-    // TODO: replace with services/auth.login() once the backend is wired.
-    // For now this mocks a successful session and routes to the dashboard.
+    const result = await loginAction(values);
+    if (!result.ok) {
+      setSubmitError(result.message);
+      return;
+    }
     router.push("/dashboard");
+    router.refresh();
   }
 
   return (

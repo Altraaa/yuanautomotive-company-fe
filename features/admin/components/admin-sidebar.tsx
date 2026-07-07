@@ -15,6 +15,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { adminNavGroups } from "@/features/admin/data";
+import { logoutAction } from "@/features/auth/actions";
 import type { AdminNavIcon, Tone } from "@/types/ui/admin";
 import { cn } from "@/lib/utils";
 import { BrandMark } from "./brand-mark";
@@ -101,14 +102,16 @@ export function AdminSidebar({ onNavigate }: { onNavigate?: () => void }) {
           <div className="font-sans text-[12.5px] font-semibold text-fg">Admin Utama</div>
           <div className="font-sans text-[10.5px] text-fg-subtle">SUPERADMIN</div>
         </div>
-        <Link
-          href="/login"
-          title="Logout"
-          aria-label="Logout"
-          className="text-fg-subtle transition-colors hover:text-red-soft"
-        >
-          <LogOut className="h-[18px] w-[18px]" />
-        </Link>
+        <form action={logoutAction}>
+          <button
+            type="submit"
+            title="Logout"
+            aria-label="Logout"
+            className="text-fg-subtle transition-colors hover:text-red-soft"
+          >
+            <LogOut className="h-[18px] w-[18px]" />
+          </button>
+        </form>
       </div>
     </div>
   );
