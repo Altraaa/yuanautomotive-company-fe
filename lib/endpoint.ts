@@ -105,4 +105,16 @@ export const endpoints = {
     bySection: (key: string) => `/cms/${key}`,
     update: (key: string) => `/cms/${key}`,
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // DASHBOARD / ANALYTICS (admin aggregation)
+  // ═══════════════════════════════════════════════════════════
+  dashboard: {
+    summary: "/dashboard/summary",
+    timeseries: "/dashboard/timeseries",
+    productsByCategory: "/dashboard/products-by-category",
+    topProducts: "/dashboard/top-products",
+    statusBreakdown: "/dashboard/status-breakdown",
+    recent: "/dashboard/recent",
+  },
 } as const;

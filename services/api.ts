@@ -1,14 +1,18 @@
-"use server";
-
 /**
  * API CLIENT — The ONLY fetch wrapper in the application
- * 
+ *
  * Rules:
  * - No other fetch() calls anywhere in the codebase
  * - Handles auth (Bearer token), cache strategy, error parsing, 204 responses
- * - Used by services; services are called by hooks (client) or RSC (server)
- * - Components NEVER call apiClient directly
+ * - Used by services (RSC + server actions); components NEVER call it directly
+ * - Server-only: `auth` requests read the JWT from an httpOnly cookie via
+ *   `next/headers`, so this module must never be imported into a client bundle.
  */
+
+import { cookies } from "next/headers";
+
+/** Base URL of the backend (no trailing slash, no `/api` prefix). */
+const BASE = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
 
 type RequestOptions = {
   auth?: boolean; // Attach Authorization: Bearer <token>
@@ -37,9 +41,14 @@ export class ApiError extends Error {
  * Get the Authorization header value
  */
 async function getAuthHeader(): Promise<string | null> {
-  // TODO: Implement token retrieval from your token store (localStorage, cookies, etc.)
-  // For now, returning null. Replace with actual token logic.
-  return null;
+  // Access token lives in an httpOnly cookie set by the auth server actions.
+  // Outside a request scope (e.g. static generation) cookies() throws → null.
+  try {
+    const token = (await cookies()).get("yd_access_token")?.value;
+    return token ?? null;
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -99,8 +108,7 @@ function getCacheStrategy(
 export const apiClient = {
   async get<T>(url: string, opts?: RequestOptions): Promise<T> {
     const fullUrl =
-      (process.env.NEXT_PUBLIC_API_URL || "") +
-      url +
+      BASE + url +
       (opts?.query ? buildQueryString(opts.query) : "");
 
     const headers: Record<string, string> = {
@@ -141,7 +149,7 @@ export const apiClient = {
     body?: unknown,
     opts?: RequestOptions
   ): Promise<T> {
-    const fullUrl = (process.env.NEXT_PUBLIC_API_URL || "") + url;
+    const fullUrl = BASE + url;
 
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
@@ -182,7 +190,7 @@ export const apiClient = {
     body?: unknown,
     opts?: RequestOptions
   ): Promise<T> {
-    const fullUrl = (process.env.NEXT_PUBLIC_API_URL || "") + url;
+    const fullUrl = BASE + url;
 
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
@@ -223,7 +231,7 @@ export const apiClient = {
     body?: unknown,
     opts?: RequestOptions
   ): Promise<T> {
-    const fullUrl = (process.env.NEXT_PUBLIC_API_URL || "") + url;
+    const fullUrl = BASE + url;
 
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
@@ -260,7 +268,7 @@ export const apiClient = {
   },
 
   async delete<T>(url: string, opts?: RequestOptions): Promise<T> {
-    const fullUrl = (process.env.NEXT_PUBLIC_API_URL || "") + url;
+    const fullUrl = BASE + url;
 
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
@@ -296,7 +304,7 @@ export const apiClient = {
   },
 
   async upload<T>(url: string, form: FormData, opts?: RequestOptions): Promise<T> {
-    const fullUrl = (process.env.NEXT_PUBLIC_API_URL || "") + url;
+    const fullUrl = BASE + url;
 
     const headers: Record<string, string> = {};
 
