@@ -3,21 +3,22 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const options = [
-  { value: "terbaru", label: "Terbaru" },
+  { value: "semua", label: "Semua" },
+  { value: "terbaru", label: "Terbaru (Baru)" },
   { value: "termurah", label: "Harga Termurah" },
   { value: "termahal", label: "Harga Termahal" },
 ];
 
-/** ProductSort — URL-param-driven sort dropdown for the catalog. */
+/** ProductSort — URL-param-driven view/sort dropdown for the catalog. */
 export function ProductSort() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const current = searchParams.get("urut") ?? "terbaru";
+  const current = searchParams.get("urut") ?? "semua";
 
   function onChange(value: string) {
     const params = new URLSearchParams(searchParams.toString());
-    if (value === "terbaru") params.delete("urut");
+    if (value === "semua") params.delete("urut");
     else params.set("urut", value);
     params.delete("page");
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
@@ -25,7 +26,7 @@ export function ProductSort() {
 
   return (
     <label className="flex items-center gap-2 font-sans text-sm text-fg-muted">
-      <span className="hidden sm:inline">Urutkan</span>
+      <span className="hidden sm:inline">Tampilkan</span>
       <select
         value={current}
         onChange={(e) => onChange(e.target.value)}

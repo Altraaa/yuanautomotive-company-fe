@@ -1,6 +1,5 @@
 import { apiClient, ApiError } from "@/services/api";
 import { endpoints } from "@/lib/endpoint";
-import { flattenPage } from "@/lib/paginate";
 import { withFallback } from "@/lib/api-fallback";
 import type { ApiPaginated } from "@/types/api/common";
 import type { ApiProductCard, ApiProductDetail } from "@/types/api/product";
@@ -42,24 +41,51 @@ function toDetail(p: ApiProductDetail): ProductDetailData {
   };
 }
 
+/**
+ * Filter + sort + paginate the full catalog. The backend's pagination `total`
+ * is unreliable (counts the returned page, off-by-one), so we fetch everything
+ * and page here. Sort/filter option semantics:
+ * - "semua" / undefined → all products, default order
+ * - "terbaru"           → only BARU-labelled products
+ * - "termurah"          → price ascending
+ * - "termahal"          → price descending
+ */
+function applyCatalogFilters(cards: ProductCardData[], filters: ProductFilters) {
+  const result = cards.filter((p) => {
+    if (filters.category && p.category.toLowerCase() !== filters.category.toLowerCase()) return false;
+    if (filters.priceMin != null && p.price < filters.priceMin) return false;
+    if (filters.priceMax != null && p.price > filters.priceMax) return false;
+    if (filters.sort === "terbaru" && p.badge !== "BARU") return false;
+    return true;
+  });
+
+  const sorted =
+    filters.sort === "termurah"
+      ? [...result].sort((a, b) => a.price - b.price)
+      : filters.sort === "termahal"
+        ? [...result].sort((a, b) => b.price - a.price)
+        : result;
+
+  const total = sorted.length;
+  const totalPages = Math.max(1, Math.ceil(total / PRODUCTS_PER_PAGE));
+  const page = Math.min(Math.max(1, filters.page ?? 1), totalPages);
+  const start = (page - 1) * PRODUCTS_PER_PAGE;
+  return { items: sorted.slice(start, start + PRODUCTS_PER_PAGE), total, totalPages, page };
+}
+
+async function fetchAllCards(): Promise<ProductCardData[]> {
+  const res = await apiClient.get<ApiPaginated<ApiProductCard>>(endpoints.products.list, {
+    revalidate: 3600,
+    tags: ["products"],
+    query: { limit: 100 }, // fetch all; backend pagination total is unreliable
+  });
+  return res.items.map(toCard);
+}
+
 export function queryProducts(filters: ProductFilters) {
   return withFallback(
-    async () => {
-      const res = await apiClient.get<ApiPaginated<ApiProductCard>>(endpoints.products.list, {
-        revalidate: 3600,
-        tags: ["products"],
-        query: {
-          page: filters.page ?? 1,
-          limit: PRODUCTS_PER_PAGE,
-          category: filters.category,
-          price_min: filters.priceMin,
-          price_max: filters.priceMax,
-          sort: filters.sort,
-        },
-      });
-      return flattenPage(res, toCard);
-    },
-    () => mock.queryProducts(filters)
+    async () => applyCatalogFilters(await fetchAllCards(), filters),
+    () => applyCatalogFilters(mock.getAllProductCards(), filters)
   );
 }
 
