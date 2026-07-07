@@ -1,12 +1,25 @@
 "use server";
 
 import { updateTag } from "next/cache";
+import { redirect } from "next/navigation";
 import { apiClient, ApiError } from "@/services/api";
 import { endpoints } from "@/lib/endpoint";
 import { listCategories } from "@/services/categories";
 import { uploadImage } from "@/services/media";
+import { clearAuthCookies } from "@/lib/auth-cookies";
 import { toProductPayload } from "@/services/admin/products";
 import type { ProductFormValues } from "@/features/admin/product-schema";
+
+/**
+ * Ends the session and bounces to /login when the backend reports 401 (token
+ * expired/invalid). `redirect()` throws, so callers put this first in `catch`.
+ */
+async function endSessionIfUnauthorized(err: unknown) {
+  if (err instanceof ApiError && err.status === 401) {
+    await clearAuthCookies();
+    redirect("/login");
+  }
+}
 
 export type SaveResult = { ok: true } | { ok: false; message: string };
 export type UploadResult =
@@ -32,6 +45,7 @@ export async function uploadImageAction(formData: FormData): Promise<UploadResul
     const media = await uploadImage(formData);
     return { ok: true, id: media.id, url: media.url };
   } catch (err) {
+    await endSessionIfUnauthorized(err);
     if (err instanceof ApiError) {
       return { ok: false, message: err.messages.join(", ") || "Gagal upload gambar." };
     }
@@ -61,6 +75,7 @@ export async function saveProductAction(
     updateTag("products"); // immediate expiry → public pages refresh in one load
     return { ok: true };
   } catch (err) {
+    await endSessionIfUnauthorized(err);
     if (err instanceof ApiError) {
       return { ok: false, message: err.messages.join(", ") || "Gagal menyimpan produk." };
     }
@@ -73,6 +88,7 @@ export async function deleteProductAction(uuid: string): Promise<void> {
     await apiClient.delete(endpoints.products.adminDelete(uuid), { auth: true });
     updateTag("products"); // immediate expiry → public pages refresh in one load
   } catch (err) {
+    await endSessionIfUnauthorized(err);
     if (err instanceof ApiError) throw err;
   }
 }
@@ -82,6 +98,7 @@ export async function bulkDeleteProductsAction(ids: string[]): Promise<void> {
     await apiClient.post(endpoints.products.adminBulkDelete, { ids }, { auth: true });
     updateTag("products"); // immediate expiry → public pages refresh in one load
   } catch (err) {
+    await endSessionIfUnauthorized(err);
     if (err instanceof ApiError) throw err;
   }
 }
