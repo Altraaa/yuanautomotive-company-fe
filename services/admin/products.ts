@@ -71,7 +71,8 @@ export function listAdminProducts(params: { page?: number; limit?: number; categ
       total: mock.ADMIN_PRODUCTS_TOTAL,
       totalPages: Math.max(1, Math.ceil(mock.ADMIN_PRODUCTS_TOTAL / limit)),
       page: params.page ?? 1,
-    })
+    }),
+    { alwaysFallback: true }
   );
 }
 
@@ -88,7 +89,8 @@ export function getAdminProduct(uuid: string): Promise<AdminProductDetail | unde
         throw err;
       }
     },
-    () => mock.getAdminProductDetail(uuid)
+    () => mock.getAdminProductDetail(uuid),
+    { alwaysFallback: true }
   );
 }
 

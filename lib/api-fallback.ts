@@ -18,12 +18,21 @@ import { ApiError } from "@/services/api";
  */
 export async function withFallback<T>(
   apiCall: () => Promise<T>,
-  mock: () => T | Promise<T>
+  mock: () => T | Promise<T>,
+  opts?: {
+    /**
+     * Also fall back on 4xx (e.g. admin endpoints not yet implemented → 404, or
+     * an invalid/mock token → 401). Use for admin reads that must never crash
+     * the panel while the backend is still being built.
+     */
+    alwaysFallback?: boolean;
+  }
 ): Promise<T> {
   try {
     return await apiCall();
   } catch (err) {
-    if (err instanceof ApiError && err.status < 500) throw err; // 4xx → handle normally
+    const isClientError = err instanceof ApiError && err.status < 500;
+    if (isClientError && !opts?.alwaysFallback) throw err; // 4xx → handle normally
     if (process.env.NODE_ENV !== "production") {
       const reason = err instanceof Error ? err.message : String(err);
       console.warn(`[api-fallback] backend down → using mock (${reason})`);

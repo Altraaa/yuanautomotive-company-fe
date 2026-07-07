@@ -181,5 +181,5 @@ export function getDashboard(): Promise<DashboardBundle> {
         status: asStatus(o.status),
       })),
     };
-  }, mockBundle);
+  }, mockBundle, { alwaysFallback: true });
 }
