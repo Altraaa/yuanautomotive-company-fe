@@ -12,21 +12,22 @@ import {
   getAllProductSlugs,
   getProductBySlug,
   getRelatedProducts,
-} from "@/features/products/data";
+} from "@/services/products";
 import { formatIDR } from "@/lib/utils";
 import { site, waLink } from "@/lib/site";
 
 export const revalidate = 3600;
 
-export function generateStaticParams() {
-  return getAllProductSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllProductSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) return { title: "Produk Tidak Ditemukan" };
 
   return {
@@ -44,10 +45,10 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 export default async function ProductDetailPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const related = getRelatedProducts(product.slug, product.category);
+  const related = await getRelatedProducts(product.slug, product.category);
 
   const productLd = {
     "@context": "https://schema.org",

@@ -2,11 +2,11 @@ import Link from "next/link";
 import { Eyebrow } from "@/components/common/eyebrow";
 import { SectionHeading } from "@/components/common/section-heading";
 import { BlogCard } from "@/components/common/blog-card";
-import { getAllBlogCards } from "@/features/blog/data";
+import { getAllBlogCards } from "@/services/blogs";
 import { site } from "@/lib/site";
 
-export function AboutBlogSection() {
-  const posts = getAllBlogCards().slice(0, 3);
+export async function AboutBlogSection() {
+  const posts = (await getAllBlogCards()).slice(0, 3);
 
   return (
     <section id="company" className="bg-surface-raised">

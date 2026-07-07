@@ -1,9 +1,9 @@
 import { SectionHeading } from "@/components/common/section-heading";
 import { ProductCard } from "@/components/common/product-card";
-import { getFeaturedProductCards } from "@/features/products/data";
+import { getFeaturedProductCards } from "@/services/products";
 
-export function FeaturedProductsSection() {
-  const products = getFeaturedProductCards();
+export async function FeaturedProductsSection() {
+  const products = await getFeaturedProductCards();
 
   return (
     <section id="product" className="bg-bg">

@@ -5,7 +5,7 @@ import { Pagination } from "@/components/common/pagination";
 import { ProductFilter } from "@/features/products/components/product-filter";
 import { ProductSort } from "@/features/products/components/product-sort";
 import { QuickAddButton } from "@/features/preorder/components/quick-add-button";
-import { queryProducts } from "@/features/products/data";
+import { queryProducts } from "@/services/products";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -32,7 +32,7 @@ export default async function ProductListPage({
   searchParams: SearchParams;
 }) {
   const sp = await searchParams;
-  const { items, total, totalPages, page } = queryProducts({
+  const { items, total, totalPages, page } = await queryProducts({
     category: sp.kategori,
     priceMin: sp.hargaMin ? Number(sp.hargaMin) : undefined,
     priceMax: sp.hargaMax ? Number(sp.hargaMax) : undefined,

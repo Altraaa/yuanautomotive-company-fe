@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/lib/site";
-import { products } from "@/features/products/data";
-import { blogs } from "@/features/blog/data";
+import { getAllProductSlugs } from "@/services/products";
+import { getAllBlogSlugs } from "@/services/blogs";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -14,16 +14,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${site.url}/kontak`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
   ];
 
-  const productRoutes: MetadataRoute.Sitemap = products.map((p) => ({
-    url: `${site.url}/produk/${p.slug}`,
+  const [productSlugs, blogSlugs] = await Promise.all([getAllProductSlugs(), getAllBlogSlugs()]);
+
+  const productRoutes: MetadataRoute.Sitemap = productSlugs.map((slug) => ({
+    url: `${site.url}/produk/${slug}`,
     lastModified: now,
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
-  const blogRoutes: MetadataRoute.Sitemap = blogs.map((b) => ({
-    url: `${site.url}/blog/${b.slug}`,
-    lastModified: new Date(b.publishedAt),
+  const blogRoutes: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
+    url: `${site.url}/blog/${slug}`,
+    lastModified: now,
     changeFrequency: "monthly",
     priority: 0.6,
   }));

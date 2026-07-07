@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/common/page-hero";
 import { BlogCard } from "@/components/common/blog-card";
 import { BlogCategoryTabs } from "@/features/blog/components/blog-category-tabs";
-import { getAllBlogCards } from "@/features/blog/data";
+import { getAllBlogCards } from "@/services/blogs";
 import { site } from "@/lib/site";
 
 export const revalidate = 3600;
@@ -18,7 +18,7 @@ type SearchParams = Promise<{ kategori?: string }>;
 
 export default async function BlogListPage({ searchParams }: { searchParams: SearchParams }) {
   const { kategori } = await searchParams;
-  const all = getAllBlogCards();
+  const all = await getAllBlogCards();
   const posts = kategori
     ? all.filter((p) => p.category.toLowerCase() === kategori.toLowerCase())
     : all;

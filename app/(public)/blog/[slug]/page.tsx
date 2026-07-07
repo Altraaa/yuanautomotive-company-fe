@@ -4,21 +4,22 @@ import { notFound } from "next/navigation";
 import { Breadcrumb } from "@/components/common/breadcrumb";
 import { SectionHeading } from "@/components/common/section-heading";
 import { BlogCard } from "@/components/common/blog-card";
-import { blogs, getBlogBySlug, getRelatedBlogs } from "@/features/blog/data";
+import { getAllBlogSlugs, getBlogBySlug, getRelatedBlogs } from "@/services/blogs";
 import { formatDate } from "@/lib/utils";
 import { site } from "@/lib/site";
 
 export const revalidate = 3600;
 
-export function generateStaticParams() {
-  return blogs.map((b) => ({ slug: b.slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllBlogSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogBySlug(slug);
+  const post = await getBlogBySlug(slug);
   if (!post) return { title: "Artikel Tidak Ditemukan" };
 
   return {
@@ -37,10 +38,10 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 export default async function BlogDetailPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const post = getBlogBySlug(slug);
+  const post = await getBlogBySlug(slug);
   if (!post) notFound();
 
-  const related = getRelatedBlogs(post.slug);
+  const related = await getRelatedBlogs(post.slug);
 
   const articleLd = {
     "@context": "https://schema.org",
