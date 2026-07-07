@@ -86,6 +86,8 @@ export type AdminProductRow = {
   price: number;
   badge?: ProductBadge;
   status: ProductStatus;
+  /** Main product image URL, when the backend provides it. */
+  imageUrl?: string;
 };
 
 /** A product image with its media uuid (for editable galleries). */

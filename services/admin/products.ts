@@ -28,6 +28,7 @@ function toRow(r: ApiAdminProductRow): AdminProductRow {
     price: Number(r.price),
     badge: toBadge(r.badge),
     status: r.status,
+    imageUrl: r.image_url ?? undefined,
   };
 }
 

@@ -24,6 +24,8 @@ export type ApiAdminProductRow = {
   price: string;
   badge: string | null;
   status: "Published" | "Draft";
+  /** Main product image (foto utama). Optional until the backend adds it. */
+  image_url?: string | null;
 };
 
 export type ApiAdminProductDetail = {

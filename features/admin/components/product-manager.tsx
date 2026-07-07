@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Check, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/common/badge";
@@ -140,9 +141,21 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
                   </button>
 
                   <div className="flex min-w-0 items-center gap-3">
-                    <div className="grid h-[38px] w-11 shrink-0 place-items-center border border-border bg-gradient-to-br from-border to-surface-sunken">
-                      <span className="h-4 w-3/5 rounded-sm bg-surface-black/80" />
-                    </div>
+                    {row.imageUrl ? (
+                      <div className="relative h-[38px] w-11 shrink-0 overflow-hidden border border-border">
+                        <Image
+                          src={row.imageUrl}
+                          alt=""
+                          fill
+                          sizes="44px"
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="grid h-[38px] w-11 shrink-0 place-items-center border border-border bg-gradient-to-br from-border to-surface-sunken">
+                        <span className="h-4 w-3/5 rounded-sm bg-surface-black/80" />
+                      </div>
+                    )}
                     <div className="min-w-0">
                       <Link
                         href={`/dashboard/produk/${row.uuid}`}
