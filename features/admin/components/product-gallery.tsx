@@ -20,9 +20,9 @@ export function ProductGallery({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative grid h-[300px] place-items-center overflow-hidden border border-border bg-gradient-to-br from-border to-surface-sunken md:h-[340px]">
+      <div className="relative grid aspect-square place-items-center overflow-hidden border border-border bg-gradient-to-br from-border to-surface-sunken">
         {hasImages ? (
-          <Image src={images[0]} alt="Foto produk" fill sizes="(min-width:1024px) 40vw, 100vw" className="object-cover" />
+          <Image src={images[0]} alt="Foto produk" fill sizes="(min-width:1024px) 40vw, 100vw" className="object-contain" />
         ) : (
           <div className="h-[110px] w-1/2 rounded-[26px_70px_16px_16px] bg-surface-black/85 shadow-[0_30px_40px_-16px_rgba(255,242,0,0.28)]" />
         )}
@@ -43,18 +43,18 @@ export function ProductGallery({
               <div
                 key={src + i}
                 className={cn(
-                  "relative h-[74px] overflow-hidden border",
+                  "relative aspect-square overflow-hidden border bg-surface-sunken",
                   i === 0 ? "border-2 border-gold" : "border-border"
                 )}
               >
-                <Image src={src} alt="" fill sizes="120px" className="object-cover" />
+                <Image src={src} alt="" fill sizes="120px" className="object-contain" />
               </div>
             ))
           : Array.from({ length: thumbs }, (_, i) => (
               <div
                 key={i}
                 className={cn(
-                  "grid h-[74px] place-items-center bg-gradient-to-br from-border to-surface-sunken",
+                  "grid aspect-square place-items-center bg-gradient-to-br from-border to-surface-sunken",
                   i === 0 ? "border-2 border-gold" : "border border-border"
                 )}
               >

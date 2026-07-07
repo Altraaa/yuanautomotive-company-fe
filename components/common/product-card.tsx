@@ -20,7 +20,7 @@ type ProductCardProps = {
 export function ProductCard({ product, action }: ProductCardProps) {
   return (
     <div className="group relative flex h-full flex-col border border-border border-t-[3px] border-t-gold bg-surface transition-[transform,border-color,box-shadow] duration-300 ease-sport hover:-translate-y-1 hover:border-gold hover:shadow-xl hover:shadow-black/40">
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-surface to-surface-sunken">
+      <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-surface to-surface-sunken">
         <Image
           src={product.imageUrl}
           alt={product.name}

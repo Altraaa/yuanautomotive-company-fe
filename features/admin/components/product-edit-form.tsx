@@ -336,14 +336,14 @@ export function ProductEditForm({
           />
 
           {/* Main preview */}
-          <div className="relative grid h-[150px] place-items-center overflow-hidden border border-border bg-gradient-to-br from-border to-surface-sunken">
+          <div className="relative grid aspect-square place-items-center overflow-hidden border border-border bg-gradient-to-br from-border to-surface-sunken">
             {images[0] ? (
               <Image
                 src={images[0].url}
                 alt="Foto utama produk"
                 fill
                 sizes="320px"
-                className="object-cover"
+                className="object-contain"
               />
             ) : (
               <div className="h-14 w-[48%] rounded-[16px_40px_8px_8px] bg-surface-black/85" />
@@ -366,8 +366,8 @@ export function ProductEditForm({
           {/* Thumbnails + add button */}
           <div className="grid grid-cols-3 gap-2">
             {images.slice(1).map((img) => (
-              <div key={img.uuid} className="relative h-14 overflow-hidden border border-border">
-                <Image src={img.url} alt="" fill sizes="120px" className="object-cover" />
+              <div key={img.uuid} className="relative aspect-square overflow-hidden border border-border bg-surface-sunken">
+                <Image src={img.url} alt="" fill sizes="120px" className="object-contain" />
                 <button
                   type="button"
                   onClick={() => removeImage(img.uuid)}
@@ -383,7 +383,7 @@ export function ProductEditForm({
               onClick={() => fileRef.current?.click()}
               disabled={uploading}
               aria-label="Tambah gambar"
-              className="grid h-14 place-items-center border border-dashed border-border-strong bg-surface-sunken text-gold transition-colors hover:border-gold disabled:opacity-50"
+              className="grid aspect-square place-items-center border border-dashed border-border-strong bg-surface-sunken text-gold transition-colors hover:border-gold disabled:opacity-50"
             >
               {uploading ? (
                 <span className="font-sans text-[10px] text-fg-subtle">Uploading…</span>
@@ -393,7 +393,7 @@ export function ProductEditForm({
             </button>
           </div>
           <span className="font-sans text-[11px] leading-relaxed text-fg-faint">
-            JPG / PNG / WebP · maks 2 MB · rasio 4:3 disarankan
+            JPG / PNG / WebP · maks 2 MB · rasio 1:1 disarankan
           </span>
         </SectionCard>
 

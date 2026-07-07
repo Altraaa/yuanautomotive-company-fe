@@ -179,17 +179,17 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
 
                   <div className="flex min-w-0 items-center gap-3">
                     {row.imageUrl ? (
-                      <div className="relative h-[38px] w-11 shrink-0 overflow-hidden border border-border">
+                      <div className="relative aspect-square w-11 shrink-0 overflow-hidden border border-border bg-surface-sunken">
                         <Image
                           src={row.imageUrl}
                           alt=""
                           fill
                           sizes="44px"
-                          className="object-cover"
+                          className="object-contain"
                         />
                       </div>
                     ) : (
-                      <div className="grid h-[38px] w-11 shrink-0 place-items-center border border-border bg-gradient-to-br from-border to-surface-sunken">
+                      <div className="grid aspect-square w-11 shrink-0 place-items-center border border-border bg-gradient-to-br from-border to-surface-sunken">
                         <span className="h-4 w-3/5 rounded-sm bg-surface-black/80" />
                       </div>
                     )}
