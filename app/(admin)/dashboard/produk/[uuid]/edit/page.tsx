@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Check } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
 import { AdminTopbar } from "@/features/admin/components/admin-topbar";
 import { ProductEditForm } from "@/features/admin/components/product-edit-form";
+import {
+  ProductFormProvider,
+  ProductSaveButton,
+} from "@/features/admin/components/product-form-context";
 import { getAdminProduct } from "@/services/admin/products";
 import { toProductFormValues } from "@/features/admin/product-schema";
 
@@ -23,7 +26,7 @@ export default async function EditProductPage({ params }: { params: Params }) {
   const backHref = `/dashboard/produk/${detail.uuid}`;
 
   return (
-    <>
+    <ProductFormProvider>
       <AdminTopbar
         crumbs={[
           { label: "Dashboard", href: "/dashboard" },
@@ -37,9 +40,7 @@ export default async function EditProductPage({ params }: { params: Params }) {
             <CtaButton href={backHref} variant="outline" className="hidden sm:inline-grid">
               Batal
             </CtaButton>
-            <CtaButton type="submit" form="product-form">
-              <Check className="h-4 w-4" /> Simpan Perubahan
-            </CtaButton>
+            <ProductSaveButton label="Simpan Perubahan" />
           </>
         }
       />
@@ -49,6 +50,6 @@ export default async function EditProductPage({ params }: { params: Params }) {
         initialImages={detail.galleryMedia}
         redirectTo={backHref}
       />
-    </>
+    </ProductFormProvider>
   );
 }

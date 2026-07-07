@@ -18,7 +18,7 @@ export function ProductDetailView({ detail }: { detail: AdminProductDetail }) {
     <div className="flex flex-col gap-5 p-4 md:gap-[22px] md:p-8">
       {/* Hero */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1.15fr]">
-        <ProductGallery badge={detail.badge} />
+        <ProductGallery images={detail.galleryMedia.map((m) => m.url)} badge={detail.badge} />
 
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center gap-2.5">

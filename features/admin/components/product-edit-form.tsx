@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronDown, Plus, X } from "lucide-react";
+import { Check, ChevronDown, Plus, X } from "lucide-react";
 import {
   productFormSchema,
   type ProductFormValues,
@@ -15,6 +15,7 @@ import { saveProductAction, uploadImageAction } from "@/features/admin/actions";
 import type { ProductMedia } from "@/types/ui/admin";
 import { cn } from "@/lib/utils";
 import { SectionCard } from "./section-card";
+import { useProductForm } from "./product-form-context";
 
 const labelClass =
   "font-sans text-[11px] font-semibold uppercase tracking-[0.1em] text-fg-muted";
@@ -46,8 +47,10 @@ export function ProductEditForm({
   formId = "product-form",
 }: ProductEditFormProps) {
   const router = useRouter();
+  const formCtx = useProductForm();
   const [compatDraft, setCompatDraft] = useState("");
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
   const [images, setImages] = useState<ProductMedia[]>(initialImages);
   // Only send `image_uuids` (authoritative) once the user actually changes the
   // gallery — otherwise omit it so the backend leaves existing photos intact.
@@ -115,27 +118,42 @@ export function ProductEditForm({
 
   async function onSubmit(values: ProductFormValues) {
     setSaveError(null);
+    formCtx?.setSubmitting(true);
     const result = await saveProductAction(
       productUuid,
       values,
       imagesDirty ? images.map((img) => img.uuid) : null
     );
     if (!result.ok) {
+      formCtx?.setSubmitting(false);
       setSaveError(result.message);
       return;
     }
-    router.push(redirectTo);
-    router.refresh();
+    // Show a brief success confirmation, then go to the detail/list.
+    setSaved(true);
+    setTimeout(() => {
+      router.push(redirectTo);
+      router.refresh();
+    }, 700);
+  }
+
+  function onInvalid() {
+    setSaveError("Lengkapi dulu field yang wajib diisi (nama, SKU, harga, stok, slug).");
   }
 
   return (
     <form
       id={formId}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit, onInvalid)}
       className="grid grid-cols-1 items-start gap-5 p-4 md:p-8 lg:grid-cols-[1fr_340px]"
       noValidate
     >
-      {saveError && (
+      {saved && (
+        <p className="flex items-center gap-2 border border-whatsapp/50 bg-whatsapp/10 px-4 py-2.5 font-sans text-sm text-whatsapp lg:col-span-2">
+          <Check className="h-4 w-4" /> Produk berhasil disimpan…
+        </p>
+      )}
+      {saveError && !saved && (
         <p className="border border-red/50 bg-red/10 px-4 py-2.5 font-sans text-sm text-red-soft lg:col-span-2">
           {saveError}
         </p>
