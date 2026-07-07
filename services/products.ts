@@ -84,10 +84,12 @@ export function getProductBySlug(slug: string): Promise<ProductDetailData | unde
 export function getFeaturedProductCards(): Promise<ProductCardData[]> {
   return withFallback(
     async () => {
+      // Backend has no dedicated `featured` param (strict whitelist) — take the
+      // top of the list as featured for now; swap when BE exposes a flag.
       const res = await apiClient.get<ApiPaginated<ApiProductCard>>(endpoints.products.list, {
         revalidate: 3600,
         tags: ["products"],
-        query: { featured: true, limit: 4 },
+        query: { limit: 4 },
       });
       return res.items.map(toCard);
     },
@@ -121,7 +123,7 @@ export function getAllProductSlugs(): Promise<string[]> {
       const res = await apiClient.get<ApiPaginated<ApiProductCard>>(endpoints.products.list, {
         revalidate: 3600,
         tags: ["products"],
-        query: { limit: 200 },
+        query: { limit: 100 },
       });
       return res.items.map((p) => p.slug);
     },

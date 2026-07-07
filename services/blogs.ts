@@ -79,7 +79,7 @@ export function getAllBlogSlugs(): Promise<string[]> {
       const res = await apiClient.get<ApiPaginated<ApiBlogCard>>(endpoints.blogs.list, {
         revalidate: 3600,
         tags: ["blogs"],
-        query: { limit: 200 },
+        query: { limit: 100 },
       });
       return res.items.map((b) => b.slug);
     },
