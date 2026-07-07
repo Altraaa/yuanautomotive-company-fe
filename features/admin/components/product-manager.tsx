@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Check, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/common/badge";
 import type { AdminProductRow, ProductStatus } from "@/types/ui/admin";
 import type { ProductBadge } from "@/types/ui/product";
 import { cn, formatIDR } from "@/lib/utils";
 import { ADMIN_PRODUCTS_TOTAL } from "@/features/admin/data";
+import { bulkDeleteProductsAction, deleteProductAction } from "@/features/admin/actions";
 import { AdminPagination } from "./admin-pagination";
 
 const GRID = "grid grid-cols-[40px_2.4fr_1fr_1.1fr_0.9fr_1fr_96px] items-center gap-3.5";
@@ -25,7 +27,9 @@ const statusStyle: Record<ProductStatus, string> = {
 };
 
 export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
+  const router = useRouter();
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [isPending, startTransition] = useTransition();
 
   const allSelected = rows.length > 0 && selected.size === rows.length;
 
@@ -40,6 +44,29 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
 
   function toggleAll() {
     setSelected(allSelected ? new Set() : new Set(rows.map((r) => r.uuid)));
+  }
+
+  function handleDelete(uuid: string) {
+    if (!window.confirm("Hapus produk ini? Tindakan tidak bisa dibatalkan.")) return;
+    startTransition(async () => {
+      await deleteProductAction(uuid);
+      setSelected((prev) => {
+        const next = new Set(prev);
+        next.delete(uuid);
+        return next;
+      });
+      router.refresh();
+    });
+  }
+
+  function handleBulkDelete() {
+    if (selected.size === 0) return;
+    if (!window.confirm(`Hapus ${selected.size} produk terpilih?`)) return;
+    startTransition(async () => {
+      await bulkDeleteProductsAction([...selected]);
+      setSelected(new Set());
+      router.refresh();
+    });
   }
 
   return (
@@ -66,7 +93,9 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
             <span className="h-4 w-px bg-border" />
             <button
               type="button"
-              className="flex items-center gap-1.5 font-display text-[11.5px] font-bold uppercase tracking-[0.04em] text-red-soft"
+              onClick={handleBulkDelete}
+              disabled={isPending}
+              className="flex items-center gap-1.5 font-display text-[11.5px] font-bold uppercase tracking-[0.04em] text-red-soft disabled:opacity-50"
             >
               <Trash2 className="h-3.5 w-3.5" /> Hapus Terpilih
             </button>
@@ -141,7 +170,7 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
                     <RowAction label="Edit" tone="gold" href={`/dashboard/produk/${row.uuid}/edit`}>
                       <Pencil className="h-3.5 w-3.5" />
                     </RowAction>
-                    <RowAction label="Hapus" tone="red">
+                    <RowAction label="Hapus" tone="red" onClick={() => handleDelete(row.uuid)}>
                       <Trash2 className="h-3.5 w-3.5" />
                     </RowAction>
                   </div>
@@ -193,11 +222,13 @@ function RowAction({
   label,
   tone,
   href,
+  onClick,
 }: {
   children: React.ReactNode;
   label: string;
   tone: "gold" | "red";
   href?: string;
+  onClick?: () => void;
 }) {
   const className = cn(
     "grid h-[30px] w-[30px] place-items-center border border-border bg-surface-sunken transition-colors hover:border-border-strong",
@@ -211,7 +242,7 @@ function RowAction({
     );
   }
   return (
-    <button type="button" title={label} aria-label={label} className={className}>
+    <button type="button" onClick={onClick} title={label} aria-label={label} className={className}>
       {children}
     </button>
   );

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Plus, Upload } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
-import { adminProductRows } from "@/features/admin/data";
+import { listAdminProducts } from "@/services/admin/products";
 import { AdminTopbar } from "@/features/admin/components/admin-topbar";
 import { ProductFilterBar } from "@/features/admin/components/product-filter-bar";
 import { ProductManager } from "@/features/admin/components/product-manager";
@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   title: "Kelola Produk",
 };
 
-export default function ManageProductsPage() {
+export default async function ManageProductsPage() {
+  const { items } = await listAdminProducts({ page: 1 });
   return (
     <>
       <AdminTopbar
@@ -30,7 +31,7 @@ export default function ManageProductsPage() {
 
       <div className="flex flex-col gap-[18px] p-4 md:p-8">
         <ProductFilterBar />
-        <ProductManager rows={adminProductRows} />
+        <ProductManager rows={items} />
       </div>
     </>
   );

@@ -5,7 +5,8 @@ import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
 import { AdminTopbar } from "@/features/admin/components/admin-topbar";
 import { ProductDetailView } from "@/features/admin/components/product-detail-view";
-import { getAdminProductDetail, getAdminProductUuids } from "@/features/admin/data";
+import { getAdminProduct } from "@/services/admin/products";
+import { getAdminProductUuids } from "@/features/admin/data";
 
 type Params = Promise<{ uuid: string }>;
 
@@ -15,13 +16,13 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { uuid } = await params;
-  const detail = getAdminProductDetail(uuid);
+  const detail = await getAdminProduct(uuid);
   return { title: detail ? `${detail.name} — Detail` : "Produk Tidak Ditemukan" };
 }
 
 export default async function ProductDetailPage({ params }: { params: Params }) {
   const { uuid } = await params;
-  const detail = getAdminProductDetail(uuid);
+  const detail = await getAdminProduct(uuid);
   if (!detail) notFound();
 
   return (

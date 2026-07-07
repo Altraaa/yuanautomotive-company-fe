@@ -10,6 +10,7 @@ import {
   productFormSchema,
   type ProductFormValues,
 } from "@/features/admin/product-schema";
+import { saveProductAction } from "@/features/admin/actions";
 import { cn } from "@/lib/utils";
 import { SectionCard } from "./section-card";
 
@@ -21,6 +22,8 @@ const inputClass =
   "w-full bg-transparent font-sans text-sm text-fg outline-none placeholder:text-fg-faint";
 
 type ProductEditFormProps = {
+  /** Product uuid when editing; null when creating. */
+  productUuid: string | null;
   defaultValues: ProductFormValues;
   /** Where to navigate after a successful save. */
   redirectTo: string;
@@ -32,12 +35,14 @@ const badgeOptions = ["", "BARU", "HOT", "TERLARIS", "PRE-ORDER"];
 const categoryOptions = ["Sparepart", "Body Part", "Aksesoris"];
 
 export function ProductEditForm({
+  productUuid,
   defaultValues,
   redirectTo,
   formId = "product-form",
 }: ProductEditFormProps) {
   const router = useRouter();
   const [compatDraft, setCompatDraft] = useState("");
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const {
     register,
@@ -72,9 +77,15 @@ export function ProductEditForm({
     );
   }
 
-  async function onSubmit(_values: ProductFormValues) {
-    // TODO: wire services/products.create|update once the backend is ready.
+  async function onSubmit(values: ProductFormValues) {
+    setSaveError(null);
+    const result = await saveProductAction(productUuid, values);
+    if (!result.ok) {
+      setSaveError(result.message);
+      return;
+    }
     router.push(redirectTo);
+    router.refresh();
   }
 
   return (
@@ -84,6 +95,12 @@ export function ProductEditForm({
       className="grid grid-cols-1 items-start gap-5 p-4 md:p-8 lg:grid-cols-[1fr_340px]"
       noValidate
     >
+      {saveError && (
+        <p className="border border-red/50 bg-red/10 px-4 py-2.5 font-sans text-sm text-red-soft lg:col-span-2">
+          {saveError}
+        </p>
+      )}
+
       {/* LEFT: form sections */}
       <div className="flex flex-col gap-[18px]">
         <SectionCard title="Informasi Dasar" topAccent="gold" bodyClassName="flex flex-col gap-4 md:px-[22px]">

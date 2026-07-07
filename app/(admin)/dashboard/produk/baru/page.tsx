@@ -30,7 +30,11 @@ export default function CreateProductPage() {
           </>
         }
       />
-      <ProductEditForm defaultValues={emptyProductFormValues} redirectTo="/dashboard/produk" />
+      <ProductEditForm
+        productUuid={null}
+        defaultValues={emptyProductFormValues}
+        redirectTo="/dashboard/produk"
+      />
     </>
   );
 }

@@ -1,14 +1,5 @@
 import type { Metadata } from "next";
-import {
-  dashboardStats,
-  leadsTrend,
-  orderStatusBreakdown,
-  ordersTrend,
-  productsByCategory,
-  recentLeads,
-  recentOrders,
-  topProducts,
-} from "@/features/admin/data";
+import { getDashboard } from "@/services/admin/dashboard";
 import { ActivityCard } from "@/features/admin/components/activity-card";
 import { AdminTopbar } from "@/features/admin/components/admin-topbar";
 import { BarList } from "@/features/admin/components/bar-list";
@@ -38,7 +29,18 @@ function TrendValue({ value, tone, delta, direction }: {
   );
 }
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const {
+    stats: dashboardStats,
+    leadsTrend,
+    ordersTrend,
+    productsByCategory,
+    orderStatusBreakdown,
+    topProducts,
+    recentLeads,
+    recentOrders,
+  } = await getDashboard();
+
   return (
     <>
       <AdminTopbar eyebrow="Ringkasan" title="Dashboard" showTools />
