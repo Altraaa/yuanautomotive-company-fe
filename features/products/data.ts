@@ -231,7 +231,7 @@ export type ProductFilters = {
   page?: number;
 };
 
-export const PRODUCTS_PER_PAGE = 6;
+export const PRODUCTS_PER_PAGE = 10;
 
 function matchesCategory(p: ProductCardData, category?: string): boolean {
   if (!category) return true;
