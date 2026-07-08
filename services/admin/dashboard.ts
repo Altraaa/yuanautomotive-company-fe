@@ -72,7 +72,7 @@ const initials = (name: string) =>
     .toUpperCase();
 const asStatus = (s: string): ActivityStatus => {
   const up = s.toUpperCase();
-  return (["NEW", "CONTACTED", "PROCESSED", "DONE", "CANCELLED"] as const).includes(
+  return (["NEW", "CONTACTED", "CLOSED", "PROCESSED", "DONE", "CANCELLED"] as const).includes(
     up as ActivityStatus
   )
     ? (up as ActivityStatus)

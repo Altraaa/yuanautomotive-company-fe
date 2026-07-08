@@ -13,6 +13,7 @@ export type Tone = "red" | "gold" | "green" | "grey" | "muted";
 export type ActivityStatus =
   | "NEW"
   | "CONTACTED"
+  | "CLOSED"
   | "PROCESSED"
   | "DONE"
   | "CANCELLED";

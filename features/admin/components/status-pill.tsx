@@ -9,6 +9,7 @@ const pillVariants = cva(
       status: {
         NEW: "bg-gold/15 text-gold",
         CONTACTED: "bg-surface-raised text-fg",
+        CLOSED: "bg-whatsapp/15 text-whatsapp",
         PROCESSED: "bg-border text-fg-muted",
         DONE: "bg-whatsapp/15 text-whatsapp",
         CANCELLED: "bg-red/15 text-red-soft",
