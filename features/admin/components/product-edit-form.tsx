@@ -1,20 +1,25 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronDown, Plus, X } from "lucide-react";
+import { ChevronDown, Plus, X } from "lucide-react";
 import {
   productFormSchema,
   type ProductFormValues,
 } from "@/features/admin/product-schema";
-import { saveProductAction, uploadImageAction } from "@/features/admin/actions";
+import {
+  deleteProductAction,
+  saveProductAction,
+  uploadImageAction,
+} from "@/features/admin/actions";
 import type { ProductMedia } from "@/types/ui/admin";
 import { cn } from "@/lib/utils";
 import { SectionCard } from "./section-card";
+import { ConfirmDialog } from "./confirm-dialog";
+import { useToast } from "./toast";
 import { useProductForm } from "./product-form-context";
 
 const labelClass =
@@ -47,10 +52,11 @@ export function ProductEditForm({
   formId = "product-form",
 }: ProductEditFormProps) {
   const router = useRouter();
+  const { toast } = useToast();
   const formCtx = useProductForm();
   const [compatDraft, setCompatDraft] = useState("");
-  const [saveError, setSaveError] = useState<string | null>(null);
-  const [saved, setSaved] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [isDeleting, startDelete] = useTransition();
   const [images, setImages] = useState<ProductMedia[]>(initialImages);
   // Only send `image_uuids` (authoritative) once the user actually changes the
   // gallery — otherwise omit it so the backend leaves existing photos intact.
@@ -61,8 +67,8 @@ export function ProductEditForm({
   async function handleFiles(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (!files || files.length === 0) return;
-    setSaveError(null);
     setUploading(true);
+    let ok = 0;
     for (const file of Array.from(files)) {
       const fd = new FormData();
       fd.append("file", file);
@@ -70,10 +76,12 @@ export function ProductEditForm({
       if (res.ok) {
         setImages((prev) => [...prev, { uuid: res.id, url: res.url }]);
         setImagesDirty(true);
+        ok += 1;
       } else {
-        setSaveError(res.message);
+        toast.error(res.message);
       }
     }
+    if (ok > 0) toast.success(`${ok} gambar diunggah.`);
     setUploading(false);
     if (fileRef.current) fileRef.current.value = "";
   }
@@ -117,7 +125,6 @@ export function ProductEditForm({
   }
 
   async function onSubmit(values: ProductFormValues) {
-    setSaveError(null);
     formCtx?.setSubmitting(true);
     const result = await saveProductAction(
       productUuid,
@@ -126,19 +133,31 @@ export function ProductEditForm({
     );
     if (!result.ok) {
       formCtx?.setSubmitting(false);
-      setSaveError(result.message);
+      toast.error(result.message);
       return;
     }
-    // Show a brief success confirmation, then go to the detail/list.
-    setSaved(true);
-    setTimeout(() => {
-      router.push(redirectTo);
-      router.refresh();
-    }, 700);
+    toast.success(productUuid ? "Produk diperbarui." : "Produk berhasil dibuat.");
+    router.push(redirectTo);
+    router.refresh();
   }
 
   function onInvalid() {
-    setSaveError("Lengkapi dulu field yang wajib diisi (nama, SKU, harga, stok, slug).");
+    toast.error("Lengkapi dulu field yang wajib diisi (nama, SKU, harga, stok, slug).");
+  }
+
+  function confirmDelete() {
+    if (!productUuid) return;
+    startDelete(async () => {
+      const res = await deleteProductAction(productUuid);
+      if (res.ok) {
+        toast.success("Produk dihapus.");
+        router.push("/dashboard/produk");
+        router.refresh();
+      } else {
+        toast.error(res.message);
+        setDeleteOpen(false);
+      }
+    });
   }
 
   return (
@@ -148,17 +167,6 @@ export function ProductEditForm({
       className="grid grid-cols-1 items-start gap-5 p-4 md:p-8 lg:grid-cols-[1fr_340px]"
       noValidate
     >
-      {saved && (
-        <p className="flex items-center gap-2 border border-whatsapp/50 bg-whatsapp/10 px-4 py-2.5 font-sans text-sm text-whatsapp lg:col-span-2">
-          <Check className="h-4 w-4" /> Produk berhasil disimpan…
-        </p>
-      )}
-      {saveError && !saved && (
-        <p className="border border-red/50 bg-red/10 px-4 py-2.5 font-sans text-sm text-red-soft lg:col-span-2">
-          {saveError}
-        </p>
-      )}
-
       {/* LEFT: form sections */}
       <div className="flex flex-col gap-[18px]">
         <SectionCard title="Informasi Dasar" topAccent="gold" bodyClassName="flex flex-col gap-4 md:px-[22px]">
@@ -404,19 +412,31 @@ export function ProductEditForm({
           {errors.slug && <span className="font-sans text-xs text-red-soft">{errors.slug.message}</span>}
         </SectionCard>
 
-        <div className="flex items-center justify-between gap-3 border border-red/30 bg-red/[0.08] px-4 py-3.5">
-          <div>
-            <div className="font-display text-[12.5px] font-bold text-red-soft">Hapus Produk</div>
-            <div className="mt-0.5 font-sans text-[11px] text-fg-subtle">Tidak bisa dibatalkan</div>
+        {productUuid && (
+          <div className="flex items-center justify-between gap-3 border border-red/30 bg-red/[0.08] px-4 py-3.5">
+            <div>
+              <div className="font-display text-[12.5px] font-bold text-red-soft">Hapus Produk</div>
+              <div className="mt-0.5 font-sans text-[11px] text-fg-subtle">Tidak bisa dibatalkan</div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setDeleteOpen(true)}
+              className="flex-none border border-red/50 px-3.5 py-2 font-display text-[11px] font-bold uppercase tracking-[0.06em] text-red-soft transition-colors hover:bg-red/10"
+            >
+              Hapus
+            </button>
           </div>
-          <Link
-            href="/dashboard/produk"
-            className="flex-none border border-red/50 px-3.5 py-2 font-display text-[11px] font-bold uppercase tracking-[0.06em] text-red-soft transition-colors hover:bg-red/10"
-          >
-            Hapus
-          </Link>
-        </div>
+        )}
       </div>
+
+      <ConfirmDialog
+        open={deleteOpen}
+        title="Hapus Produk"
+        description="Produk ini akan dihapus permanen. Tindakan tidak bisa dibatalkan."
+        pending={isDeleting}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteOpen(false)}
+      />
     </form>
   );
 }

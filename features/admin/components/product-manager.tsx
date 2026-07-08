@@ -11,6 +11,8 @@ import type { ProductBadge } from "@/types/ui/product";
 import { cn, formatIDR } from "@/lib/utils";
 import { bulkDeleteProductsAction, deleteProductAction } from "@/features/admin/actions";
 import { AdminPagination } from "./admin-pagination";
+import { ConfirmDialog } from "./confirm-dialog";
+import { useToast } from "./toast";
 import {
   ProductFilterBar,
   defaultProductFilters,
@@ -47,9 +49,12 @@ const statusStyle: Record<ProductStatus, string> = {
 
 export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
   const router = useRouter();
+  const { toast } = useToast();
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState<ProductListFilters>(defaultProductFilters);
   const [page, setPage] = useState(1);
+  const [deleteTarget, setDeleteTarget] = useState<AdminProductRow | null>(null);
+  const [bulkOpen, setBulkOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const filtered = useMemo(() => filterRows(rows, filters), [rows, filters]);
@@ -82,26 +87,38 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
     });
   }
 
-  function handleDelete(uuid: string) {
-    if (!window.confirm("Hapus produk ini? Tindakan tidak bisa dibatalkan.")) return;
+  function confirmDelete() {
+    if (!deleteTarget) return;
+    const target = deleteTarget;
     startTransition(async () => {
-      await deleteProductAction(uuid);
-      setSelected((prev) => {
-        const next = new Set(prev);
-        next.delete(uuid);
-        return next;
-      });
-      router.refresh();
+      const res = await deleteProductAction(target.uuid);
+      if (res.ok) {
+        toast.success(`Produk "${target.name}" dihapus.`);
+        setSelected((prev) => {
+          const next = new Set(prev);
+          next.delete(target.uuid);
+          return next;
+        });
+        router.refresh();
+      } else {
+        toast.error(res.message);
+      }
+      setDeleteTarget(null);
     });
   }
 
-  function handleBulkDelete() {
+  function confirmBulkDelete() {
     if (selected.size === 0) return;
-    if (!window.confirm(`Hapus ${selected.size} produk terpilih?`)) return;
     startTransition(async () => {
-      await bulkDeleteProductsAction([...selected]);
-      setSelected(new Set());
-      router.refresh();
+      const res = await bulkDeleteProductsAction([...selected]);
+      if (res.ok) {
+        toast.success(`${selected.size} produk dihapus.`);
+        setSelected(new Set());
+        router.refresh();
+      } else {
+        toast.error(res.message);
+      }
+      setBulkOpen(false);
     });
   }
 
@@ -131,7 +148,7 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
             <span className="h-4 w-px bg-border" />
             <button
               type="button"
-              onClick={handleBulkDelete}
+              onClick={() => setBulkOpen(true)}
               disabled={isPending}
               className="flex items-center gap-1.5 font-display text-[11.5px] font-bold uppercase tracking-[0.04em] text-red-soft disabled:opacity-50"
             >
@@ -220,7 +237,7 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
                     <RowAction label="Edit" tone="gold" href={`/dashboard/produk/${row.uuid}/edit`}>
                       <Pencil className="h-3.5 w-3.5" />
                     </RowAction>
-                    <RowAction label="Hapus" tone="red" onClick={() => handleDelete(row.uuid)}>
+                    <RowAction label="Hapus" tone="red" onClick={() => setDeleteTarget(row)}>
                       <Trash2 className="h-3.5 w-3.5" />
                     </RowAction>
                   </div>
@@ -244,6 +261,23 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
           onPageChange={setPage}
         />
       </div>
+
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        title="Hapus Produk"
+        description={deleteTarget ? `Produk "${deleteTarget.name}" akan dihapus permanen.` : undefined}
+        pending={isPending}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
+      <ConfirmDialog
+        open={bulkOpen}
+        title="Hapus Produk Terpilih"
+        description={`${selected.size} produk akan dihapus permanen.`}
+        pending={isPending}
+        onConfirm={confirmBulkDelete}
+        onCancel={() => setBulkOpen(false)}
+      />
     </div>
   );
 }

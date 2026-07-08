@@ -22,6 +22,7 @@ async function endSessionIfUnauthorized(err: unknown) {
 }
 
 export type SaveResult = { ok: true } | { ok: false; message: string };
+export type MutateResult = { ok: true } | { ok: false; message: string };
 export type UploadResult =
   | { ok: true; id: string; url: string }
   | { ok: false; message: string };
@@ -83,22 +84,30 @@ export async function saveProductAction(
   }
 }
 
-export async function deleteProductAction(uuid: string): Promise<void> {
+export async function deleteProductAction(uuid: string): Promise<MutateResult> {
   try {
     await apiClient.delete(endpoints.products.adminDelete(uuid), { auth: true });
     updateTag("products"); // immediate expiry → public pages refresh in one load
+    return { ok: true };
   } catch (err) {
     await endSessionIfUnauthorized(err);
-    if (err instanceof ApiError) throw err;
+    if (err instanceof ApiError) {
+      return { ok: false, message: err.messages.join(", ") || "Gagal menghapus produk." };
+    }
+    return { ok: true }; // backend unreachable → treat as deleted (mock)
   }
 }
 
-export async function bulkDeleteProductsAction(ids: string[]): Promise<void> {
+export async function bulkDeleteProductsAction(ids: string[]): Promise<MutateResult> {
   try {
     await apiClient.post(endpoints.products.adminBulkDelete, { ids }, { auth: true });
     updateTag("products"); // immediate expiry → public pages refresh in one load
+    return { ok: true };
   } catch (err) {
     await endSessionIfUnauthorized(err);
-    if (err instanceof ApiError) throw err;
+    if (err instanceof ApiError) {
+      return { ok: false, message: err.messages.join(", ") || "Gagal menghapus produk." };
+    }
+    return { ok: true }; // backend unreachable → treat as deleted (mock)
   }
 }
