@@ -12,7 +12,7 @@ const EFFECTIVE_DATE = "1 Juli 2026";
 
 export const metadata: Metadata = {
   title: "Kebijakan Privasi",
-  description: `Kebijakan Privasi ${site.name} (dikelola ${LEGAL_ENTITY}) — bagaimana kami mengumpulkan, menggunakan, dan melindungi data pribadi Anda sesuai UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP).`,
+  description: `Kebijakan Privasi ${site.name} (dikelola ${LEGAL_ENTITY}) — bagaimana kami mengumpulkan, menggunakan, dan melindungi Data Pribadi Anda sesuai UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP).`,
   alternates: { canonical: `${site.url}/kebijakan-privasi` },
 };
 
@@ -34,7 +34,7 @@ const sections: Section[] = [
     id: "pendahuluan",
     title: "Pendahuluan",
     intro: [
-      `${site.name} yang dikelola oleh ${LEGAL_ENTITY} berkomitmen melindungi data pribadi setiap pengunjung dan pelanggan. Kebijakan ini menjelaskan bagaimana kami mengumpulkan, menggunakan, menyimpan, dan melindungi data Anda ketika menggunakan situs katalog sparepart & aksesoris mobil listrik (EV) kami.`,
+      `${site.name} yang dikelola oleh ${LEGAL_ENTITY} berkomitmen melindungi Data Pribadi setiap pengunjung dan pelanggan. Kebijakan ini menjelaskan bagaimana kami mengumpulkan, menggunakan, menyimpan, dan melindungi data Anda ketika menggunakan situs katalog sparepart & aksesoris mobil listrik (EV) kami.`,
       "Dengan menggunakan situs ini dan mengirimkan data melalui formulir kontak, pre-order, maupun menghubungi kami via WhatsApp, email, atau telepon, Anda dianggap telah membaca, memahami, dan menyetujui kebijakan ini.",
     ],
   },
@@ -43,13 +43,13 @@ const sections: Section[] = [
     title: "Dasar Hukum",
     intro: [
       "Kebijakan ini mengacu pada Undang-Undang Republik Indonesia No. 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP) beserta peraturan pelaksananya.",
-      `Dalam pemrosesan data pribadi Anda, ${LEGAL_ENTITY} bertindak sebagai Pengendali Data Pribadi sebagaimana dimaksud dalam Pasal 20 UU PDP.`,
+      `Dalam pemrosesan Data Pribadi Anda, ${LEGAL_ENTITY} bertindak sebagai Pengendali Data Pribadi sebagaimana dimaksud dalam Pasal 20 UU PDP.`,
     ],
   },
   {
     id: "data-yang-dikumpulkan",
     title: "Data yang Dikumpulkan",
-    intro: ["Kami mengumpulkan data pribadi dalam empat kategori berikut:"],
+    intro: ["Kami mengumpulkan Data Pribadi dalam empat kategori berikut:"],
     bullets: [
       "Identitas & kontak — nama, email, nomor telepon/WhatsApp, kota, serta model kendaraan EV Anda.",
       "Konsultasi & kebutuhan — detail pesan, kebutuhan sparepart/aksesoris, dan kompatibilitas kendaraan.",
@@ -57,13 +57,13 @@ const sections: Section[] = [
       "Data teknis — alamat IP, jenis perangkat, halaman yang dikunjungi, cookie, dan data Google Analytics.",
     ],
     outro: [
-      "Kami tidak dengan sengaja mengumpulkan data pribadi yang bersifat spesifik/sensitif seperti data kesehatan, biometrik, atau keuangan.",
+      "Kami tidak dengan sengaja mengumpulkan Data Pribadi yang bersifat spesifik/sensitif seperti data kesehatan, biometrik, atau keuangan.",
     ],
   },
   {
     id: "tujuan-penggunaan",
     title: "Tujuan Penggunaan",
-    intro: ["Data pribadi Anda kami gunakan untuk tujuan berikut:"],
+    intro: ["Data Pribadi Anda kami gunakan untuk tujuan berikut:"],
     bullets: [
       "Melakukan konsultasi dan asesmen kebutuhan sparepart & aksesoris mobil listrik Anda.",
       "Menghubungi Anda terkait pertanyaan, penawaran, konfirmasi stok, dan pre-order.",
@@ -77,7 +77,7 @@ const sections: Section[] = [
     id: "dasar-pemrosesan",
     title: "Dasar Pemrosesan & Persetujuan",
     intro: [
-      "Pemrosesan data pribadi Anda dilakukan berdasarkan persetujuan yang Anda berikan serta kepentingan yang sah (legitimate interest) dari perusahaan.",
+      "Pemrosesan Data Pribadi Anda dilakukan berdasarkan persetujuan yang Anda berikan serta kepentingan yang sah (legitimate interest) dari perusahaan.",
       "Persetujuan untuk tujuan pemasaran bersifat sukarela dan dapat Anda tarik kembali kapan saja tanpa memengaruhi layanan inti yang Anda terima.",
     ],
   },
@@ -93,7 +93,7 @@ const sections: Section[] = [
     id: "pihak-ketiga",
     title: "Pembagian ke Pihak Ketiga",
     intro: [
-      "Kami tidak menjual data pribadi Anda kepada pihak mana pun. Data hanya dibagikan secara terbatas kepada:",
+      "Kami tidak menjual Data Pribadi Anda kepada pihak mana pun. Data hanya dibagikan secara terbatas kepada:",
     ],
     bullets: [
       "Penyedia layanan tepercaya yang membantu operasional kami (mis. hosting, analitik, dan pengiriman).",
@@ -105,29 +105,29 @@ const sections: Section[] = [
     id: "penyimpanan-keamanan",
     title: "Penyimpanan & Keamanan",
     intro: [
-      "Kami menerapkan langkah-langkah teknis dan organisasi yang wajar untuk melindungi data pribadi Anda dari akses, pengungkapan, perubahan, atau penghancuran yang tidak sah.",
-      "Data pribadi disimpan selama masih diperlukan untuk tujuan pengumpulannya atau selama diwajibkan oleh hukum, kemudian akan dihapus atau dianonimkan.",
+      "Kami menerapkan langkah-langkah teknis dan organisasi yang wajar untuk melindungi Data Pribadi Anda dari akses, pengungkapan, perubahan, atau penghancuran yang tidak sah.",
+      "Data Pribadi disimpan selama masih diperlukan untuk tujuan pengumpulannya atau selama diwajibkan oleh hukum, kemudian akan dihapus atau dianonimkan.",
     ],
   },
   {
     id: "hak-anda",
     title: "Hak Anda (UU PDP)",
-    intro: ["Sesuai UU PDP, Anda memiliki hak-hak berikut atas data pribadi Anda:"],
+    intro: ["Sesuai UU PDP, Anda memiliki hak-hak berikut atas Data Pribadi Anda:"],
     bullets: [
-      "Mengakses dan memperoleh salinan data pribadi Anda.",
+      "Mengakses dan memperoleh salinan Data Pribadi Anda.",
       "Memperbaiki atau memperbarui data yang tidak akurat.",
-      "Menghapus data pribadi Anda (right to be forgotten).",
+      "Menghapus Data Pribadi Anda (right to be forgotten).",
       "Menarik kembali persetujuan yang telah diberikan.",
       "Menolak pemrosesan untuk pemasaran maupun pengambilan keputusan otomatis.",
       "Memperoleh dan memindahkan data Anda (portabilitas data).",
-      "Menuntut ganti rugi atas pelanggaran pemrosesan data pribadi.",
+      "Menuntut ganti rugi atas pelanggaran pemrosesan Data Pribadi.",
     ],
   },
   {
     id: "data-anak",
     title: "Data Anak",
     intro: [
-      "Layanan kami ditujukan untuk pengguna dewasa. Kami tidak dengan sengaja mengumpulkan data pribadi anak-anak tanpa persetujuan orang tua atau wali yang sah.",
+      "Layanan kami ditujukan untuk pengguna dewasa. Kami tidak dengan sengaja mengumpulkan Data Pribadi anak-anak tanpa persetujuan orang tua atau wali yang sah.",
       "Apabila Anda menyadari bahwa data anak telah dikirimkan tanpa izin, silakan menghubungi kami agar data tersebut dapat dihapus.",
     ],
   },
@@ -143,7 +143,7 @@ const sections: Section[] = [
     id: "hubungi-kami",
     title: "Hubungi Kami (Pengendali Data)",
     intro: [
-      `Untuk pertanyaan, permintaan penggunaan hak Anda, atau keluhan terkait data pribadi, silakan hubungi ${LEGAL_ENTITY} selaku Pengendali Data melalui kanal berikut:`,
+      `Untuk pertanyaan, permintaan penggunaan hak Anda, atau keluhan terkait Data Pribadi, silakan hubungi ${LEGAL_ENTITY} selaku Pengendali Data melalui kanal berikut:`,
     ],
     contact: true,
   },
@@ -156,7 +156,7 @@ export default function PrivacyPolicyPage() {
         eyebrow="Legal"
         title="Kebijakan"
         accent="Privasi"
-        description={`Bagaimana ${site.name} (dikelola ${LEGAL_ENTITY}) mengumpulkan, menggunakan, dan melindungi data pribadi Anda sesuai UU PDP.`}
+        description={`Bagaimana ${site.name} (dikelola ${LEGAL_ENTITY}) mengumpulkan, menggunakan, dan melindungi Data Pribadi Anda sesuai UU PDP.`}
       />
 
       <div className="mx-auto max-w-4xl px-4 py-10 md:px-8 md:py-14">
