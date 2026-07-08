@@ -102,10 +102,12 @@ export function CartSheet() {
           </button>
         </div>
 
-        {empty ? (
+        {stage === "checkout" ? (
+          // Checkout owns its own success screen after submit — keep it mounted
+          // even once the cart is cleared, so the confirmation actually shows.
+          <PreorderForm onBack={() => setStage("cart")} onDone={close} />
+        ) : empty ? (
           <EmptyState onClose={close} />
-        ) : stage === "checkout" ? (
-          <PreorderForm onBack={() => setStage("cart")} />
         ) : (
           <>
             <ul className="flex-1 divide-y divide-border overflow-y-auto">

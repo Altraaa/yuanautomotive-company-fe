@@ -8,6 +8,7 @@ import { CtaButton } from "@/components/common/cta-button";
 import { PrivacyNotice } from "@/components/common/privacy-notice";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/features/admin/components/toast";
 import { preorderSchema, type PreorderFormValues } from "@/features/preorder/schema";
 import { submitPreorder } from "@/features/preorder/services/submit-order";
 import { useCart } from "@/features/preorder/store/cart-context";
@@ -39,8 +40,9 @@ function buildOrderMessage(
   return parts.join("\n");
 }
 
-export function PreorderForm({ onBack }: { onBack: () => void }) {
+export function PreorderForm({ onBack, onDone }: { onBack: () => void; onDone?: () => void }) {
   const { items, subtotal, clear } = useCart();
+  const { toast } = useToast();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [sentMessage, setSentMessage] = useState<string | null>(null);
 
@@ -58,10 +60,11 @@ export function PreorderForm({ onBack }: { onBack: () => void }) {
       await submitPreorder(values, items);
       setSentMessage(buildOrderMessage(items, values, subtotal));
       clear();
+      toast.success("Pre-order berhasil dikirim! Tim kami akan menghubungi Anda.");
     } catch (err) {
-      setSubmitError(
-        err instanceof Error ? err.message : "Gagal mengirim pre-order. Coba lagi."
-      );
+      const message = err instanceof Error ? err.message : "Gagal mengirim pre-order. Coba lagi.";
+      setSubmitError(message);
+      toast.error(message);
     }
   }
 
@@ -85,6 +88,11 @@ export function PreorderForm({ onBack }: { onBack: () => void }) {
         >
           Konfirmasi via WhatsApp
         </CtaButton>
+        {onDone ? (
+          <CtaButton variant="outline" onClick={onDone} className="w-full">
+            Selesai
+          </CtaButton>
+        ) : null}
       </div>
     );
   }
