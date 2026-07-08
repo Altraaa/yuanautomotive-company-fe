@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
+import { PrivacyNotice } from "@/components/common/privacy-notice";
 import { PreorderForm } from "@/features/preorder/components/preorder-form";
 import { useCart } from "@/features/preorder/store/cart-context";
 import { cn, formatIDR } from "@/lib/utils";
@@ -187,6 +188,10 @@ export function CartSheet() {
               <p className="text-center font-sans text-xs text-fg-subtle">
                 Harga belum termasuk ongkir. Tim kami mengonfirmasi total akhir.
               </p>
+              <PrivacyNotice
+                lead="Melanjutkan pre-order berarti Anda menyetujui "
+                className="justify-center text-center"
+              />
             </div>
           </>
         )}

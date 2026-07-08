@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2 } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
+import { PrivacyNotice } from "@/components/common/privacy-notice";
 import { contactSchema, type ContactFormValues } from "@/features/contact/schema";
 import { submitContactLead } from "@/features/contact/services/submit-contact";
 import { cn } from "@/lib/utils";
@@ -95,6 +96,8 @@ export function ContactForm() {
           {submitError}
         </p>
       ) : null}
+
+      <PrivacyNotice lead="Dengan mengirim pesan ini, Anda menyetujui " />
 
       <CtaButton size="lg" disabled={isSubmitting} className="w-full sm:w-fit">
         {isSubmitting ? "Mengirim…" : "Kirim Pesan"}

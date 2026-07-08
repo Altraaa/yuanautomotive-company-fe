@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
+import { PrivacyNotice } from "@/components/common/privacy-notice";
 import { preorderSchema, type PreorderFormValues } from "@/features/preorder/schema";
 import { submitPreorder } from "@/features/preorder/services/submit-order";
 import { useCart } from "@/features/preorder/store/cart-context";
@@ -146,6 +147,8 @@ export function PreorderForm({ onBack }: { onBack: () => void }) {
             {submitError}
           </p>
         ) : null}
+
+        <PrivacyNotice lead="Dengan mengirim pre-order ini, Anda menyetujui " />
 
         <CtaButton size="lg" disabled={isSubmitting} className="w-full">
           {isSubmitting ? "Mengirim…" : "Kirim Pre-Order"}

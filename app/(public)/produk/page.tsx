@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/common/page-hero";
 import { ProductCard } from "@/components/common/product-card";
+import { PrivacyNotice } from "@/components/common/privacy-notice";
 import { Pagination } from "@/components/common/pagination";
 import { ProductFilter } from "@/features/products/components/product-filter";
 import { ProductSort } from "@/features/products/components/product-sort";
@@ -50,6 +51,11 @@ export default async function ProductListPage({
       />
 
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-12">
+        <PrivacyNotice
+          lead="Menambahkan produk ke pre-order atau menghubungi kami berarti Anda menyetujui "
+          className="mb-6 border border-border border-l-[3px] border-l-gold bg-surface px-4 py-3"
+        />
+
         <div className="grid gap-8 md:grid-cols-[220px_1fr]">
           {/* Filter — sidebar (desktop) / sheet trigger (mobile) */}
           <div className="md:sticky md:top-24 md:self-start">

@@ -18,6 +18,12 @@ export function Footer() {
           <p className="font-sans text-xs text-fg-faint">
             © {new Date().getFullYear()} {site.name}
           </p>
+          <Link
+            href="/kebijakan-privasi"
+            className="font-sans text-xs font-medium text-fg-subtle transition-colors hover:text-gold"
+          >
+            Kebijakan Privasi
+          </Link>
         </div>
 
         <div className="flex flex-col gap-3">
