@@ -11,6 +11,14 @@ import {
   deleteContactAction,
   updateContactStatusAction,
 } from "@/features/admin/contact-actions";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { StatusPill } from "@/features/admin/components/status-pill";
 import { StatusTabs } from "@/features/admin/components/status-tabs";
 import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
@@ -117,11 +125,11 @@ export function ContactManager({ rows }: { rows: ContactRow[] }) {
 
       <label className="flex h-11 max-w-sm items-center gap-2.5 border border-border bg-surface px-4 focus-within:border-gold">
         <Search className="h-4 w-4 shrink-0 text-fg-faint" />
-        <input
+        <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Cari nama, email, kendaraan, pesan…"
-          className="w-full bg-transparent font-sans text-[13px] text-fg outline-none placeholder:text-fg-faint"
+          className="h-auto flex-1 border-0 bg-transparent px-0 py-0 text-[13px] placeholder:text-fg-faint focus:border-transparent"
         />
       </label>
 
@@ -249,19 +257,21 @@ function StatusSelect({
   onChange: (s: ContactStatus) => void;
 }) {
   return (
-    <select
-      value={value}
-      disabled={disabled}
-      onChange={(e) => onChange(e.target.value as ContactStatus)}
-      aria-label="Ubah status lead"
-      className="h-[34px] cursor-pointer appearance-none border border-border bg-surface-sunken px-3 font-display text-[10px] font-bold uppercase tracking-[0.05em] text-fg-soft outline-none transition-colors hover:border-border-strong focus:border-gold disabled:opacity-50"
-    >
-      {CONTACT_STATUSES.map((s) => (
-        <option key={s} value={s} className="bg-surface text-fg">
-          {CONTACT_STATUS_LABEL[s]}
-        </option>
-      ))}
-    </select>
+    <Select value={value} onValueChange={(v) => onChange(v as ContactStatus)} disabled={disabled}>
+      <SelectTrigger
+        aria-label="Ubah status lead"
+        className="h-[34px] w-auto gap-1.5 px-3 font-display text-[10px] font-bold uppercase tracking-[0.05em] text-fg-soft hover:border-border-strong [&>svg]:h-3 [&>svg]:w-3"
+      >
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {CONTACT_STATUSES.map((s) => (
+          <SelectItem key={s} value={s}>
+            {CONTACT_STATUS_LABEL[s]}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
 

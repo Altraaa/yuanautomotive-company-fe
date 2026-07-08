@@ -6,6 +6,7 @@ import { Check, Sparkles } from "lucide-react";
 import { saveCmsAction } from "@/features/admin/cms-actions";
 import { SectionCard } from "@/features/admin/components/section-card";
 import { useToast } from "@/features/admin/components/toast";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
 /**
@@ -98,13 +99,13 @@ export function CmsEditor({
         </span>
       </div>
 
-      <textarea
+      <Textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         spellCheck={false}
         rows={18}
         className={cn(
-          "w-full resize-y border bg-surface-sunken px-3.5 py-3 font-mono text-[12.5px] leading-relaxed text-fg outline-none transition-colors focus:border-gold",
+          "px-3.5 font-mono text-[12.5px]",
           parseError ? "border-red/50" : "border-border"
         )}
         placeholder='{\n  "title": "..."\n}'

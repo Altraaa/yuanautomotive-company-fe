@@ -11,12 +11,13 @@ import {
 } from "@/features/admin/category-actions";
 import { useToast } from "@/features/admin/components/toast";
 import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 const boxClass =
   "flex h-11 items-center gap-2.5 border border-border bg-surface px-4 transition-colors focus-within:border-gold";
 const inputClass =
-  "w-full bg-transparent font-sans text-[13px] text-fg outline-none placeholder:text-fg-faint";
+  "h-auto w-full border-0 bg-transparent px-0 py-0 font-sans text-[13px] text-fg outline-none placeholder:text-fg-faint focus:border-transparent";
 
 export function CategoryManager({ initial }: { initial: CategoryOption[] }) {
   const router = useRouter();
@@ -100,7 +101,7 @@ export function CategoryManager({ initial }: { initial: CategoryOption[] }) {
         <div className="mt-2.5 flex flex-col gap-2.5 sm:flex-row">
           <div className={cn(boxClass, "flex-1")}>
             <FolderTree className="h-4 w-4 shrink-0 text-fg-faint" />
-            <input
+            <Input
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={(e) => {
@@ -137,7 +138,7 @@ export function CategoryManager({ initial }: { initial: CategoryOption[] }) {
       {/* Search */}
       <label className={cn(boxClass, "max-w-sm")}>
         <Search className="h-4 w-4 shrink-0 text-fg-faint" />
-        <input
+        <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Cari kategori…"
@@ -169,7 +170,7 @@ export function CategoryManager({ initial }: { initial: CategoryOption[] }) {
 
               {isEditing ? (
                 <div className={cn(boxClass, "h-10 flex-1")}>
-                  <input
+                  <Input
                     autoFocus
                     value={editValue}
                     onChange={(e) => setEditValue(e.target.value)}

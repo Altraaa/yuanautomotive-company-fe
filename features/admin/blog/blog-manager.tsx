@@ -4,10 +4,18 @@ import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Check, ChevronDown, Pencil, Search, Trash2 } from "lucide-react";
+import { Check, Pencil, Search, Trash2 } from "lucide-react";
 import type { AdminBlogRow } from "@/types/ui/blog";
 import { BLOG_CATEGORIES } from "@/types/ui/blog";
 import { cn, formatDate } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { bulkDeleteBlogsAction, deleteBlogAction } from "@/features/admin/blog-actions";
 import { AdminPagination } from "@/features/admin/components/admin-pagination";
 import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
@@ -102,11 +110,11 @@ export function BlogManager({ rows }: { rows: AdminBlogRow[] }) {
       <div className="flex flex-wrap items-center gap-3">
         <label className="flex h-11 min-w-[220px] flex-1 items-center gap-2.5 border border-border bg-surface px-4 focus-within:border-gold">
           <Search className="h-4 w-4 shrink-0 text-fg-faint" />
-          <input
+          <Input
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
             placeholder="Cari judul artikel…"
-            className="w-full bg-transparent font-sans text-[13px] text-fg outline-none placeholder:text-fg-faint"
+            className="h-auto flex-1 border-0 bg-transparent px-0 py-0 text-[13px] placeholder:text-fg-faint focus:border-transparent"
           />
         </label>
         <FilterSelect label="Kategori" value={category} onChange={(v) => { setCategory(v); setPage(1); }} options={["Semua", ...BLOG_CATEGORIES]} />
@@ -249,21 +257,22 @@ function FilterSelect({
   options: string[];
 }) {
   return (
-    <div className="relative flex h-11 items-center border border-border bg-surface pl-4 pr-9 font-sans text-[12.5px] font-semibold text-fg-soft">
-      <span className="whitespace-nowrap">{label}:</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="ml-1.5 cursor-pointer appearance-none bg-transparent pr-1 font-semibold text-gold outline-none"
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger
+        aria-label={label}
+        className="h-11 w-auto gap-1.5 bg-surface font-sans text-[12.5px] font-semibold text-gold"
       >
+        <span className="text-fg-soft">{label}:</span>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
         {options.map((o) => (
-          <option key={o} value={o} className="bg-surface text-fg">
+          <SelectItem key={o} value={o}>
             {o}
-          </option>
+          </SelectItem>
         ))}
-      </select>
-      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gold" />
-    </div>
+      </SelectContent>
+    </Select>
   );
 }
 

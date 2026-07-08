@@ -6,12 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2 } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
 import { PrivacyNotice } from "@/components/common/privacy-notice";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { contactSchema, type ContactFormValues } from "@/features/contact/schema";
 import { submitContactLead } from "@/features/contact/services/submit-contact";
-import { cn } from "@/lib/utils";
-
-const fieldClass =
-  "w-full border border-border bg-surface-sunken px-4 py-3 font-sans text-sm text-fg placeholder:text-fg-subtle outline-none transition-colors focus:border-gold";
 
 export function ContactForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -57,36 +55,26 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
       <Field label="Nama" error={errors.name?.message}>
-        <input {...register("name")} className={fieldClass} placeholder="Nama lengkap" />
+        <Input {...register("name")} placeholder="Nama lengkap" />
       </Field>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Nomor WhatsApp" error={errors.phone?.message}>
-          <input
-            {...register("phone")}
-            className={fieldClass}
-            placeholder="08xx-xxxx-xxxx"
-            inputMode="tel"
-          />
+          <Input {...register("phone")} placeholder="08xx-xxxx-xxxx" inputMode="tel" />
         </Field>
         <Field label="Email" error={errors.email?.message}>
-          <input {...register("email")} className={fieldClass} placeholder="nama@email.com" />
+          <Input {...register("email")} placeholder="nama@email.com" />
         </Field>
       </div>
 
       <Field label="Model Kendaraan EV (opsional)" error={errors.vehicleModel?.message}>
-        <input
-          {...register("vehicleModel")}
-          className={fieldClass}
-          placeholder="mis. Hyundai Ioniq 5"
-        />
+        <Input {...register("vehicleModel")} placeholder="mis. Hyundai Ioniq 5" />
       </Field>
 
       <Field label="Pesan" error={errors.message?.message}>
-        <textarea
+        <Textarea
           {...register("message")}
           rows={5}
-          className={cn(fieldClass, "resize-y")}
           placeholder="Tuliskan kebutuhan atau pertanyaan Anda…"
         />
       </Field>

@@ -6,16 +6,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
 import { PrivacyNotice } from "@/components/common/privacy-notice";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { preorderSchema, type PreorderFormValues } from "@/features/preorder/schema";
 import { submitPreorder } from "@/features/preorder/services/submit-order";
 import { useCart } from "@/features/preorder/store/cart-context";
 import type { CartItem } from "@/types/ui/cart";
 import { formatIDR } from "@/lib/utils";
 import { site, waLink } from "@/lib/site";
-import { cn } from "@/lib/utils";
-
-const fieldClass =
-  "w-full border border-border bg-surface-sunken px-4 py-3 font-sans text-sm text-fg placeholder:text-fg-subtle outline-none transition-colors focus:border-gold";
 
 /** Build an itemized WhatsApp order message as a fallback / confirmation channel. */
 function buildOrderMessage(
@@ -108,31 +106,21 @@ export function PreorderForm({ onBack }: { onBack: () => void }) {
         noValidate
       >
         <Field label="Nama" error={errors.name?.message}>
-          <input {...register("name")} className={fieldClass} placeholder="Nama lengkap" />
+          <Input {...register("name")} placeholder="Nama lengkap" />
         </Field>
 
         <Field label="Nomor WhatsApp" error={errors.phone?.message}>
-          <input
-            {...register("phone")}
-            className={fieldClass}
-            placeholder="08xx-xxxx-xxxx"
-            inputMode="tel"
-          />
+          <Input {...register("phone")} placeholder="08xx-xxxx-xxxx" inputMode="tel" />
         </Field>
 
         <Field label="Model Kendaraan EV (opsional)" error={errors.vehicleModel?.message}>
-          <input
-            {...register("vehicleModel")}
-            className={fieldClass}
-            placeholder="mis. Hyundai Ioniq 5"
-          />
+          <Input {...register("vehicleModel")} placeholder="mis. Hyundai Ioniq 5" />
         </Field>
 
         <Field label="Catatan (opsional)" error={errors.note?.message}>
-          <textarea
+          <Textarea
             {...register("note")}
             rows={3}
-            className={cn(fieldClass, "resize-y")}
             placeholder="Warna, waktu pengiriman, atau permintaan khusus…"
           />
         </Field>

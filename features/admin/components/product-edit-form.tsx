@@ -3,9 +3,9 @@
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronDown, Plus, X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import {
   productFormSchema,
   type ProductFormValues,
@@ -17,6 +17,16 @@ import {
 } from "@/features/admin/actions";
 import type { ProductMedia } from "@/types/ui/admin";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { SectionCard } from "./section-card";
 import { ConfirmDialog } from "./confirm-dialog";
 import { useToast } from "./toast";
@@ -26,8 +36,11 @@ const labelClass =
   "font-sans text-[11px] font-semibold uppercase tracking-[0.1em] text-fg-muted";
 const boxClass =
   "flex items-center gap-2 border border-border bg-surface-sunken px-3.5 transition-colors focus-within:border-gold";
+// Chrome-less: the surrounding `boxClass` provides border/bg/focus; the Input
+// primitive sits inside it bare.
 const inputClass =
-  "w-full bg-transparent font-sans text-sm text-fg outline-none placeholder:text-fg-faint";
+  "h-auto w-full border-0 bg-transparent px-0 py-0 font-sans text-sm text-fg outline-none placeholder:text-fg-faint focus:border-transparent";
+const badges = ["BARU", "HOT", "TERLARIS", "PRE-ORDER"] as const;
 
 type ProductEditFormProps = {
   /** Product uuid when editing; null when creating. */
@@ -41,7 +54,6 @@ type ProductEditFormProps = {
   formId?: string;
 };
 
-const badgeOptions = ["", "BARU", "HOT", "TERLARIS", "PRE-ORDER"];
 const categoryOptions = ["Sparepart", "Body Part", "Aksesoris"];
 
 export function ProductEditForm({
@@ -172,29 +184,40 @@ export function ProductEditForm({
         <SectionCard title="Informasi Dasar" topAccent="gold" bodyClassName="flex flex-col gap-4 md:px-[22px]">
           <Field label="Nama Produk" error={errors.name?.message}>
             <div className={cn(boxClass, "h-[46px]")}>
-              <input {...register("name")} className={inputClass} placeholder="Nama produk" />
+              <Input {...register("name")} className={inputClass} placeholder="Nama produk" />
             </div>
           </Field>
           <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
             <Field label="SKU" error={errors.sku?.message}>
               <div className={cn(boxClass, "h-[46px]")}>
-                <input {...register("sku")} className={cn(inputClass, "font-mono")} placeholder="YD-XXX-000" />
+                <Input {...register("sku")} className={cn(inputClass, "font-mono")} placeholder="YD-XXX-000" />
               </div>
             </Field>
             <Field label="Kategori" error={errors.category?.message}>
-              <SelectBox {...register("category")}>
-                {categoryOptions.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </SelectBox>
+              <Controller
+                control={control}
+                name="category"
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="h-[46px]">
+                      <SelectValue placeholder="Pilih kategori" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categoryOptions.map((c) => (
+                        <SelectItem key={c} value={c}>{c}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
             </Field>
           </div>
           <Field label="Deskripsi" error={errors.description?.message}>
             <div className={cn(boxClass, "items-stretch py-3")}>
-              <textarea
+              <Textarea
                 {...register("description")}
                 rows={3}
-                className={cn(inputClass, "resize-y leading-relaxed")}
+                className={cn(inputClass, "min-h-0 resize-y leading-relaxed")}
                 placeholder="Deskripsi produk…"
               />
             </div>
@@ -205,18 +228,18 @@ export function ProductEditForm({
           <Field label="Harga Retail" error={errors.retailPrice?.message}>
             <div className={cn(boxClass, "h-[46px]")}>
               <span className="font-sans text-xs font-semibold text-fg-subtle">Rp</span>
-              <input {...register("retailPrice")} inputMode="numeric" className={cn(inputClass, "font-display font-bold text-gold")} placeholder="0" />
+              <Input {...register("retailPrice")} inputMode="numeric" className={cn(inputClass, "font-display font-bold text-gold")} placeholder="0" />
             </div>
           </Field>
           <Field label="Harga Grosir" error={errors.wholesalePrice?.message}>
             <div className={cn(boxClass, "h-[46px]")}>
               <span className="font-sans text-xs font-semibold text-fg-subtle">Rp</span>
-              <input {...register("wholesalePrice")} inputMode="numeric" className={cn(inputClass, "font-display font-bold")} placeholder="0" />
+              <Input {...register("wholesalePrice")} inputMode="numeric" className={cn(inputClass, "font-display font-bold")} placeholder="0" />
             </div>
           </Field>
           <Field label="Stok (unit)" error={errors.stock?.message}>
             <div className={cn(boxClass, "h-[46px]")}>
-              <input {...register("stock")} inputMode="numeric" className={cn(inputClass, "font-display font-bold")} placeholder="0" />
+              <Input {...register("stock")} inputMode="numeric" className={cn(inputClass, "font-display font-bold")} placeholder="0" />
             </div>
           </Field>
         </SectionCard>
@@ -238,10 +261,10 @@ export function ProductEditForm({
           {fields.map((field, i) => (
             <div key={field.id} className="grid grid-cols-[1fr_1fr_36px] items-center gap-2.5 sm:grid-cols-[180px_1fr_36px]">
               <div className={cn(boxClass, "h-[42px]")}>
-                <input {...register(`specs.${i}.label`)} className={cn(inputClass, "text-[12.5px] font-semibold text-fg-muted")} placeholder="Label" />
+                <Input {...register(`specs.${i}.label`)} className={cn(inputClass, "text-[12.5px] font-semibold text-fg-muted")} placeholder="Label" />
               </div>
               <div className={cn(boxClass, "h-[42px]")}>
-                <input {...register(`specs.${i}.value`)} className={cn(inputClass, "text-[13px]")} placeholder="Nilai" />
+                <Input {...register(`specs.${i}.value`)} className={cn(inputClass, "text-[13px]")} placeholder="Nilai" />
               </div>
               <button
                 type="button"
@@ -269,7 +292,7 @@ export function ProductEditForm({
           ))}
           <div className="inline-flex h-[37px] items-center gap-1.5 border border-dashed border-border-strong bg-surface-sunken px-3 focus-within:border-gold">
             <Plus className="h-3.5 w-3.5 text-gold" />
-            <input
+            <Input
               value={compatDraft}
               onChange={(e) => setCompatDraft(e.target.value)}
               onKeyDown={(e) => {
@@ -279,7 +302,7 @@ export function ProductEditForm({
                 }
               }}
               placeholder="Tambah kendaraan…"
-              className="w-36 bg-transparent font-sans text-xs text-fg outline-none placeholder:text-fg-faint"
+              className="h-auto w-36 border-0 bg-transparent px-0 py-0 text-xs placeholder:text-fg-faint focus:border-transparent"
             />
           </div>
         </SectionCard>
@@ -307,30 +330,35 @@ export function ProductEditForm({
           </div>
 
           <Field label="Badge">
-            <SelectBox {...register("badge")}>
-              {badgeOptions.map((b) => (
-                <option key={b || "none"} value={b}>{b || "Tanpa badge"}</option>
-              ))}
-            </SelectBox>
+            <Controller
+              control={control}
+              name="badge"
+              render={({ field }) => (
+                <Select
+                  value={field.value || "none"}
+                  onValueChange={(v) => field.onChange(v === "none" ? "" : v)}
+                >
+                  <SelectTrigger className="h-[46px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Tanpa badge</SelectItem>
+                    {badges.map((b) => (
+                      <SelectItem key={b} value={b}>{b}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </Field>
 
-          <button
-            type="button"
-            role="switch"
-            aria-checked={featured}
-            onClick={() => setValue("featured", !featured, { shouldDirty: true })}
-            className="flex items-center justify-between"
-          >
+          <label className="flex cursor-pointer items-center justify-between">
             <span className="font-sans text-[12.5px] text-fg-soft">Tampilkan di Unggulan</span>
-            <span className={cn("relative h-[22px] w-10 rounded-full transition-colors", featured ? "bg-gold" : "bg-border-strong")}>
-              <span
-                className={cn(
-                  "absolute top-0.5 h-[18px] w-[18px] rounded-full bg-bg transition-all",
-                  featured ? "right-0.5" : "left-0.5"
-                )}
-              />
-            </span>
-          </button>
+            <Switch
+              checked={featured}
+              onCheckedChange={(v) => setValue("featured", v === true, { shouldDirty: true })}
+            />
+          </label>
         </SectionCard>
 
         <SectionCard title="Media Produk" bodyClassName="flex flex-col gap-3">
@@ -407,7 +435,7 @@ export function ProductEditForm({
 
         <SectionCard title="Slug URL" bodyClassName="flex flex-col gap-2">
           <div className={cn(boxClass, "h-[42px]")}>
-            <input {...register("slug")} className={cn(inputClass, "font-mono text-[12.5px]")} placeholder="nama-produk" />
+            <Input {...register("slug")} className={cn(inputClass, "font-mono text-[12.5px]")} placeholder="nama-produk" />
           </div>
           {errors.slug && <span className="font-sans text-xs text-red-soft">{errors.slug.message}</span>}
         </SectionCard>
@@ -456,19 +484,5 @@ function Field({
       {children}
       {error && <span className="font-sans text-xs text-red-soft">{error}</span>}
     </label>
-  );
-}
-
-function SelectBox({ children, ...props }: React.SelectHTMLAttributes<HTMLSelectElement>) {
-  return (
-    <div className="relative">
-      <select
-        {...props}
-        className="h-[46px] w-full appearance-none border border-border bg-surface-sunken px-3.5 pr-9 font-sans text-sm text-fg outline-none transition-colors focus:border-gold"
-      >
-        {children}
-      </select>
-      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gold" />
-    </div>
   );
 }

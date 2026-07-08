@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
 
 type PriceRangeSliderProps = {
   min: number;
@@ -19,8 +20,7 @@ const rangeThumb =
   "[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-bg [&::-webkit-slider-thumb]:bg-gold [&::-webkit-slider-thumb]:cursor-pointer " +
   "[&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-bg [&::-moz-range-thumb]:bg-gold [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-track]:bg-transparent";
 
-const numberInput =
-  "w-full border border-border bg-surface-sunken py-2 pl-8 pr-2 font-sans text-sm text-fg outline-none transition-colors focus:border-gold";
+const numberInput = "h-auto w-full py-2 pl-8 pr-2 text-sm";
 
 function groupDigits(n: number): string {
   return n.toLocaleString("id-ID");
@@ -117,7 +117,7 @@ export function PriceRangeSlider({
           <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 font-sans text-xs text-fg-subtle">
             Rp
           </span>
-          <input
+          <Input
             inputMode="numeric"
             value={loText}
             onChange={(e) => setLoText(e.target.value)}
@@ -137,7 +137,7 @@ export function PriceRangeSlider({
           <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 font-sans text-xs text-fg-subtle">
             Rp
           </span>
-          <input
+          <Input
             inputMode="numeric"
             value={hiText}
             onChange={(e) => setHiText(e.target.value)}

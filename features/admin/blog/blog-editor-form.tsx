@@ -4,9 +4,9 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronDown, ImagePlus, X } from "lucide-react";
+import { ImagePlus, X } from "lucide-react";
 import { BLOG_CATEGORIES } from "@/types/ui/blog";
 import { uploadImageAction } from "@/features/admin/actions";
 import { saveBlogAction } from "@/features/admin/blog-actions";
@@ -15,6 +15,15 @@ import { SectionCard } from "@/features/admin/components/section-card";
 import { useFormSubmit } from "@/features/admin/components/form-submit-context";
 import { useToast } from "@/features/admin/components/toast";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Tiptap is heavy + browser-only → keep it out of the SSR/public bundle.
 const RichTextEditor = dynamic(
@@ -32,7 +41,9 @@ const RichTextEditor = dynamic(
 const labelClass = "font-sans text-[11px] font-semibold uppercase tracking-[0.1em] text-fg-muted";
 const boxClass =
   "flex items-center gap-2 border border-border bg-surface-sunken px-3.5 transition-colors focus-within:border-gold";
-const inputClass = "w-full bg-transparent font-sans text-sm text-fg outline-none placeholder:text-fg-faint";
+// Chrome-less: the surrounding `boxClass` provides border/bg/focus.
+const inputClass =
+  "h-auto w-full border-0 bg-transparent px-0 py-0 font-sans text-sm text-fg outline-none placeholder:text-fg-faint focus:border-transparent";
 
 const BLOG_FORM_ID = "blog-form";
 
@@ -56,6 +67,7 @@ export function BlogEditorForm({ blogUuid, defaultValues, initialCoverUrl, redir
   const {
     register,
     handleSubmit,
+    control,
     watch,
     setValue,
     formState: { errors },
@@ -121,15 +133,15 @@ export function BlogEditorForm({ blogUuid, defaultValues, initialCoverUrl, redir
         <SectionCard title="Informasi Artikel" topAccent="gold" bodyClassName="flex flex-col gap-4 md:px-[22px]">
           <Field label="Judul" error={errors.title?.message}>
             <div className={cn(boxClass, "h-[46px]")}>
-              <input {...register("title")} className={inputClass} placeholder="Judul artikel" />
+              <Input {...register("title")} className={inputClass} placeholder="Judul artikel" />
             </div>
           </Field>
           <Field label="Ringkasan (excerpt)" error={errors.excerpt?.message}>
             <div className={cn(boxClass, "items-stretch py-3")}>
-              <textarea
+              <Textarea
                 {...register("excerpt")}
                 rows={2}
-                className={cn(inputClass, "resize-y leading-relaxed")}
+                className={cn(inputClass, "min-h-0 resize-y leading-relaxed")}
                 placeholder="Ringkasan singkat untuk kartu & meta description…"
               />
             </div>
@@ -167,22 +179,33 @@ export function BlogEditorForm({ blogUuid, defaultValues, initialCoverUrl, redir
           </div>
 
           <Field label="Kategori" error={errors.category?.message}>
-            <SelectBox {...register("category")}>
-              {BLOG_CATEGORIES.map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </SelectBox>
+            <Controller
+              control={control}
+              name="category"
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="h-[46px]">
+                    <SelectValue placeholder="Pilih kategori" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {BLOG_CATEGORIES.map((c) => (
+                      <SelectItem key={c} value={c}>{c}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </Field>
 
           <div className="grid grid-cols-2 gap-3">
             <Field label="Penulis" error={errors.author?.message}>
               <div className={cn(boxClass, "h-[42px]")}>
-                <input {...register("author")} className={cn(inputClass, "text-[13px]")} placeholder="Penulis" />
+                <Input {...register("author")} className={cn(inputClass, "text-[13px]")} placeholder="Penulis" />
               </div>
             </Field>
             <Field label="Menit Baca" error={errors.readingMinutes?.message}>
               <div className={cn(boxClass, "h-[42px]")}>
-                <input {...register("readingMinutes")} inputMode="numeric" className={cn(inputClass, "text-[13px]")} placeholder="4" />
+                <Input {...register("readingMinutes")} inputMode="numeric" className={cn(inputClass, "text-[13px]")} placeholder="4" />
               </div>
             </Field>
           </div>
@@ -251,20 +274,6 @@ function Field({
       {children}
       {error && <span className="font-sans text-xs text-red-soft">{error}</span>}
     </label>
-  );
-}
-
-function SelectBox({ children, ...props }: React.SelectHTMLAttributes<HTMLSelectElement>) {
-  return (
-    <div className="relative">
-      <select
-        {...props}
-        className="h-[46px] w-full appearance-none border border-border bg-surface-sunken px-3.5 pr-9 font-sans text-sm text-fg outline-none transition-colors focus:border-gold"
-      >
-        {children}
-      </select>
-      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gold" />
-    </div>
   );
 }
 

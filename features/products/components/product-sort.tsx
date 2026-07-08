@@ -1,6 +1,13 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const options = [
   { value: "semua", label: "Semua" },
@@ -27,17 +34,18 @@ export function ProductSort() {
   return (
     <label className="flex items-center gap-2 font-sans text-sm text-fg-muted">
       <span className="hidden sm:inline">Tampilkan</span>
-      <select
-        value={current}
-        onChange={(e) => onChange(e.target.value)}
-        className="border border-border bg-surface px-3 py-2 font-sans text-sm text-fg outline-none focus:border-gold"
-      >
-        {options.map((o) => (
-          <option key={o.value} value={o.value} className="bg-surface text-fg">
-            {o.label}
-          </option>
-        ))}
-      </select>
+      <Select value={current} onValueChange={onChange}>
+        <SelectTrigger className="h-10 w-auto min-w-[160px] bg-surface" aria-label="Urutkan produk">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((o) => (
+            <SelectItem key={o.value} value={o.value}>
+              {o.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </label>
   );
 }

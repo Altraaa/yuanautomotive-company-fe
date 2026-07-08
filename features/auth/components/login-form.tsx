@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AtSign, Check, KeyRound } from "lucide-react";
+import { AtSign, KeyRound } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { loginSchema, type LoginFormValues } from "@/features/auth/schema";
 import { loginAction } from "@/features/auth/actions";
 import { cn } from "@/lib/utils";
@@ -14,7 +16,7 @@ import { cn } from "@/lib/utils";
 const fieldWrap =
   "flex h-[50px] items-center gap-3 border border-border bg-surface-sunken px-4 transition-colors focus-within:border-gold";
 const inputClass =
-  "flex-1 bg-transparent font-sans text-sm text-fg outline-none placeholder:text-fg-faint";
+  "h-auto flex-1 border-0 bg-transparent px-0 py-0 font-sans text-sm text-fg outline-none placeholder:text-fg-faint focus:border-transparent";
 const labelClass =
   "font-sans text-[11px] font-semibold uppercase tracking-[0.1em] text-fg-muted";
 
@@ -53,7 +55,7 @@ export function LoginForm() {
         <span className={labelClass}>Email</span>
         <div className={fieldWrap}>
           <AtSign className="h-4 w-4 shrink-0 text-gold" />
-          <input
+          <Input
             {...register("email")}
             type="email"
             autoComplete="email"
@@ -68,7 +70,7 @@ export function LoginForm() {
         <span className={labelClass}>Password</span>
         <div className={fieldWrap}>
           <KeyRound className="h-4 w-4 shrink-0 text-gold" />
-          <input
+          <Input
             {...register("password")}
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
@@ -89,21 +91,13 @@ export function LoginForm() {
       </label>
 
       <div className="flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => setValue("remember", !remember)}
-          className="flex items-center gap-2.5"
-        >
-          <span
-            className={cn(
-              "grid h-4 w-4 place-items-center border transition-colors",
-              remember ? "border-red bg-red text-fg" : "border-border-strong bg-transparent"
-            )}
-          >
-            {remember && <Check className="h-2.5 w-2.5" strokeWidth={3} />}
-          </span>
+        <label className="flex cursor-pointer items-center gap-2.5">
+          <Checkbox
+            checked={remember}
+            onCheckedChange={(v) => setValue("remember", v === true)}
+          />
           <span className="font-sans text-[12.5px] text-fg-muted">Ingat perangkat ini</span>
-        </button>
+        </label>
         <Link
           href="/login"
           className="font-sans text-[12.5px] font-semibold text-gold transition-colors hover:text-gold-soft"
