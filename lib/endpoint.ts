@@ -94,7 +94,8 @@ export const endpoints = {
   // MEDIA (UPLOAD)
   // ═══════════════════════════════════════════════════════════
   media: {
-    upload: "/media/upload", // multipart/form-data
+    upload: "/media/upload", // multipart/form-data, field `file`
+    uploadMany: "/media/upload-many", // multipart/form-data, field `files` (max 20)
     delete: (uuid: string) => `/media/${uuid}`,
   },
 
