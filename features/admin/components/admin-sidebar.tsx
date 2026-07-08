@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -18,7 +19,8 @@ import { adminNavGroups } from "@/features/admin/data";
 import { logoutAction } from "@/features/auth/actions";
 import type { AdminNavIcon, Tone } from "@/types/ui/admin";
 import { cn } from "@/lib/utils";
-import { BrandMark } from "./brand-mark";
+import { Logo } from "@/components/common/logo";
+import { ConfirmDialog } from "./confirm-dialog";
 
 const iconMap: Record<AdminNavIcon, LucideIcon> = {
   dashboard: LayoutDashboard,
@@ -46,11 +48,13 @@ function isActive(pathname: string, href: string): boolean {
 
 export function AdminSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
+  const [confirmLogout, setConfirmLogout] = useState(false);
+  const [isLoggingOut, startLogout] = useTransition();
 
   return (
     <div className="flex h-full flex-col bg-surface-sunken">
       <div className="border-b border-surface px-[22px] pb-[22px] pt-1">
-        <BrandMark size="md" subtitle="ADMIN PANEL" />
+        <Logo />
       </div>
 
       <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto p-3">
@@ -102,17 +106,28 @@ export function AdminSidebar({ onNavigate }: { onNavigate?: () => void }) {
           <div className="font-sans text-[12.5px] font-semibold text-fg">Admin Utama</div>
           <div className="font-sans text-[10.5px] text-fg-subtle">SUPERADMIN</div>
         </div>
-        <form action={logoutAction}>
-          <button
-            type="submit"
-            title="Logout"
-            aria-label="Logout"
-            className="text-fg-subtle transition-colors hover:text-red-soft"
-          >
-            <LogOut className="h-[18px] w-[18px]" />
-          </button>
-        </form>
+        <button
+          type="button"
+          onClick={() => setConfirmLogout(true)}
+          title="Logout"
+          aria-label="Logout"
+          className="text-fg-subtle transition-colors hover:text-red-soft"
+        >
+          <LogOut className="h-[18px] w-[18px]" />
+        </button>
       </div>
+
+      <ConfirmDialog
+        open={confirmLogout}
+        title="Keluar dari Admin"
+        description="Anda akan keluar dari panel admin dan diarahkan ke halaman login."
+        confirmLabel="Logout"
+        cancelLabel="Batal"
+        tone="danger"
+        pending={isLoggingOut}
+        onConfirm={() => startLogout(() => logoutAction())}
+        onCancel={() => setConfirmLogout(false)}
+      />
     </div>
   );
 }
