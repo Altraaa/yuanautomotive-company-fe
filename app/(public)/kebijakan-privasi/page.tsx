@@ -9,6 +9,8 @@ export const revalidate = 3600;
 
 const LEGAL_ENTITY = "PT. Yuan Dewata Timur";
 const EFFECTIVE_DATE = "1 Juli 2026";
+// Dedicated privacy/data-protection inbox (separate from the general site email).
+const PRIVACY_EMAIL = "privacy@yuandewatatimur.com";
 
 export const metadata: Metadata = {
   title: "Kebijakan Privasi",
@@ -242,8 +244,8 @@ function ContactCard() {
       <ContactItem
         icon={<Mail className="h-4 w-4" />}
         label="Email"
-        value={site.email}
-        href={`mailto:${site.email}`}
+        value={PRIVACY_EMAIL}
+        href={`mailto:${PRIVACY_EMAIL}`}
       />
       <ContactItem
         icon={<MessageCircle className="h-4 w-4" />}
