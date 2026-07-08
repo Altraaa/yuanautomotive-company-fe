@@ -1,8 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
-import { TriangleAlert, X } from "lucide-react";
+import { TriangleAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 type ConfirmDialogProps = {
   open: boolean;
@@ -19,8 +27,9 @@ type ConfirmDialogProps = {
 };
 
 /**
- * ConfirmDialog — branded modal replacing native window.confirm for destructive
- * admin actions (delete, bulk delete, cancel order). Escape / backdrop cancels.
+ * ConfirmDialog — branded confirmation modal for destructive admin actions,
+ * composed from the shadcn/Radix Dialog primitive (focus trap, Escape/backdrop
+ * close, smooth fade+scale). Same props as before, so callers are unchanged.
  */
 export function ConfirmDialog({
   open,
@@ -33,81 +42,52 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && !pending) onCancel();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, pending, onCancel]);
-
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-[90] grid place-items-center p-4">
-      <div
-        className="absolute inset-0 animate-fade-in bg-surface-black/70"
-        onClick={() => !pending && onCancel()}
-      />
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-        className="relative w-full max-w-[400px] animate-fade-in border border-border border-t-[3px] border-t-red bg-surface p-6"
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        if (!next && !pending) onCancel();
+      }}
+    >
+      <DialogContent
+        showClose={!pending}
+        className={cn(tone === "default" && "border-t-gold")}
+        onEscapeKeyDown={(e) => pending && e.preventDefault()}
+        onInteractOutside={(e) => pending && e.preventDefault()}
       >
-        <button
-          type="button"
-          onClick={() => !pending && onCancel()}
-          aria-label="Tutup"
-          className="absolute right-4 top-4 text-fg-faint transition-colors hover:text-fg"
-        >
-          <X className="h-4 w-4" />
-        </button>
-
-        <div className="flex items-start gap-3.5">
-          <span
-            className={cn(
-              "grid h-10 w-10 shrink-0 place-items-center",
-              tone === "danger" ? "bg-red/15 text-red-soft" : "bg-gold/15 text-gold"
-            )}
-          >
-            <TriangleAlert className="h-5 w-5" />
-          </span>
-          <div className="min-w-0 pt-0.5">
-            <h2 className="font-display text-base font-bold uppercase italic text-fg">
-              {title}
-            </h2>
-            {description && (
-              <p className="mt-1.5 font-sans text-[12.5px] leading-relaxed text-fg-subtle">
-                {description}
-              </p>
-            )}
+        <DialogHeader>
+          <div className="flex items-start gap-3.5">
+            <span
+              className={cn(
+                "grid h-10 w-10 shrink-0 place-items-center",
+                tone === "danger" ? "bg-red/15 text-red-soft" : "bg-gold/15 text-gold"
+              )}
+            >
+              <TriangleAlert className="h-5 w-5" />
+            </span>
+            <div className="min-w-0 pt-0.5">
+              <DialogTitle>{title}</DialogTitle>
+              {description && (
+                <DialogDescription className="mt-1.5">{description}</DialogDescription>
+              )}
+            </div>
           </div>
-        </div>
+        </DialogHeader>
 
-        <div className="mt-6 flex items-center justify-end gap-2.5">
-          <button
-            type="button"
-            onClick={onCancel}
-            disabled={pending}
-            className="border border-border bg-surface-sunken px-4 py-2.5 font-display text-[11.5px] font-bold uppercase tracking-[0.06em] text-fg-soft transition-colors hover:text-fg disabled:opacity-50"
-          >
+        <DialogFooter className="mt-6">
+          <Button variant="outline" size="sm" onClick={onCancel} disabled={pending}>
             {cancelLabel}
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant={tone === "danger" ? "default" : "gold"}
+            size="sm"
             onClick={onConfirm}
             disabled={pending}
-            className={cn(
-              "px-4 py-2.5 font-display text-[11.5px] font-bold uppercase tracking-[0.06em] text-fg transition-colors disabled:opacity-50",
-              tone === "danger" ? "bg-red hover:bg-red-soft" : "bg-gold text-bg hover:bg-gold-soft"
-            )}
           >
             {pending ? "Memproses…" : confirmLabel}
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

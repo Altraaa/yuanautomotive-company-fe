@@ -12,7 +12,7 @@ import { cn, formatIDR } from "@/lib/utils";
 import { bulkDeleteProductsAction, deleteProductAction } from "@/features/admin/actions";
 import { AdminPagination } from "./admin-pagination";
 import { ConfirmDialog } from "./confirm-dialog";
-import { useToast } from "./toast";
+import { toast } from "sonner";
 import {
   ProductFilterBar,
   defaultProductFilters,
@@ -49,7 +49,6 @@ const statusStyle: Record<ProductStatus, string> = {
 
 export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
   const router = useRouter();
-  const { toast } = useToast();
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState<ProductListFilters>(defaultProductFilters);
   const [page, setPage] = useState(1);

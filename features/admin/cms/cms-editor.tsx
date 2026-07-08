@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Check, Sparkles } from "lucide-react";
 import { saveCmsAction } from "@/features/admin/cms-actions";
 import { SectionCard } from "@/features/admin/components/section-card";
-import { useToast } from "@/features/admin/components/toast";
+import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +26,6 @@ export function CmsEditor({
   exists: boolean;
 }) {
   const router = useRouter();
-  const { toast } = useToast();
   const initialText = useMemo(
     () => JSON.stringify(initialData ?? {}, null, 2),
     [initialData]

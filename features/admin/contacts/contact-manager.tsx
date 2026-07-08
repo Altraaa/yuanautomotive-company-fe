@@ -22,7 +22,7 @@ import {
 import { StatusPill } from "@/features/admin/components/status-pill";
 import { StatusTabs } from "@/features/admin/components/status-tabs";
 import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
-import { useToast } from "@/features/admin/components/toast";
+import { toast } from "sonner";
 
 /** Build a wa.me link from an Indonesian phone number (0812… → 62812…). */
 function waLink(phone: string): string {
@@ -33,7 +33,6 @@ function waLink(phone: string): string {
 
 export function ContactManager({ rows }: { rows: ContactRow[] }) {
   const router = useRouter();
-  const { toast } = useToast();
   const [tab, setTab] = useState<string>("ALL");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());

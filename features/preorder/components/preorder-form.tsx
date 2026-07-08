@@ -8,7 +8,7 @@ import { CtaButton } from "@/components/common/cta-button";
 import { PrivacyNotice } from "@/components/common/privacy-notice";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/features/admin/components/toast";
+import { toast } from "sonner";
 import { preorderSchema, type PreorderFormValues } from "@/features/preorder/schema";
 import { submitPreorder } from "@/features/preorder/services/submit-order";
 import { useCart } from "@/features/preorder/store/cart-context";
@@ -42,7 +42,6 @@ function buildOrderMessage(
 
 export function PreorderForm({ onBack, onDone }: { onBack: () => void; onDone?: () => void }) {
   const { items, subtotal, clear } = useCart();
-  const { toast } = useToast();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [sentMessage, setSentMessage] = useState<string | null>(null);
 
@@ -146,7 +145,7 @@ export function PreorderForm({ onBack, onDone }: { onBack: () => void; onDone?: 
 
         <PrivacyNotice lead="Dengan mengirim pre-order ini, Anda menyetujui " />
 
-        <CtaButton size="lg" disabled={isSubmitting} className="w-full">
+        <CtaButton size="lg" disabled={isSubmitting} className="mt-1 h-14 w-full shrink-0">
           {isSubmitting ? "Mengirim…" : "Kirim Pre-Order"}
         </CtaButton>
       </form>

@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/select";
 import { SectionCard } from "./section-card";
 import { ConfirmDialog } from "./confirm-dialog";
-import { useToast } from "./toast";
+import { toast } from "sonner";
 import { useProductForm } from "./product-form-context";
 
 const labelClass =
@@ -64,7 +64,6 @@ export function ProductEditForm({
   formId = "product-form",
 }: ProductEditFormProps) {
   const router = useRouter();
-  const { toast } = useToast();
   const formCtx = useProductForm();
   const [compatDraft, setCompatDraft] = useState("");
   const [deleteOpen, setDeleteOpen] = useState(false);

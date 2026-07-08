@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Check, Copy, FileText, Trash2, UploadCloud } from "lucide-react";
 import { deleteMediaAction, uploadMediaAction } from "@/features/admin/media-actions";
 import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
-import { useToast } from "@/features/admin/components/toast";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 type MediaItem = {
@@ -23,7 +23,6 @@ function formatBytes(bytes: number): string {
 }
 
 export function MediaUploader() {
-  const { toast } = useToast();
   const [items, setItems] = useState<MediaItem[]>([]);
   const [uploading, setUploading] = useState(false);
   const [dragging, setDragging] = useState(false);

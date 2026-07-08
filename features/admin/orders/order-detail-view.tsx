@@ -10,11 +10,10 @@ import { deleteOrderAction, updateOrderStatusAction } from "@/features/admin/ord
 import { SectionCard } from "@/features/admin/components/section-card";
 import { StatusPill } from "@/features/admin/components/status-pill";
 import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
-import { useToast } from "@/features/admin/components/toast";
+import { toast } from "sonner";
 
 export function OrderDetailView({ order }: { order: OrderDetail }) {
   const router = useRouter();
-  const { toast } = useToast();
   const [status, setStatus] = useState<OrderStatus>(order.status);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isPending, startTransition] = useTransition();

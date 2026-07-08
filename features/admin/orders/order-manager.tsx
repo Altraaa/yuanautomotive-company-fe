@@ -23,7 +23,7 @@ import {
 import { StatusTabs } from "@/features/admin/components/status-tabs";
 import { AdminPagination } from "@/features/admin/components/admin-pagination";
 import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
-import { useToast } from "@/features/admin/components/toast";
+import { toast } from "sonner";
 
 const GRID = "grid grid-cols-[36px_1.8fr_1.3fr_1fr_1.1fr_1fr_90px] items-center gap-3.5";
 const PAGE_SIZE = 10;
@@ -31,7 +31,6 @@ const statusLabel = ORDER_STATUS_LABEL;
 
 export function OrderManager({ rows }: { rows: OrderRow[] }) {
   const router = useRouter();
-  const { toast } = useToast();
   const [tab, setTab] = useState<string>("ALL");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);

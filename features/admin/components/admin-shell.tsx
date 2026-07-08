@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { X } from "lucide-react";
 import { AdminSidebar } from "./admin-sidebar";
-import { ToastProvider } from "./toast";
+import { Toaster } from "@/components/ui/sonner";
 
 /** Lets any descendant topbar open the mobile sidebar drawer without prop threading. */
 const SidebarContext = createContext<{ open: () => void } | null>(null);
@@ -21,7 +21,6 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
   return (
     <SidebarContext.Provider value={{ open: () => setDrawerOpen(true) }}>
-      <ToastProvider>
       <div className="min-h-screen bg-bg lg:grid lg:grid-cols-[240px_1fr]">
         {/* Desktop sidebar */}
         <aside className="sticky top-0 hidden h-screen border-r border-border lg:block">
@@ -51,7 +50,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
         <main className="min-w-0">{children}</main>
       </div>
-      </ToastProvider>
+      <Toaster />
     </SidebarContext.Provider>
   );
 }

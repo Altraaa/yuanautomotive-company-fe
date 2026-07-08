@@ -19,14 +19,13 @@ import {
 import { bulkDeleteBlogsAction, deleteBlogAction } from "@/features/admin/blog-actions";
 import { AdminPagination } from "@/features/admin/components/admin-pagination";
 import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
-import { useToast } from "@/features/admin/components/toast";
+import { toast } from "sonner";
 
 const GRID = "grid grid-cols-[36px_2.6fr_1fr_1.1fr_1fr_78px] items-center gap-3.5";
 const PAGE_SIZE = 10;
 
 export function BlogManager({ rows }: { rows: AdminBlogRow[] }) {
   const router = useRouter();
-  const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Semua");
   const [status, setStatus] = useState("Semua");

@@ -9,7 +9,7 @@ import {
   deleteCategoryAction,
   updateCategoryAction,
 } from "@/features/admin/category-actions";
-import { useToast } from "@/features/admin/components/toast";
+import { toast } from "sonner";
 import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -21,7 +21,6 @@ const inputClass =
 
 export function CategoryManager({ initial }: { initial: CategoryOption[] }) {
   const router = useRouter();
-  const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [draft, setDraft] = useState("");
   const [editingUuid, setEditingUuid] = useState<string | null>(null);

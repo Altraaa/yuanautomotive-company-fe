@@ -13,7 +13,7 @@ import { saveBlogAction } from "@/features/admin/blog-actions";
 import { blogFormSchema, type BlogFormValues } from "@/features/admin/blog-schema";
 import { SectionCard } from "@/features/admin/components/section-card";
 import { useFormSubmit } from "@/features/admin/components/form-submit-context";
-import { useToast } from "@/features/admin/components/toast";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -56,7 +56,6 @@ type Props = {
 
 export function BlogEditorForm({ blogUuid, defaultValues, initialCoverUrl, redirectTo }: Props) {
   const router = useRouter();
-  const { toast } = useToast();
   const formCtx = useFormSubmit();
   const [coverUrl, setCoverUrl] = useState<string | undefined>(initialCoverUrl);
   const [coverUuid, setCoverUuid] = useState<string | null>(null);
