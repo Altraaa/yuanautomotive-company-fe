@@ -67,6 +67,23 @@ export const endpoints = {
   },
 
   // ═══════════════════════════════════════════════════════════
+  // NEWS — Instagram content (Reels / Poster). Public (by slug) + Admin (by uuid)
+  // ═══════════════════════════════════════════════════════════
+  news: {
+    // Public
+    list: "/news",
+    detailBySlug: (slug: string) => `/news/slug/${slug}`,
+
+    // Admin
+    adminList: "/news",
+    adminDetail: (uuid: string) => `/news/${uuid}`,
+    adminCreate: "/news",
+    adminUpdate: (uuid: string) => `/news/${uuid}`,
+    adminDelete: (uuid: string) => `/news/${uuid}`,
+    adminBulkDelete: "/news/bulk/delete",
+  },
+
+  // ═══════════════════════════════════════════════════════════
   // CONTACTS (LEAD GENERATION)
   // ═══════════════════════════════════════════════════════════
   contacts: {

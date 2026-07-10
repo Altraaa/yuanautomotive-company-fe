@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { HeroSection } from "@/features/home/components/hero-section";
 import { CategorySection } from "@/features/home/components/category-section";
 import { FeaturedProductsSection } from "@/features/home/components/featured-products-section";
+import { NewsHighlightSection } from "@/features/home/components/news-highlight-section";
 import { WhyUsSection } from "@/features/home/components/why-us-section";
 import { AboutBlogSection } from "@/features/home/components/about-blog-section";
 import { SocialProofSection } from "@/features/home/components/social-proof-section";
@@ -47,6 +48,9 @@ export default function HomePage() {
       </Reveal>
       <Reveal>
         <FeaturedProductsSection />
+      </Reveal>
+      <Reveal>
+        <NewsHighlightSection />
       </Reveal>
       <Reveal>
         <WhyUsSection />

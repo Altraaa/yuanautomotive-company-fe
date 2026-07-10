@@ -31,6 +31,7 @@ export const navLinks = [
   { href: "/", label: "Home" },
   { href: "/tentang", label: "Company" },
   { href: "/produk", label: "Product" },
+  { href: "/news", label: "News" },
   { href: "/blog", label: "Blog" },
   { href: "/kontak", label: "Contact" },
 ] as const;

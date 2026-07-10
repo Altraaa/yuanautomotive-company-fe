@@ -23,6 +23,7 @@ export const adminNavGroups: AdminNavGroup[] = [
       { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
       { label: "Produk", href: "/dashboard/produk", icon: "products", count: 42, countTone: "gold" },
       { label: "Blog", href: "/dashboard/blog", icon: "blog", count: 12, countTone: "grey" },
+      { label: "News", href: "/dashboard/news", icon: "news", count: 6, countTone: "grey" },
     ],
   },
   {
