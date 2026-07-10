@@ -19,17 +19,26 @@ export const metadata: Metadata = {
 
 const organizationLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": ["Organization", "AutoPartsStore"],
   name: site.name,
   url: site.url,
   description: site.description,
   email: site.email,
+  telephone: `+${site.whatsapp.number}`,
+  areaServed: { "@type": "Country", name: "Indonesia" },
   address: {
     "@type": "PostalAddress",
+    streetAddress: "Sanur, Denpasar Selatan",
     addressLocality: "Denpasar",
     addressRegion: "Bali",
     addressCountry: "ID",
   },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: site.geo.latitude,
+    longitude: site.geo.longitude,
+  },
+  hasMap: `https://www.google.com/maps?q=${site.geo.latitude},${site.geo.longitude}`,
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "sales",

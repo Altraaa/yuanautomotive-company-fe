@@ -50,6 +50,12 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   alternates: { canonical: site.url },
+  other: {
+    "geo.region": site.geo.region,
+    "geo.placename": site.geo.placename,
+    "geo.position": `${site.geo.latitude};${site.geo.longitude}`,
+    ICBM: `${site.geo.latitude}, ${site.geo.longitude}`,
+  },
 };
 
 export const viewport: Viewport = {
