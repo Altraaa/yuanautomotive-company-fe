@@ -8,6 +8,7 @@ import { NewsCard } from "@/components/common/news-card";
 import { getAllNewsSlugs, getNewsBySlug, getRelatedNews } from "@/services/news";
 import { formatDate } from "@/lib/utils";
 import { site } from "@/lib/site";
+import { withBrand } from "@/lib/seo-keywords";
 
 export const revalidate = 3600;
 
@@ -26,12 +27,11 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return {
     title: item.title,
     description: item.caption,
-    keywords: [
+    keywords: withBrand([
       item.title,
       `konten ${item.type} mobil listrik`,
       "Instagram Yuan Dewata Automotive",
-      "mobil listrik",
-    ],
+    ]),
     alternates: { canonical: `${site.url}/news/${item.slug}` },
     openGraph: {
       title: item.title,

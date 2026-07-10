@@ -3,6 +3,7 @@ import { Mail, MapPin, MessageCircle } from "lucide-react";
 import { PageHero } from "@/components/common/page-hero";
 import { Eyebrow } from "@/components/common/eyebrow";
 import { site, waLink } from "@/lib/site";
+import { keywordsFor } from "@/lib/seo-keywords";
 import { cn } from "@/lib/utils";
 
 export const revalidate = 3600;
@@ -15,10 +16,7 @@ const PRIVACY_EMAIL = "privacy@yuandewatatimur.com";
 export const metadata: Metadata = {
   title: "Kebijakan Privasi",
   description: `Kebijakan Privasi ${site.name} (dikelola ${LEGAL_ENTITY}) — bagaimana kami mengumpulkan, menggunakan, dan melindungi Data Pribadi Anda sesuai UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP).`,
-  keywords: [
-    "kebijakan privasi Yuan Dewata Automotive",
-    "perlindungan data pribadi UU PDP",
-  ],
+  keywords: keywordsFor("privacy"),
   alternates: { canonical: `${site.url}/kebijakan-privasi` },
 };
 

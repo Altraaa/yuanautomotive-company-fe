@@ -8,18 +8,12 @@ import { AboutBlogSection } from "@/features/home/components/about-blog-section"
 import { SocialProofSection } from "@/features/home/components/social-proof-section";
 import { Reveal } from "@/components/common/reveal";
 import { site } from "@/lib/site";
+import { keywordsFor } from "@/lib/seo-keywords";
 
 export const metadata: Metadata = {
   title: `${site.name} — Sparepart & Aksesoris Mobil Listrik`,
   description: site.description,
-  keywords: [
-    "sparepart original mobil listrik",
-    "sparepart & aksesoris mobil China",
-    "importir langsung sparepart mobil listrik",
-    "one stop sparepart mobil China",
-    "jual sparepart aksesoris EV Indonesia",
-    "body part mobil listrik original",
-  ],
+  keywords: keywordsFor("home"),
   alternates: { canonical: site.url },
 };
 

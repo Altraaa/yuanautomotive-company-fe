@@ -5,6 +5,7 @@ import { Eyebrow } from "@/components/common/eyebrow";
 import { CtaButton } from "@/components/common/cta-button";
 import { ContactForm } from "@/features/contact/components/contact-form";
 import { site, waLink } from "@/lib/site";
+import { keywordsFor } from "@/lib/seo-keywords";
 
 export const revalidate = 3600;
 
@@ -12,14 +13,7 @@ export const metadata: Metadata = {
   title: "Kontak — Hubungi Tim Kami",
   description:
     "Hubungi tim Yuan Dewata Automotive via WhatsApp atau formulir untuk konsultasi sparepart & aksesoris mobil listrik, harga grosir, dan kemitraan dealer.",
-  keywords: [
-    "kontak Yuan Dewata Automotive",
-    "WhatsApp sparepart mobil listrik",
-    "konsultasi sparepart EV",
-    "harga grosir sparepart mobil China",
-    "cek stok sparepart mobil listrik",
-    "kemitraan dealer reseller sparepart mobil listrik",
-  ],
+  keywords: keywordsFor("contact"),
   alternates: { canonical: `${site.url}/kontak` },
 };
 

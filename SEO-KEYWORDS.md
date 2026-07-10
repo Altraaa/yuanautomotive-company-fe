@@ -167,10 +167,14 @@ Bukan halaman komersial — keyword minimal, tetap `index`.
 
 | Lokasi | Perubahan |
 |---|---|
-| `lib/site.ts` | Tambah `siteKeywords` (universal) |
-| `app/layout.tsx` | `metadata.keywords = siteKeywords` |
-| Tiap `page.tsx` publik statis | `keywords: [...]` sesuai cluster di atas |
-| `produk/[slug]`, `blog/[slug]`, `news/[slug]` | `keywords` dirakit di `generateMetadata` dari entitas |
+| `lib/seo-keywords.ts` | **Sumber tunggal** — `brandCore` (universal), `pageKeywords` (per halaman), helper `keywordsFor()` & `withBrand()` |
+| `app/layout.tsx` | `metadata.keywords = brandCore` |
+| Tiap `page.tsx` publik statis | `keywords: keywordsFor("<page>")` (tanpa array panjang inline) |
+| `produk/[slug]`, `blog/[slug]`, `news/[slug]` | `keywords: withBrand([...])` — keyword entitas + brandCore |
+
+> Catatan: di Next.js `metadata.keywords` per-halaman **menimpa** (bukan menggabung)
+> keywords layout — karena itu tiap halaman memakai `keywordsFor()`/`withBrand()` agar
+> `brandCore` selalu ikut.
 
 > Keyword ditanam **melengkapi**, bukan menggantikan, optimasi title/description/heading.
 > Untuk ranking nyata: pastikan H1/H2 tiap halaman memuat primary keyword-nya (mayoritas

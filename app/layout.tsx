@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Chakra_Petch, Barlow, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-import { site, siteKeywords } from "@/lib/site";
+import { site } from "@/lib/site";
+import { brandCore } from "@/lib/seo-keywords";
 
 const chakra = Chakra_Petch({
   subsets: ["latin"],
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
     template: `%s — ${site.name}`,
   },
   description: site.description,
-  keywords: siteKeywords,
+  keywords: brandCore,
   openGraph: {
     title: `${site.name} — Sparepart & Aksesoris Mobil Listrik`,
     description: site.description,

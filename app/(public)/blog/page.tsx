@@ -4,6 +4,7 @@ import { BlogCard } from "@/components/common/blog-card";
 import { BlogCategoryTabs } from "@/features/blog/components/blog-category-tabs";
 import { getAllBlogCards } from "@/services/blogs";
 import { site } from "@/lib/site";
+import { keywordsFor } from "@/lib/seo-keywords";
 
 export const revalidate = 3600;
 
@@ -11,14 +12,7 @@ export const metadata: Metadata = {
   title: "Blog & Update — Tips, Panduan, dan Rilis EV",
   description:
     "Tips perawatan, panduan teknis, dan kabar rilis terbaru seputar sparepart & aksesoris mobil listrik dari Yuan Dewata Automotive.",
-  keywords: [
-    "tips perawatan mobil listrik",
-    "panduan sparepart mobil listrik",
-    "cara merawat kampas rem EV",
-    "panduan charger mobil listrik",
-    "berita mobil listrik Indonesia",
-    "cara memilih velg mobil listrik",
-  ],
+  keywords: keywordsFor("blog"),
   alternates: { canonical: `${site.url}/blog` },
 };
 

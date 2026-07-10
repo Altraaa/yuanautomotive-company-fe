@@ -7,6 +7,7 @@ import { BlogCard } from "@/components/common/blog-card";
 import { getAllBlogSlugs, getBlogBySlug, getRelatedBlogs } from "@/services/blogs";
 import { formatDate } from "@/lib/utils";
 import { site } from "@/lib/site";
+import { withBrand } from "@/lib/seo-keywords";
 
 export const revalidate = 3600;
 
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return {
     title: post.title,
     description: post.excerpt,
-    keywords: [post.title, post.category, "mobil listrik", "tips mobil listrik"],
+    keywords: withBrand([post.title, post.category, "tips mobil listrik"]),
     alternates: { canonical: `${site.url}/blog/${post.slug}` },
     openGraph: {
       title: post.title,

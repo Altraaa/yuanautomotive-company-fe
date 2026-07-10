@@ -4,6 +4,7 @@ import { NewsCard } from "@/components/common/news-card";
 import { NewsTypeTabs } from "@/features/news/components/news-type-tabs";
 import { getAllNewsCards } from "@/services/news";
 import { site } from "@/lib/site";
+import { keywordsFor } from "@/lib/seo-keywords";
 
 export const revalidate = 3600;
 
@@ -11,13 +12,7 @@ export const metadata: Metadata = {
   title: "News — Konten & Update Instagram Yuan Dewata Automotive",
   description:
     "Kumpulan konten Instagram Yuan Dewata Automotive — video Reels dan poster seputar sparepart, aksesoris, dan tips kendaraan listrik.",
-  keywords: [
-    "konten Instagram Yuan Dewata Automotive",
-    "reels mobil listrik",
-    "video tips mobil listrik",
-    "konten aksesoris mobil China",
-    "Instagram sparepart mobil listrik Indonesia",
-  ],
+  keywords: keywordsFor("news"),
   alternates: { canonical: `${site.url}/news` },
 };
 

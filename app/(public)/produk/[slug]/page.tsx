@@ -15,6 +15,7 @@ import {
 } from "@/services/products";
 import { formatIDR } from "@/lib/utils";
 import { site, waLink } from "@/lib/site";
+import { withBrand } from "@/lib/seo-keywords";
 
 export const revalidate = 3600;
 
@@ -33,12 +34,11 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return {
     title: `${product.name} — ${product.category}`,
     description: product.description,
-    keywords: [
+    keywords: withBrand([
       product.name,
-      `${product.category} mobil listrik`,
+      `${product.category} ${product.name}`,
       ...product.compatibility.map((brand) => `sparepart ${brand}`),
-      "sparepart mobil listrik",
-    ],
+    ]),
     alternates: { canonical: `${site.url}/produk/${product.slug}` },
     openGraph: {
       title: product.name,

@@ -22,29 +22,6 @@ export const site = {
   },
 } as const;
 
-/**
- * UNIVERSAL keywords — brand + core categories, inherited by every page via the
- * root layout. Page-level metadata can append its own cluster (see SEO-KEYWORDS.md).
- * Note: Google ignores <meta keywords>; kept for Bing/other engines + consistency.
- */
-export const siteKeywords: string[] = [
-  "Yuan Dewata Automotive",
-  "Yuan Dewata Timur",
-  "sparepart mobil listrik",
-  "aksesoris mobil listrik",
-  "sparepart mobil China",
-  "aksesoris mobil China",
-  "body part mobil listrik",
-  "importir sparepart mobil listrik",
-  "jual sparepart EV",
-  "toko sparepart mobil listrik",
-  "distributor aksesoris mobil China",
-  "pre-order sparepart mobil China",
-  "sparepart EV original",
-  "sparepart mobil listrik Bali",
-  "sparepart mobil listrik Denpasar",
-];
-
 export function waLink(message?: string): string {
   const text = encodeURIComponent(message ?? site.whatsapp.defaultMessage);
   return `https://wa.me/${site.whatsapp.number}?text=${text}`;

@@ -5,20 +5,14 @@ import { StatsStrip } from "@/components/common/stats-strip";
 import { Eyebrow } from "@/components/common/eyebrow";
 import { CtaBanner } from "@/components/common/cta-banner";
 import { site, waLink } from "@/lib/site";
+import { keywordsFor } from "@/lib/seo-keywords";
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Tentang Kami — Profil Perusahaan",
   description: `${site.name} adalah pusat sparepart, body part, dan aksesoris original untuk mobil buatan China yang beredar di Indonesia — melayani dealer resmi, bengkel, dan customer.`,
-  keywords: [
-    "tentang Yuan Dewata Automotive",
-    "importir sparepart mobil China",
-    "distributor sparepart mobil listrik",
-    "pre-order sparepart mobil China langka",
-    "sparepart original mobil China terjangkau",
-    "mitra dealer reseller sparepart EV",
-  ],
+  keywords: keywordsFor("company"),
   alternates: { canonical: `${site.url}/tentang` },
 };
 
