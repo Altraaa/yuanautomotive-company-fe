@@ -1,4 +1,4 @@
-import { apiClient } from "@/services/api";
+import { apiClient, ApiError } from "@/services/api";
 import { endpoints } from "@/lib/endpoint";
 import { withFallback } from "@/lib/api-fallback";
 import type { ApiPaginated } from "@/types/api/common";
@@ -9,12 +9,10 @@ import * as mock from "@/features/news/data";
 /**
  * PUBLIC news service (RSC), API-first with mock fallback. Instagram content.
  *
- * The backend `/news` endpoints are not wired yet, so every read uses
- * `alwaysFallback` → a missing route (404) transparently serves the mock set,
- * exactly like the admin news service. Once the NestJS `/news` routes are live
- * (matching `ApiNewsCard`/`ApiNewsDetail`), real data is used automatically:
- * a genuine 404 for an unknown slug still falls back to the mock, which returns
- * `undefined` for unknown slugs → the detail page calls `notFound()`.
+ * Backend `/news` is live, so reads hit it directly. `withFallback` (no
+ * `alwaysFallback`) keeps the site up only when the backend is truly down
+ * (5xx / unreachable) — 4xx propagate normally (detail 404 → `notFound()`),
+ * exactly like the public blog/product services.
  */
 
 function toCard(n: ApiNewsCard): NewsCardData {
@@ -43,22 +41,25 @@ export function getAllNewsCards(): Promise<NewsCardData[]> {
       });
       return res.items.map(toCard);
     },
-    () => mock.getAllNewsCards(),
-    { alwaysFallback: true }
+    () => mock.getAllNewsCards()
   );
 }
 
 export function getNewsBySlug(slug: string): Promise<NewsDetailData | undefined> {
   return withFallback(
     async () => {
-      const n = await apiClient.get<ApiNewsDetail>(endpoints.news.detailBySlug(slug), {
-        revalidate: 3600,
-        tags: ["news"],
-      });
-      return toDetail(n);
+      try {
+        const n = await apiClient.get<ApiNewsDetail>(endpoints.news.detailBySlug(slug), {
+          revalidate: 3600,
+          tags: ["news"],
+        });
+        return toDetail(n);
+      } catch (err) {
+        if (err instanceof ApiError && err.status === 404) return undefined;
+        throw err;
+      }
     },
-    () => mock.getNewsBySlug(slug),
-    { alwaysFallback: true }
+    () => mock.getNewsBySlug(slug)
   );
 }
 
@@ -75,8 +76,7 @@ export function getRelatedNews(slug: string): Promise<NewsCardData[]> {
         .filter((n) => n.slug !== slug)
         .slice(0, 3);
     },
-    () => mock.getRelatedNews(slug),
-    { alwaysFallback: true }
+    () => mock.getRelatedNews(slug)
   );
 }
 
@@ -90,7 +90,6 @@ export function getAllNewsSlugs(): Promise<string[]> {
       });
       return res.items.map((n) => n.slug);
     },
-    () => mock.news.map((n) => n.slug),
-    { alwaysFallback: true }
+    () => mock.news.map((n) => n.slug)
   );
 }

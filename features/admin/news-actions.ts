@@ -44,7 +44,7 @@ export async function saveNewsAction(
     if (err instanceof ApiError) {
       return { ok: false, message: err.messages.join(", ") || "Gagal menyimpan konten." };
     }
-    return { ok: true }; // backend unreachable → treat as saved (mock)
+    return { ok: false, message: "Gagal terhubung ke server. Coba lagi." };
   }
 }
 
@@ -58,7 +58,7 @@ export async function deleteNewsAction(uuid: string): Promise<MutateResult> {
     if (err instanceof ApiError) {
       return { ok: false, message: err.messages.join(", ") || "Gagal menghapus konten." };
     }
-    return { ok: true };
+    return { ok: false, message: "Gagal terhubung ke server. Coba lagi." };
   }
 }
 
@@ -72,6 +72,6 @@ export async function bulkDeleteNewsAction(ids: string[]): Promise<MutateResult>
     if (err instanceof ApiError) {
       return { ok: false, message: err.messages.join(", ") || "Gagal menghapus konten." };
     }
-    return { ok: true };
+    return { ok: false, message: "Gagal terhubung ke server. Coba lagi." };
   }
 }
