@@ -12,6 +12,14 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: `${site.name} — Sparepart & Aksesoris Mobil Listrik`,
   description: site.description,
+  keywords: [
+    "sparepart original mobil listrik",
+    "sparepart & aksesoris mobil China",
+    "importir langsung sparepart mobil listrik",
+    "one stop sparepart mobil China",
+    "jual sparepart aksesoris EV Indonesia",
+    "body part mobil listrik original",
+  ],
   alternates: { canonical: site.url },
 };
 

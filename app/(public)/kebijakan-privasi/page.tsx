@@ -15,6 +15,10 @@ const PRIVACY_EMAIL = "privacy@yuandewatatimur.com";
 export const metadata: Metadata = {
   title: "Kebijakan Privasi",
   description: `Kebijakan Privasi ${site.name} (dikelola ${LEGAL_ENTITY}) — bagaimana kami mengumpulkan, menggunakan, dan melindungi Data Pribadi Anda sesuai UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP).`,
+  keywords: [
+    "kebijakan privasi Yuan Dewata Automotive",
+    "perlindungan data pribadi UU PDP",
+  ],
   alternates: { canonical: `${site.url}/kebijakan-privasi` },
 };
 

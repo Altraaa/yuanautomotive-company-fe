@@ -12,6 +12,14 @@ export const metadata: Metadata = {
   title: "Kontak — Hubungi Tim Kami",
   description:
     "Hubungi tim Yuan Dewata Automotive via WhatsApp atau formulir untuk konsultasi sparepart & aksesoris mobil listrik, harga grosir, dan kemitraan dealer.",
+  keywords: [
+    "kontak Yuan Dewata Automotive",
+    "WhatsApp sparepart mobil listrik",
+    "konsultasi sparepart EV",
+    "harga grosir sparepart mobil China",
+    "cek stok sparepart mobil listrik",
+    "kemitraan dealer reseller sparepart mobil listrik",
+  ],
   alternates: { canonical: `${site.url}/kontak` },
 };
 

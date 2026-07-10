@@ -11,6 +11,14 @@ export const metadata: Metadata = {
   title: "Blog & Update — Tips, Panduan, dan Rilis EV",
   description:
     "Tips perawatan, panduan teknis, dan kabar rilis terbaru seputar sparepart & aksesoris mobil listrik dari Yuan Dewata Automotive.",
+  keywords: [
+    "tips perawatan mobil listrik",
+    "panduan sparepart mobil listrik",
+    "cara merawat kampas rem EV",
+    "panduan charger mobil listrik",
+    "berita mobil listrik Indonesia",
+    "cara memilih velg mobil listrik",
+  ],
   alternates: { canonical: `${site.url}/blog` },
 };
 

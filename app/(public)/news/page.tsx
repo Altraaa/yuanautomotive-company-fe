@@ -11,6 +11,13 @@ export const metadata: Metadata = {
   title: "News — Konten & Update Instagram Yuan Dewata Automotive",
   description:
     "Kumpulan konten Instagram Yuan Dewata Automotive — video Reels dan poster seputar sparepart, aksesoris, dan tips kendaraan listrik.",
+  keywords: [
+    "konten Instagram Yuan Dewata Automotive",
+    "reels mobil listrik",
+    "video tips mobil listrik",
+    "konten aksesoris mobil China",
+    "Instagram sparepart mobil listrik Indonesia",
+  ],
   alternates: { canonical: `${site.url}/news` },
 };
 

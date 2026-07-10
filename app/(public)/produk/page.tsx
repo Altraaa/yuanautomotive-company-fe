@@ -13,6 +13,17 @@ export const metadata: Metadata = {
   title: "Produk — Katalog Sparepart & Aksesoris EV",
   description:
     "Jelajahi katalog lengkap sparepart dan aksesoris mobil listrik: charger, kampas rem, velg, interior, dan eksterior — dengan spesifikasi teknis lengkap.",
+  keywords: [
+    "katalog sparepart mobil listrik",
+    "jual aksesoris mobil listrik",
+    "charger mobil listrik Type 2",
+    "kampas rem regeneratif EV",
+    "velg mobil listrik",
+    "karpet mobil listrik",
+    "cover jok mobil listrik",
+    "kabel charging Type 2 Mode 3",
+    "harga sparepart mobil China",
+  ],
   alternates: { canonical: `${site.url}/produk` },
 };
 

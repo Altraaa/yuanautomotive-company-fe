@@ -33,6 +33,12 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return {
     title: `${product.name} — ${product.category}`,
     description: product.description,
+    keywords: [
+      product.name,
+      `${product.category} mobil listrik`,
+      ...product.compatibility.map((brand) => `sparepart ${brand}`),
+      "sparepart mobil listrik",
+    ],
     alternates: { canonical: `${site.url}/produk/${product.slug}` },
     openGraph: {
       title: product.name,

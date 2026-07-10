@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return {
     title: post.title,
     description: post.excerpt,
+    keywords: [post.title, post.category, "mobil listrik", "tips mobil listrik"],
     alternates: { canonical: `${site.url}/blog/${post.slug}` },
     openGraph: {
       title: post.title,
