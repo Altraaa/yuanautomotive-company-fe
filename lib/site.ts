@@ -9,7 +9,7 @@ export const site = {
   shortName: "Yuan Dewata",
   tagline: "AUTOMOTIVE",
   description:
-    "Sparepart dan aksesoris mobil listrik dengan spesifikasi teknis lengkap untuk komunitas EV, bengkel, dealer, dan reseller di Indonesia.",
+    "Spare part, body parts, dan aksesoris mobil Cina serta mobil listrik dengan spesifikasi teknis lengkap untuk komunitas EV, bengkel, dealer, dan reseller di Indonesia.",
   url: "https://automotive.yuandewatatimur.com",
   locale: "id_ID",
   email: "info@yuandewata.id",

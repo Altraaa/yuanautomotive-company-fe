@@ -30,13 +30,13 @@ const barlowCondensed = Barlow_Condensed({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — Sparepart & Aksesoris Mobil Listrik`,
+    default: `${site.name} — Sparepart & Aksesoris Mobil Cina & Listrik`,
     template: `%s — ${site.name}`,
   },
   description: site.description,
   keywords: brandCore,
   openGraph: {
-    title: `${site.name} — Sparepart & Aksesoris Mobil Listrik`,
+    title: `${site.name} — Sparepart & Aksesoris Mobil Cina & Listrik`,
     description: site.description,
     url: site.url,
     siteName: site.name,
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — Sparepart & Aksesoris Mobil Listrik`,
+    title: `${site.name} — Sparepart & Aksesoris Mobil Cina & Listrik`,
     description: site.description,
   },
   robots: { index: true, follow: true },

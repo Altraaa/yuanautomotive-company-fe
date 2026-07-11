@@ -12,7 +12,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Kontak — Hubungi Tim Kami",
   description:
-    "Hubungi tim Yuan Dewata Automotive via WhatsApp atau formulir untuk konsultasi sparepart & aksesoris mobil listrik, harga grosir, dan kemitraan dealer.",
+    "Hubungi tim Yuan Dewata Automotive via WhatsApp atau formulir untuk konsultasi sparepart, body parts & aksesoris mobil Cina dan mobil listrik, harga grosir, dan kemitraan dealer.",
   keywords: keywordsFor("contact"),
   alternates: { canonical: `${site.url}/kontak` },
 };

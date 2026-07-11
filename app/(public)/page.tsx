@@ -8,10 +8,10 @@ import { AboutBlogSection } from "@/features/home/components/about-blog-section"
 import { SocialProofSection } from "@/features/home/components/social-proof-section";
 import { Reveal } from "@/components/common/reveal";
 import { site } from "@/lib/site";
-import { keywordsFor } from "@/lib/seo-keywords";
+import { brandCore, keywordsFor } from "@/lib/seo-keywords";
 
 export const metadata: Metadata = {
-  title: `${site.name} — Sparepart & Aksesoris Mobil Listrik`,
+  title: `${site.name} — Sparepart & Aksesoris Mobil Cina & Listrik`,
   description: site.description,
   keywords: keywordsFor("home"),
   alternates: { canonical: site.url },
@@ -23,8 +23,26 @@ const organizationLd = {
   name: site.name,
   url: site.url,
   description: site.description,
+  slogan: "Spare part, body parts, dan aksesoris mobil Cina & mobil listrik original.",
   email: site.email,
   telephone: `+${site.whatsapp.number}`,
+  // Sinyal topikal untuk mesin pencari — cerminan brandCore (sumber tunggal keyword).
+  keywords: brandCore.join(", "),
+  knowsAbout: [
+    "sparepart mobil Cina",
+    "body parts mobil Cina",
+    "aksesoris mobil Cina",
+    "sparepart mobil listrik",
+    "aksesoris mobil listrik",
+    "importir sparepart mobil Cina",
+    "pre-order sparepart mobil Cina langka",
+    "Wuling",
+    "BYD",
+    "Chery",
+    "MG",
+    "Neta",
+    "Hyundai",
+  ],
   areaServed: { "@type": "Country", name: "Indonesia" },
   address: {
     "@type": "PostalAddress",

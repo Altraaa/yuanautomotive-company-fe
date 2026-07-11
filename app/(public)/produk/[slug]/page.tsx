@@ -63,6 +63,13 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
     description: product.description,
     image: product.gallery,
     category: product.category,
+    keywords: [
+      product.name,
+      `${product.category} ${product.name}`,
+      ...product.compatibility.map((brand) => `sparepart ${brand}`),
+      "sparepart mobil Cina",
+      "aksesoris mobil Cina",
+    ].join(", "),
     brand: { "@type": "Brand", name: site.name },
     offers: {
       "@type": "Offer",
