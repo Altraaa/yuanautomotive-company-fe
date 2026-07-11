@@ -20,8 +20,7 @@ type SearchParams = Promise<{ tipe?: string }>;
 
 export default async function NewsListPage({ searchParams }: { searchParams: SearchParams }) {
   const { tipe } = await searchParams;
-  const all = await getAllNewsCards();
-  const items = tipe ? all.filter((n) => n.type.toLowerCase() === tipe.toLowerCase()) : all;
+  const items = await getAllNewsCards(tipe);
 
   const [featured, ...rest] = items;
 

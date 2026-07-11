@@ -24,17 +24,27 @@ function toDetail(b: ApiBlogDetail): BlogDetailData {
   return { ...toCard(b), contentHtml: b.content_html, author: b.author };
 }
 
-export function getAllBlogCards(): Promise<BlogCardData[]> {
+/** Backend `category` filter values (`@IsIn`-style map → invalid would 400). */
+const BLOG_CATEGORY_VALUES = new Set(["tips", "rilis", "panduan", "berita"]);
+
+export function getAllBlogCards(category?: string): Promise<BlogCardData[]> {
+  const c =
+    category && BLOG_CATEGORY_VALUES.has(category.toLowerCase())
+      ? category.toLowerCase()
+      : undefined;
   return withFallback(
     async () => {
       const res = await apiClient.get<ApiPaginated<ApiBlogCard>>(endpoints.blogs.list, {
         revalidate: 3600,
         tags: ["blogs"],
-        query: { limit: 50 },
+        query: { limit: 50, category: c },
       });
       return res.items.map(toCard);
     },
-    () => mock.getAllBlogCards()
+    () => {
+      const all = mock.getAllBlogCards();
+      return c ? all.filter((b) => b.category.toLowerCase() === c) : all;
+    }
   );
 }
 

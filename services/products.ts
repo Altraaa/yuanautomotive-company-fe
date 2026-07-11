@@ -1,6 +1,7 @@
 import { apiClient, ApiError } from "@/services/api";
 import { endpoints } from "@/lib/endpoint";
 import { withFallback } from "@/lib/api-fallback";
+import { flattenPage } from "@/lib/paginate";
 import type { ApiPaginated } from "@/types/api/common";
 import type { ApiProductCard, ApiProductDetail } from "@/types/api/product";
 import type {
@@ -9,14 +10,20 @@ import type {
   ProductCategory,
   ProductDetailData,
 } from "@/types/ui/product";
+import { isRecentlyAdded } from "@/types/ui/product";
 import * as mock from "@/features/products/data";
 import { PRODUCTS_PER_PAGE, type ProductFilters } from "@/features/products/data";
 
 /**
  * PUBLIC product service (RSC). Calls the backend via apiClient and maps the
- * snake_case API JSON to UI types. Falls back to the mock catalog when the
- * backend is unreachable so public pages stay stable until the API is live.
+ * snake_case API JSON to UI types. Filtering, sorting, and pagination are done
+ * server-side (query params below) — the backend returns a correct `meta.total`.
+ * Falls back to the in-memory mock catalog when the backend is unreachable so
+ * public pages stay stable.
  */
+
+/** Sort tokens the backend accepts (`@IsIn` there → invalid values 400). */
+const ALLOWED_SORTS = new Set(["terbaru", "termurah", "termahal"]);
 
 const toBadge = (b: string | null): ProductBadge | undefined => (b ? (b as ProductBadge) : undefined);
 
@@ -27,7 +34,9 @@ function toCard(p: ApiProductCard): ProductCardData {
     category: p.category as ProductCategory,
     price: Number(p.price),
     imageUrl: p.image_url ?? "/placeholder-product-1.png",
-    badge: toBadge(p.badge),
+    // Manual promo badge wins; otherwise flag recently-added items as "BARU"
+    // (backend derives no BARU badge — it sends created_at for exactly this).
+    badge: toBadge(p.badge) ?? (isRecentlyAdded(p.created_at) ? "BARU" : undefined),
   };
 }
 
@@ -42,50 +51,30 @@ function toDetail(p: ApiProductDetail): ProductDetailData {
 }
 
 /**
- * Filter + sort + paginate the full catalog. The backend's pagination `total`
- * is unreliable (counts the returned page, off-by-one), so we fetch everything
- * and page here. Sort/filter option semantics:
- * - "semua" / undefined → all products, default order
- * - "terbaru"           → only BARU-labelled products
- * - "termurah"          → price ascending
- * - "termahal"          → price descending
+ * Filter + sort + paginate the catalog — all server-side. Search params from
+ * the URL (category, price range, sort, page) are forwarded as query params;
+ * the backend filters at the DB level and returns the correct `meta.total`.
+ * An unrecognised `sort` is dropped (the backend would 400 on it). The mock
+ * fallback mirrors this in memory when the backend is down.
  */
-function applyCatalogFilters(cards: ProductCardData[], filters: ProductFilters) {
-  const result = cards.filter((p) => {
-    if (filters.category && p.category.toLowerCase() !== filters.category.toLowerCase()) return false;
-    if (filters.priceMin != null && p.price < filters.priceMin) return false;
-    if (filters.priceMax != null && p.price > filters.priceMax) return false;
-    if (filters.sort === "terbaru" && p.badge !== "BARU") return false;
-    return true;
-  });
-
-  const sorted =
-    filters.sort === "termurah"
-      ? [...result].sort((a, b) => a.price - b.price)
-      : filters.sort === "termahal"
-        ? [...result].sort((a, b) => b.price - a.price)
-        : result;
-
-  const total = sorted.length;
-  const totalPages = Math.max(1, Math.ceil(total / PRODUCTS_PER_PAGE));
-  const page = Math.min(Math.max(1, filters.page ?? 1), totalPages);
-  const start = (page - 1) * PRODUCTS_PER_PAGE;
-  return { items: sorted.slice(start, start + PRODUCTS_PER_PAGE), total, totalPages, page };
-}
-
-async function fetchAllCards(): Promise<ProductCardData[]> {
-  const res = await apiClient.get<ApiPaginated<ApiProductCard>>(endpoints.products.list, {
-    revalidate: 3600,
-    tags: ["products"],
-    query: { limit: 100 }, // fetch all; backend pagination total is unreliable
-  });
-  return res.items.map(toCard);
-}
-
 export function queryProducts(filters: ProductFilters) {
   return withFallback(
-    async () => applyCatalogFilters(await fetchAllCards(), filters),
-    () => applyCatalogFilters(mock.getAllProductCards(), filters)
+    async () => {
+      const res = await apiClient.get<ApiPaginated<ApiProductCard>>(endpoints.products.list, {
+        revalidate: 3600,
+        tags: ["products"],
+        query: {
+          category: filters.category || undefined,
+          price_min: filters.priceMin,
+          price_max: filters.priceMax,
+          sort: filters.sort && ALLOWED_SORTS.has(filters.sort) ? filters.sort : undefined,
+          page: filters.page ?? 1,
+          limit: PRODUCTS_PER_PAGE,
+        },
+      });
+      return flattenPage(res, toCard);
+    },
+    () => mock.queryProducts(filters)
   );
 }
 

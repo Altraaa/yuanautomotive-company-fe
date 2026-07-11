@@ -20,10 +20,7 @@ type SearchParams = Promise<{ kategori?: string }>;
 
 export default async function BlogListPage({ searchParams }: { searchParams: SearchParams }) {
   const { kategori } = await searchParams;
-  const all = await getAllBlogCards();
-  const posts = kategori
-    ? all.filter((p) => p.category.toLowerCase() === kategori.toLowerCase())
-    : all;
+  const posts = await getAllBlogCards(kategori);
 
   const [featured, ...rest] = posts;
 

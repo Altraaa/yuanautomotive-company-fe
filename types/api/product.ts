@@ -6,7 +6,11 @@ export type ApiProductCard = {
   category: string;
   price: string;
   image_url: string | null;
+  /** Manual promo badge (HOT / TERLARIS / PRE-ORDER). "BARU" is NOT sent here —
+   *  the FE derives it from `created_at` recency (see isRecentlyAdded). */
   badge: string | null;
+  /** ISO timestamp; powers the date-based "BARU" flag on the FE. */
+  created_at: string;
 };
 
 export type ApiProductDetail = ApiProductCard & {

@@ -31,17 +31,24 @@ function toDetail(n: ApiNewsDetail): NewsDetailData {
   return { ...toCard(n), caption: n.caption };
 }
 
-export function getAllNewsCards(): Promise<NewsCardData[]> {
+/** Backend `type` filter values (`@IsIn` there → invalid values would 400). */
+const NEWS_TYPE_VALUES = new Set(["reels", "poster"]);
+
+export function getAllNewsCards(type?: string): Promise<NewsCardData[]> {
+  const t = type && NEWS_TYPE_VALUES.has(type.toLowerCase()) ? type.toLowerCase() : undefined;
   return withFallback(
     async () => {
       const res = await apiClient.get<ApiPaginated<ApiNewsCard>>(endpoints.news.list, {
         revalidate: 3600,
         tags: ["news"],
-        query: { limit: 50 },
+        query: { limit: 50, type: t },
       });
       return res.items.map(toCard);
     },
-    () => mock.getAllNewsCards()
+    () => {
+      const all = mock.getAllNewsCards();
+      return t ? all.filter((n) => n.type.toLowerCase() === t) : all;
+    }
   );
 }
 
