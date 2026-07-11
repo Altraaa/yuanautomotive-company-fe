@@ -38,6 +38,14 @@ export function waLink(message?: string): string {
   return `https://wa.me/${site.whatsapp.number}?text=${text}`;
 }
 
+/**
+ * Brand Instagram profile URL. Empty = account not live yet → the home
+ * "Sorotan Instagram" CTA renders a disabled "Segera Hadir" button. Set this to
+ * the real profile URL when the account exists; the CTA switches to a live link
+ * automatically, no component change needed.
+ */
+export const instagramUrl: string = "";
+
 export const navLinks = [
   { href: "/", label: "Home" },
   { href: "/tentang", label: "Company" },
