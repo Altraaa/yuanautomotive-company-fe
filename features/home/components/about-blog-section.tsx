@@ -15,8 +15,8 @@ export async function AboutBlogSection() {
         <div className="flex flex-col justify-center gap-4">
           <Eyebrow>Tentang Kami</Eyebrow>
           <p className="font-sans text-lg leading-relaxed text-fg-soft md:text-[19px]">
-            {site.name} — pusat sparepart, body parts &amp; aksesoris mobil Cina dan mobil listrik
-            untuk komunitas EV, bengkel, dan jaringan dealer di Indonesia.
+            {site.name} — pusat sparepart, body parts &amp; aksesoris otomotif untuk mobil Cina dan
+            mobil listrik, melayani komunitas EV, bengkel, dan jaringan dealer di Indonesia.
           </p>
           <Link
             href="/tentang"
@@ -28,7 +28,7 @@ export async function AboutBlogSection() {
 
         {/* Blog */}
         <div id="blog">
-          <SectionHeading title="Blog &" accent="Update" actionLabel="Semua" actionHref="/blog" />
+          <SectionHeading title="Blog Otomotif &" accent="Update" actionLabel="Semua" actionHref="/blog" />
           <div className="mt-4 grid gap-3.5 sm:grid-cols-3">
             {posts.map((post) => (
               <BlogCard key={post.slug} post={post} />

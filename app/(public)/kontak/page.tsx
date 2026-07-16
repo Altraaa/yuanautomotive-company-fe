@@ -12,7 +12,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Kontak — Hubungi Tim Kami",
   description:
-    "Hubungi tim Yuan Dewata Automotive via WhatsApp atau formulir untuk konsultasi sparepart, body parts & aksesoris mobil Cina dan mobil listrik, harga grosir, dan kemitraan dealer.",
+    "Hubungi tim Yuan Dewata Automotive via WhatsApp atau formulir untuk konsultasi sparepart, body parts & aksesoris otomotif mobil Cina dan mobil listrik, harga grosir, dan kemitraan dealer.",
   keywords: keywordsFor("contact"),
   alternates: { canonical: `${site.url}/kontak` },
 };
@@ -24,7 +24,7 @@ export default function ContactPage() {
         eyebrow="Kontak"
         title="Hubungi"
         accent="Tim Kami"
-        description="Butuh konsultasi teknis, cek stok, atau harga grosir? Chat langsung via WhatsApp atau kirim pesan lewat formulir di bawah."
+        description="Butuh konsultasi teknis sparepart otomotif, cek stok, atau harga grosir? Chat langsung via WhatsApp atau kirim pesan lewat formulir di bawah."
       />
 
       <div className="mx-auto max-w-6xl px-4 py-12 md:px-8">

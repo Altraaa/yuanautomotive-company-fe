@@ -13,7 +13,7 @@ import { keywordsFor } from "@/lib/seo-keywords";
 export const metadata: Metadata = {
   title: "Katalog Sparepart, Body Parts & Aksesoris Mobil Cina",
   description:
-    "Jelajahi katalog lengkap sparepart, body parts, dan aksesoris mobil Cina & mobil listrik: kampas rem, filter, bumper, velg, interior, dan eksterior — dengan spesifikasi teknis lengkap.",
+    "Jelajahi katalog lengkap sparepart, body parts, dan aksesoris otomotif untuk mobil Cina & mobil listrik: kampas rem, filter, bumper, velg, interior, dan eksterior — dengan spesifikasi teknis lengkap.",
   keywords: keywordsFor("product"),
   alternates: { canonical: `${site.url}/produk` },
 };
@@ -48,8 +48,8 @@ export default async function ProductListPage({
       <PageHero
         eyebrow="Katalog"
         title="Sparepart, Body Parts &"
-        accent="Aksesoris Mobil Cina"
-        description="Katalog lengkap sparepart, body parts, dan aksesoris mobil Cina & mobil listrik dengan spesifikasi teknis lengkap. Saring berdasarkan kategori dan rentang harga."
+        accent="Aksesoris Otomotif Mobil Cina"
+        description="Katalog lengkap sparepart, body parts, dan aksesoris otomotif untuk mobil Cina & mobil listrik dengan spesifikasi teknis lengkap. Saring berdasarkan kategori dan rentang harga."
       />
 
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-12">

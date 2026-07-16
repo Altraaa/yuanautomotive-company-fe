@@ -21,14 +21,20 @@ const organizationLd = {
   "@context": "https://schema.org",
   "@type": ["Organization", "AutoPartsStore"],
   name: site.name,
+  // Ejaan "Otomotif" — padanan Indonesia dari "Automotive". Nama resmi tetap
+  // site.name; alternateName memberi tahu mesin pencari keduanya satu entitas.
+  alternateName: ["Yuan Dewata Otomotif", "Yuan Dewata Timur", site.shortName],
   url: site.url,
   description: site.description,
-  slogan: "Spare part, body parts, dan aksesoris mobil Cina & mobil listrik original.",
+  slogan: "Spare part, body parts, dan aksesoris otomotif mobil Cina & mobil listrik original.",
   email: site.email,
   telephone: `+${site.whatsapp.number}`,
   // Sinyal topikal untuk mesin pencari — cerminan brandCore (sumber tunggal keyword).
   keywords: brandCore.join(", "),
   knowsAbout: [
+    "otomotif",
+    "sparepart otomotif",
+    "aksesoris otomotif",
     "sparepart mobil Cina",
     "body parts mobil Cina",
     "aksesoris mobil Cina",

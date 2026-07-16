@@ -24,6 +24,16 @@
 export const brandCore: string[] = [
   "Yuan Dewata Automotive",
   "Yuan Dewata Timur",
+  // Ejaan "otomotif" — padanan Indonesia dari "automotive". Mayoritas pencarian
+  // lokal memakai ejaan ini, jadi wajib berdampingan dengan nama brand resmi.
+  "Yuan Dewata Otomotif",
+  "otomotif Yuan Dewata",
+  "sparepart otomotif",
+  "aksesoris otomotif",
+  "otomotif mobil Cina",
+  "otomotif mobil listrik",
+  "toko otomotif Bali",
+  "otomotif Denpasar",
   "sparepart mobil China",
   "aksesoris mobil China",
   // Ejaan "Cina" — varian pencarian dominan di Indonesia (wajib ada berdampingan)
@@ -58,6 +68,8 @@ export const pageKeywords = {
     "jual sparepart aksesoris EV Indonesia",
     "body part mobil listrik original",
     "toko sparepart mobil China",
+    "toko otomotif mobil Cina",
+    "sparepart otomotif original",
   ],
   company: [
     "tentang Yuan Dewata Automotive",
@@ -68,10 +80,14 @@ export const pageKeywords = {
     "sparepart original mobil China terjangkau",
     "body part original mobil Cina",
     "mitra dealer reseller sparepart EV",
+    "perusahaan otomotif Bali",
+    "distributor otomotif mobil Cina",
   ],
   product: [
     // Katalog nyata — sparepart mobil China / Wuling
     "katalog sparepart mobil China",
+    "katalog otomotif mobil Cina",
+    "jual sparepart otomotif online",
     "sparepart Wuling original",
     // Body parts & aksesoris mobil Cina (kluster kategori)
     "body parts mobil Cina",
@@ -117,6 +133,7 @@ export const pageKeywords = {
     "konten aksesoris mobil China",
     "konten body parts aksesoris mobil Cina",
     "Instagram sparepart mobil listrik Indonesia",
+    "konten otomotif Indonesia",
   ],
   blog: [
     "tips perawatan mobil listrik",
@@ -125,6 +142,8 @@ export const pageKeywords = {
     "panduan charger mobil listrik",
     "berita mobil listrik Indonesia",
     "cara memilih velg mobil listrik",
+    "blog otomotif Indonesia",
+    "tips otomotif mobil Cina",
   ],
   contact: [
     "kontak Yuan Dewata Automotive",
@@ -134,6 +153,8 @@ export const pageKeywords = {
     "harga grosir body parts aksesoris mobil Cina",
     "cek stok sparepart mobil listrik",
     "kemitraan dealer reseller sparepart mobil listrik",
+    "kontak Yuan Dewata Otomotif",
+    "toko otomotif Sanur Denpasar",
   ],
   privacy: [
     "kebijakan privasi Yuan Dewata Automotive",
@@ -146,6 +167,8 @@ export const pageKeywords = {
     "garansi sparepart mobil listrik",
     "pengiriman sparepart mobil Cina ke seluruh Indonesia",
     "harga grosir aksesoris mobil listrik reseller",
+    "FAQ Yuan Dewata Otomotif",
+    "pertanyaan umum sparepart otomotif",
   ],
 } as const;
 

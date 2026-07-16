@@ -11,7 +11,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "News — Konten & Update Instagram Yuan Dewata Automotive",
   description:
-    "Kumpulan konten Instagram Yuan Dewata Automotive — video Reels dan poster seputar sparepart, body parts, dan aksesoris mobil Cina serta kendaraan listrik.",
+    "Kumpulan konten otomotif Instagram Yuan Dewata Automotive — video Reels dan poster seputar sparepart, body parts, dan aksesoris mobil Cina serta kendaraan listrik.",
   keywords: keywordsFor("news"),
   alternates: { canonical: `${site.url}/news` },
 };
@@ -29,8 +29,8 @@ export default async function NewsListPage({ searchParams }: { searchParams: Sea
       <PageHero
         eyebrow="Sorotan Instagram"
         title="News &"
-        accent="Konten"
-        description="Video Reels dan poster terbaru dari Instagram kami — tips, rilis sparepart & aksesoris mobil Cina, dan momen komunitas EV."
+        accent="Konten Otomotif"
+        description="Video Reels dan poster otomotif terbaru dari Instagram kami — tips, rilis sparepart & aksesoris mobil Cina, dan momen komunitas EV."
       />
 
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-12">

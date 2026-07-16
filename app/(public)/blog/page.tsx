@@ -9,9 +9,9 @@ import { keywordsFor } from "@/lib/seo-keywords";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Blog & Update — Tips & Panduan Mobil Cina & Listrik",
+  title: "Blog Otomotif & Update — Tips & Panduan Mobil Cina & Listrik",
   description:
-    "Tips perawatan, panduan teknis, dan kabar rilis terbaru seputar sparepart, body parts, dan aksesoris mobil Cina serta mobil listrik dari Yuan Dewata Automotive.",
+    "Tips perawatan, panduan teknis, dan kabar rilis terbaru seputar sparepart, body parts, dan aksesoris otomotif mobil Cina serta mobil listrik dari Yuan Dewata Automotive.",
   keywords: keywordsFor("blog"),
   alternates: { canonical: `${site.url}/blog` },
 };
@@ -28,9 +28,9 @@ export default async function BlogListPage({ searchParams }: { searchParams: Sea
     <>
       <PageHero
         eyebrow="Wawasan"
-        title="Blog &"
+        title="Blog Otomotif &"
         accent="Update"
-        description="Tips perawatan, panduan teknis, dan kabar rilis terbaru seputar sparepart & aksesoris mobil Cina dan kendaraan listrik."
+        description="Tips perawatan, panduan teknis, dan kabar rilis terbaru seputar sparepart & aksesoris otomotif mobil Cina dan kendaraan listrik."
       />
 
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-12">

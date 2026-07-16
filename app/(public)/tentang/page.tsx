@@ -11,7 +11,7 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Tentang Kami — Profil Perusahaan",
-  description: `${site.name} adalah pusat sparepart, body part, dan aksesoris original untuk mobil buatan China yang beredar di Indonesia — melayani dealer resmi, bengkel, dan customer.`,
+  description: `${site.name} adalah pusat sparepart, body part, dan aksesoris otomotif original untuk mobil buatan China yang beredar di Indonesia — melayani dealer resmi, bengkel, dan customer.`,
   keywords: keywordsFor("company"),
   alternates: { canonical: `${site.url}/tentang` },
 };
@@ -60,9 +60,9 @@ export default function CompanyPage() {
     <>
       <PageHero
         eyebrow="Tentang Kami"
-        title="Sparepart Original Mobil China,"
+        title="Sparepart Otomotif Original Mobil China,"
         accent="Mudah & Terjangkau."
-        description={`${site.name} — pusat sparepart, body part, dan aksesoris original untuk mobil buatan China yang beredar di Indonesia. Kami hadir memberikan kemudahan, harga terjangkau, dan layanan pre-order untuk komponen yang langka.`}
+        description={`${site.name} — pusat sparepart, body part, dan aksesoris otomotif original untuk mobil buatan China yang beredar di Indonesia. Kami hadir memberikan kemudahan, harga terjangkau, dan layanan pre-order untuk komponen yang langka.`}
       />
 
       <section className="bg-bg">

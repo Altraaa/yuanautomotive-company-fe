@@ -29,11 +29,11 @@ export function HeroSection() {
 
         <h1 className="font-display text-4xl font-bold italic uppercase leading-[1.06] text-fg md:text-6xl lg:text-7xl">
           Pastikan Kendaraan Anda Mendapatkan {""}
-          <span className="text-gold">Sparepart Original Mobil Cina</span>
+          <span className="text-gold">Sparepart Otomotif Original Mobil Cina</span>
         </h1>
 
         <p className="mt-5 max-w-2xl font-sans text-base leading-relaxed text-fg-muted md:text-lg">
-          One-stop shopping spare part, body parts, dan aksesoris mobil Cina &amp; mobil listrik di Indonesia.
+          One-stop shopping spare part, body parts, dan aksesoris otomotif mobil Cina &amp; mobil listrik di Indonesia.
         </p>
 
         <div className="mt-8 flex w-full flex-col gap-3.5 sm:w-auto sm:flex-row">

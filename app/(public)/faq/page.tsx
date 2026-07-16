@@ -9,9 +9,9 @@ import { keywordsFor } from "@/lib/seo-keywords";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "FAQ — Pertanyaan Umum Yuan Dewata Automotive",
+  title: "FAQ — Pertanyaan Umum Otomotif Yuan Dewata Automotive",
   description:
-    "Jawaban atas pertanyaan yang sering diajukan seputar pembelian, pengiriman, garansi, dan produk sparepart, body parts, serta aksesoris mobil Cina dan mobil listrik di Yuan Dewata Automotive.",
+    "Jawaban atas pertanyaan yang sering diajukan seputar pembelian, pengiriman, garansi, dan produk sparepart, body parts, serta aksesoris otomotif mobil Cina dan mobil listrik di Yuan Dewata Automotive.",
   keywords: keywordsFor("faq"),
   alternates: { canonical: `${site.url}/faq` },
 };
@@ -34,9 +34,9 @@ export default async function FaqPage() {
     <>
       <PageHero
         eyebrow="Pusat Bantuan"
-        title="Pertanyaan"
-        accent="Umum"
-        description="Hal-hal yang paling sering ditanyakan pelanggan — mulai dari cara pemesanan, pembayaran, pengiriman, hingga garansi. Tidak menemukan jawabannya? Hubungi kami langsung."
+        title="Pertanyaan Umum"
+        accent="Seputar Otomotif"
+        description="Hal-hal yang paling sering ditanyakan pelanggan seputar sparepart & aksesoris otomotif kami — mulai dari cara pemesanan, pembayaran, pengiriman, hingga garansi. Tidak menemukan jawabannya? Hubungi kami langsung."
       />
 
       <div className="mx-auto max-w-3xl px-4 py-10 md:px-8 md:py-14">
@@ -58,7 +58,7 @@ export default async function FaqPage() {
       <CtaBanner
         title="Masih Ada"
         accent="Pertanyaan?"
-        description="Tim kami siap membantu memilih sparepart & aksesoris yang tepat untuk kendaraan Anda."
+        description="Tim kami siap membantu memilih sparepart & aksesoris otomotif yang tepat untuk kendaraan Anda."
         ctaLabel="Hubungi Kami"
         ctaHref="/kontak"
       />
