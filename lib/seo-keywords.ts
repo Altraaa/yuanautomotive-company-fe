@@ -139,6 +139,14 @@ export const pageKeywords = {
     "kebijakan privasi Yuan Dewata Automotive",
     "perlindungan data pribadi UU PDP",
   ],
+  faq: [
+    "FAQ Yuan Dewata Automotive",
+    "pertanyaan umum sparepart mobil listrik",
+    "cara pesan sparepart mobil China",
+    "garansi sparepart mobil listrik",
+    "pengiriman sparepart mobil Cina ke seluruh Indonesia",
+    "harga grosir aksesoris mobil listrik reseller",
+  ],
 } as const;
 
 export type PageKeywordKey = keyof typeof pageKeywords;

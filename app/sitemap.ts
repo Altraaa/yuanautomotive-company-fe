@@ -13,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${site.url}/tentang`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${site.url}/news`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${site.url}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${site.url}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${site.url}/kontak`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${site.url}/kebijakan-privasi`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
   ];
