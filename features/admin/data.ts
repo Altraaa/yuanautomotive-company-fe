@@ -36,6 +36,7 @@ export const adminNavGroups: AdminNavGroup[] = [
   {
     label: "Konten",
     items: [
+      { label: "FAQ", href: "/dashboard/faq", icon: "faq" },
       { label: "Kategori", href: "/dashboard/kategori", icon: "categories" },
       { label: "Media", href: "/dashboard/media", icon: "media" },
       { label: "CMS", href: "/dashboard/cms", icon: "cms" },

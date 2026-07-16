@@ -36,6 +36,7 @@ export type AdminNavIcon =
   | "products"
   | "blog"
   | "news"
+  | "faq"
   | "leads"
   | "orders"
   | "categories"

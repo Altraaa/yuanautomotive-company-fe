@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   FolderTree,
+  HelpCircle,
   Image as ImageIcon,
   LayoutDashboard,
   LogOut,
@@ -28,6 +29,7 @@ const iconMap: Record<AdminNavIcon, LucideIcon> = {
   products: Package,
   blog: PenLine,
   news: Newspaper,
+  faq: HelpCircle,
   leads: Mail,
   orders: ShoppingBag,
   categories: FolderTree,
