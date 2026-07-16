@@ -84,6 +84,22 @@ export const endpoints = {
   },
 
   // ═══════════════════════════════════════════════════════════
+  // FAQ — "Pertanyaan Umum". One `/faqs` path; shape depends on auth.
+  // ═══════════════════════════════════════════════════════════
+  faqs: {
+    // Public (published only) + Admin (all rows with Bearer token)
+    list: "/faqs",
+
+    // Admin (by uuid)
+    adminList: "/faqs",
+    adminDetail: (uuid: string) => `/faqs/${uuid}`,
+    adminCreate: "/faqs",
+    adminUpdate: (uuid: string) => `/faqs/${uuid}`,
+    adminDelete: (uuid: string) => `/faqs/${uuid}`,
+    adminBulkDelete: "/faqs/bulk/delete",
+  },
+
+  // ═══════════════════════════════════════════════════════════
   // CONTACTS (LEAD GENERATION)
   // ═══════════════════════════════════════════════════════════
   contacts: {
