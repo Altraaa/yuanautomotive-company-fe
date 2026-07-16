@@ -27,7 +27,9 @@ COPY . .
 
 # Build-time public env (di-inline ke bundle client).
 ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_GA_ID
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+    NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID \
     NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build

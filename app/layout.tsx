@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Chakra_Petch, Barlow, Barlow_Condensed } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { site } from "@/lib/site";
@@ -62,6 +63,14 @@ export const viewport: Viewport = {
   themeColor: "#141416",
 };
 
+/**
+ * GA4 measurement ID. Di-inline saat build (NEXT_PUBLIC_*), jadi wajib ada
+ * sebagai build ARG di Dockerfile/compose — bukan sekadar env runtime.
+ * Kosong = tag tidak dirender sama sekali (perilaku default di lokal/dev,
+ * supaya traffic development tidak mengotori laporan produksi).
+ */
+const gaId = process.env.NEXT_PUBLIC_GA_ID;
+
 export default function RootLayout({
   children,
 }: {
@@ -76,6 +85,7 @@ export default function RootLayout({
       <body className="bg-bg font-sans text-fg antialiased">
         <Providers>{children}</Providers>
       </body>
+      {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>
   );
 }

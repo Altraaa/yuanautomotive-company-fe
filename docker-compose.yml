@@ -6,6 +6,8 @@ services:
       args:
         # NEXT_PUBLIC_* dibutuhkan saat build (di-inline ke bundle client).
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        # GA4 measurement ID — kosong = tag Analytics tidak dirender.
+        NEXT_PUBLIC_GA_ID: ${NEXT_PUBLIC_GA_ID:-}
     image: yuan-automotive-web:latest
     container_name: yuan-automotive-web
     restart: unless-stopped
