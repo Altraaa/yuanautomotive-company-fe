@@ -1,6 +1,6 @@
 "use server";
 
-import { updateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { apiClient, ApiError } from "@/services/api";
 import { endpoints } from "@/lib/endpoint";
@@ -74,6 +74,9 @@ export async function saveProductAction(
       await apiClient.post(endpoints.products.adminCreate, payload, { auth: true });
     }
     updateTag("products"); // immediate expiry → public pages refresh in one load
+    // Purge the admin route cache (detail is no-store → only cached client-side)
+    // so navigating back after an edit shows the fresh record, not the stale one.
+    revalidatePath("/dashboard/produk", "layout");
     return { ok: true };
   } catch (err) {
     await endSessionIfUnauthorized(err);

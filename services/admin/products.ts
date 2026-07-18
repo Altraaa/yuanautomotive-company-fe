@@ -110,7 +110,13 @@ export function toProductPayload(
   categories: CategoryOption[],
   imageUuids: string[] | null = null
 ) {
-  const cat = categories.find((c) => c.name === v.category);
+  // Resolve category name → backend uuid. Match exactly first, then fall back to
+  // a case/whitespace-insensitive match so a subtly-different label (e.g. from an
+  // older record) can't silently drop `category_id` and leave the old category.
+  const norm = (s: string) => s.trim().toLowerCase();
+  const cat =
+    categories.find((c) => c.name === v.category) ??
+    categories.find((c) => norm(c.name) === norm(v.category));
   return {
     name: v.name,
     sku: v.sku,

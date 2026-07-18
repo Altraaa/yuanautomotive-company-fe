@@ -1,6 +1,6 @@
 "use server";
 
-import { updateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { apiClient, ApiError } from "@/services/api";
 import { endpoints } from "@/lib/endpoint";
@@ -38,6 +38,8 @@ export async function saveNewsAction(
       await apiClient.post(endpoints.news.adminCreate, payload, { auth: true });
     }
     updateTag("news");
+    // Purge admin route cache so the edit shows immediately on navigate-back.
+    revalidatePath("/dashboard/news", "layout");
     return { ok: true };
   } catch (err) {
     await endSessionIfUnauthorized(err);
