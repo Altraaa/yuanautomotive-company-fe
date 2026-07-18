@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CtaButton } from "@/components/common/cta-button";
 import { AdminTopbar } from "@/features/admin/components/admin-topbar";
 import { BlogEditorForm } from "@/features/admin/blog/blog-editor-form";
-import {
-  FormSaveButton,
-  FormSubmitProvider,
-} from "@/features/admin/components/form-submit-context";
+import { EditorActionBar } from "@/features/admin/components/editor-action-bar";
+import { FormSubmitProvider } from "@/features/admin/components/form-submit-context";
 import { getAdminBlog } from "@/services/admin/blogs";
 import { toBlogFormValues } from "@/features/admin/blog-schema";
 
@@ -33,21 +30,13 @@ export default async function EditBlogPage({ params }: { params: Params }) {
           { label: "Edit" },
         ]}
         title="Edit Artikel"
-        actions={
-          <>
-            <CtaButton href="/dashboard/blog" variant="outline" className="hidden sm:inline-grid">
-              Batal
-            </CtaButton>
-            <FormSaveButton label="Simpan Perubahan" formId="blog-form" />
-          </>
-        }
       />
       <BlogEditorForm
         blogUuid={blog.uuid}
         defaultValues={toBlogFormValues(blog)}
         initialCoverUrl={blog.coverUrl}
-        redirectTo="/dashboard/blog"
       />
+      <EditorActionBar formId="blog-form" saveLabel="Simpan Perubahan" />
     </FormSubmitProvider>
   );
 }

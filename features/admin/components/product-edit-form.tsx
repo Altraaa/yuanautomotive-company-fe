@@ -30,7 +30,7 @@ import {
 import { SectionCard } from "./section-card";
 import { ConfirmDialog } from "./confirm-dialog";
 import { toast } from "sonner";
-import { useProductForm } from "./product-form-context";
+import { useFormSubmit } from "./form-submit-context";
 
 const labelClass =
   "font-sans text-[11px] font-semibold uppercase tracking-[0.1em] text-fg-muted";
@@ -48,23 +48,21 @@ type ProductEditFormProps = {
   defaultValues: ProductFormValues;
   /** Existing product images (uuid + url) to pre-load in edit mode. */
   initialImages?: ProductMedia[];
-  /** Where to navigate after a successful save. */
-  redirectTo: string;
-  /** Shared id so the topbar "Simpan" button can submit this form. */
+  /** Category names from the live category list (backend) for the dropdown. */
+  categories?: string[];
+  /** Shared id so the action-bar "Simpan" button can submit this form. */
   formId?: string;
 };
-
-const categoryOptions = ["Sparepart", "Body Part", "Aksesoris"];
 
 export function ProductEditForm({
   productUuid,
   defaultValues,
   initialImages = [],
-  redirectTo,
+  categories = [],
   formId = "product-form",
 }: ProductEditFormProps) {
   const router = useRouter();
-  const formCtx = useProductForm();
+  const formCtx = useFormSubmit();
   const [compatDraft, setCompatDraft] = useState("");
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isDeleting, startDelete] = useTransition();
@@ -148,7 +146,7 @@ export function ProductEditForm({
       return;
     }
     toast.success(productUuid ? "Produk diperbarui." : "Produk berhasil dibuat.");
-    router.push(redirectTo);
+    router.back();
     router.refresh();
   }
 
@@ -196,18 +194,34 @@ export function ProductEditForm({
               <Controller
                 control={control}
                 name="category"
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="h-[46px]">
-                      <SelectValue placeholder="Pilih kategori" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categoryOptions.map((c) => (
-                        <SelectItem key={c} value={c}>{c}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
+                render={({ field }) => {
+                  // Keep the current value selectable even if it isn't in the
+                  // fetched list (e.g. a renamed/legacy category on an old product).
+                  const options =
+                    field.value && !categories.includes(field.value)
+                      ? [field.value, ...categories]
+                      : categories;
+                  return (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="h-[46px]">
+                        <SelectValue placeholder="Pilih kategori" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {options.length === 0 ? (
+                          <SelectItem value="__none" disabled>
+                            Belum ada kategori
+                          </SelectItem>
+                        ) : (
+                          options.map((c) => (
+                            <SelectItem key={c} value={c}>
+                              {c}
+                            </SelectItem>
+                          ))
+                        )}
+                      </SelectContent>
+                    </Select>
+                  );
+                }}
               />
             </Field>
           </div>

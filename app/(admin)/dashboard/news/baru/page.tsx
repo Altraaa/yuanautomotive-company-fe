@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
-import { CtaButton } from "@/components/common/cta-button";
 import { AdminTopbar } from "@/features/admin/components/admin-topbar";
 import { NewsEditorForm } from "@/features/admin/news/news-editor-form";
-import {
-  FormSaveButton,
-  FormSubmitProvider,
-} from "@/features/admin/components/form-submit-context";
+import { EditorActionBar } from "@/features/admin/components/editor-action-bar";
+import { FormSubmitProvider } from "@/features/admin/components/form-submit-context";
 import { emptyNewsForm } from "@/features/admin/news-schema";
 
 export const metadata: Metadata = {
@@ -22,16 +19,9 @@ export default function NewNewsPage() {
           { label: "Tambah Konten" },
         ]}
         title="Tambah Konten"
-        actions={
-          <>
-            <CtaButton href="/dashboard/news" variant="outline" className="hidden sm:inline-grid">
-              Batal
-            </CtaButton>
-            <FormSaveButton label="Simpan Konten" formId="news-form" />
-          </>
-        }
       />
-      <NewsEditorForm newsUuid={null} defaultValues={emptyNewsForm} redirectTo="/dashboard/news" />
+      <NewsEditorForm newsUuid={null} defaultValues={emptyNewsForm} />
+      <EditorActionBar formId="news-form" saveLabel="Simpan Konten" />
     </FormSubmitProvider>
   );
 }

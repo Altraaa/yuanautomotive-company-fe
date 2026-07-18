@@ -26,7 +26,7 @@ import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
 import { toast } from "sonner";
 
 const GRID = "grid grid-cols-[36px_1.8fr_1.3fr_1fr_1.1fr_1fr_90px] items-center gap-3.5";
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 25;
 const statusLabel = ORDER_STATUS_LABEL;
 
 export function OrderManager({ rows }: { rows: OrderRow[] }) {

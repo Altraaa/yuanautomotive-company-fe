@@ -22,7 +22,7 @@ import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
 import { toast } from "sonner";
 
 const GRID = "grid grid-cols-[36px_2.6fr_1fr_1.1fr_1fr_78px] items-center gap-3.5";
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 25;
 
 export function BlogManager({ rows }: { rows: AdminBlogRow[] }) {
   const router = useRouter();

@@ -9,7 +9,9 @@ import type { AdminProductDetail } from "@/types/ui/admin";
 export const productFormSchema = z.object({
   name: z.string().min(2, "Nama produk minimal 2 karakter"),
   sku: z.string().min(2, "SKU wajib diisi"),
-  category: z.enum(["Sparepart", "Body Part", "Aksesoris"]),
+  // Free-form: the options come from the live category list (backend), not a
+  // fixed enum — so any category created in the Category manager is selectable.
+  category: z.string().min(1, "Kategori wajib dipilih"),
   description: z.string().min(10, "Deskripsi minimal 10 karakter"),
   retailPrice: z.string().min(1, "Harga retail wajib diisi"),
   wholesalePrice: z.string().optional(),
@@ -49,7 +51,7 @@ export function toProductFormValues(detail: AdminProductDetail): ProductFormValu
 export const emptyProductFormValues: ProductFormValues = {
   name: "",
   sku: "",
-  category: "Sparepart",
+  category: "",
   description: "",
   retailPrice: "",
   wholesalePrice: "",

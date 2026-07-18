@@ -20,7 +20,7 @@ import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
 import { toast } from "sonner";
 
 const GRID = "grid grid-cols-[36px_2.7fr_1fr_0.7fr_1fr_112px] items-center gap-3.5";
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 25;
 const UNGROUPED = "Tanpa Kategori";
 
 export function FaqManager({ rows }: { rows: AdminFaqRow[] }) {
