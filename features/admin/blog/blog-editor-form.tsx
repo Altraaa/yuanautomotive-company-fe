@@ -51,10 +51,9 @@ type Props = {
   blogUuid: string | null;
   defaultValues: BlogFormValues;
   initialCoverUrl?: string;
-  redirectTo: string;
 };
 
-export function BlogEditorForm({ blogUuid, defaultValues, initialCoverUrl, redirectTo }: Props) {
+export function BlogEditorForm({ blogUuid, defaultValues, initialCoverUrl }: Props) {
   const router = useRouter();
   const formCtx = useFormSubmit();
   const [coverUrl, setCoverUrl] = useState<string | undefined>(initialCoverUrl);
@@ -112,7 +111,7 @@ export function BlogEditorForm({ blogUuid, defaultValues, initialCoverUrl, redir
       return;
     }
     toast.success(blogUuid ? "Artikel diperbarui." : "Artikel dibuat.");
-    router.push(redirectTo);
+    router.back();
     router.refresh();
   }
 

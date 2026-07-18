@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CtaButton } from "@/components/common/cta-button";
 import { AdminTopbar } from "@/features/admin/components/admin-topbar";
 import { FaqEditorForm } from "@/features/admin/faqs/faq-editor-form";
-import {
-  FormSaveButton,
-  FormSubmitProvider,
-} from "@/features/admin/components/form-submit-context";
+import { EditorActionBar } from "@/features/admin/components/editor-action-bar";
+import { FormSubmitProvider } from "@/features/admin/components/form-submit-context";
 import { getAdminFaq, listAdminFaqCategories } from "@/services/admin/faqs";
 import { toFaqFormValues } from "@/features/admin/faq-schema";
 
@@ -36,21 +33,13 @@ export default async function EditFaqPage({ params }: { params: Params }) {
           { label: "Edit" },
         ]}
         title="Edit FAQ"
-        actions={
-          <>
-            <CtaButton href="/dashboard/faq" variant="outline" className="hidden sm:inline-grid">
-              Batal
-            </CtaButton>
-            <FormSaveButton label="Simpan Perubahan" formId="faq-form" />
-          </>
-        }
       />
       <FaqEditorForm
         faqUuid={item.uuid}
         defaultValues={toFaqFormValues(item)}
         categories={categories}
-        redirectTo="/dashboard/faq"
       />
+      <EditorActionBar formId="faq-form" saveLabel="Simpan Perubahan" />
     </FormSubmitProvider>
   );
 }

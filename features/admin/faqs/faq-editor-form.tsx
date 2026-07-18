@@ -29,10 +29,9 @@ type Props = {
   defaultValues: FaqFormValues;
   /** Existing category labels for autocomplete (optional). */
   categories?: string[];
-  redirectTo: string;
 };
 
-export function FaqEditorForm({ faqUuid, defaultValues, categories = [], redirectTo }: Props) {
+export function FaqEditorForm({ faqUuid, defaultValues, categories = [] }: Props) {
   const router = useRouter();
   const formCtx = useFormSubmit();
 
@@ -58,7 +57,7 @@ export function FaqEditorForm({ faqUuid, defaultValues, categories = [], redirec
       return;
     }
     toast.success(faqUuid ? "FAQ diperbarui." : "FAQ dibuat.");
-    router.push(redirectTo);
+    router.back();
     router.refresh();
   }
 

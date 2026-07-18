@@ -38,10 +38,9 @@ type Props = {
   newsUuid: string | null;
   defaultValues: NewsFormValues;
   initialThumbnailUrl?: string;
-  redirectTo: string;
 };
 
-export function NewsEditorForm({ newsUuid, defaultValues, initialThumbnailUrl, redirectTo }: Props) {
+export function NewsEditorForm({ newsUuid, defaultValues, initialThumbnailUrl }: Props) {
   const router = useRouter();
   const formCtx = useFormSubmit();
   const [thumbUrl, setThumbUrl] = useState<string | undefined>(initialThumbnailUrl);
@@ -100,7 +99,7 @@ export function NewsEditorForm({ newsUuid, defaultValues, initialThumbnailUrl, r
       return;
     }
     toast.success(newsUuid ? "Konten diperbarui." : "Konten dibuat.");
-    router.push(redirectTo);
+    router.back();
     router.refresh();
   }
 
