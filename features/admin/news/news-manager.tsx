@@ -22,7 +22,7 @@ import { ConfirmDialog } from "@/features/admin/components/confirm-dialog";
 import { toast } from "sonner";
 
 const GRID = "grid grid-cols-[36px_2.6fr_0.9fr_1.1fr_1fr_112px] items-center gap-3.5";
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 25;
 
 export function NewsManager({ rows }: { rows: AdminNewsRow[] }) {
   const router = useRouter();

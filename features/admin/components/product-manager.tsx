@@ -20,7 +20,7 @@ import {
 } from "./product-filter-bar";
 
 const GRID = "grid grid-cols-[40px_2.4fr_1fr_1.1fr_0.9fr_1fr_96px] items-center gap-3.5";
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 25;
 
 function filterRows(rows: AdminProductRow[], f: ProductListFilters): AdminProductRow[] {
   const q = f.search.trim().toLowerCase();
@@ -47,7 +47,13 @@ const statusStyle: Record<ProductStatus, string> = {
   Draft: "text-fg-subtle",
 };
 
-export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
+export function ProductManager({
+  rows,
+  categories,
+}: {
+  rows: AdminProductRow[];
+  categories: string[];
+}) {
   const router = useRouter();
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState<ProductListFilters>(defaultProductFilters);
@@ -123,7 +129,7 @@ export function ProductManager({ rows }: { rows: AdminProductRow[] }) {
 
   return (
     <div className="flex flex-col gap-[18px]">
-      <ProductFilterBar filters={filters} onChange={updateFilters} />
+      <ProductFilterBar filters={filters} onChange={updateFilters} categories={categories} />
 
       {/* Bulk action bar */}
       {selected.size > 0 && (

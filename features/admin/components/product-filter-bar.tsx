@@ -1,7 +1,6 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { productCategories } from "@/features/products/data";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -28,10 +27,12 @@ export const defaultProductFilters: ProductListFilters = {
 type ProductFilterBarProps = {
   filters: ProductListFilters;
   onChange: (next: ProductListFilters) => void;
+  /** Category names from the live category list (backend). */
+  categories: string[];
 };
 
 /** ProductFilterBar — functional search + category/status/sort controls (client). */
-export function ProductFilterBar({ filters, onChange }: ProductFilterBarProps) {
+export function ProductFilterBar({ filters, onChange, categories }: ProductFilterBarProps) {
   const set = (patch: Partial<ProductListFilters>) => onChange({ ...filters, ...patch });
 
   return (
@@ -50,7 +51,7 @@ export function ProductFilterBar({ filters, onChange }: ProductFilterBarProps) {
         label="Kategori"
         value={filters.category}
         onChange={(v) => set({ category: v })}
-        options={["Semua", ...productCategories]}
+        options={["Semua", ...categories]}
       />
       <FilterSelect
         label="Status"

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus, Upload } from "lucide-react";
 import { CtaButton } from "@/components/common/cta-button";
 import { listAdminProducts } from "@/services/admin/products";
+import { listCategories } from "@/services/categories";
 import { AdminTopbar } from "@/features/admin/components/admin-topbar";
 import { ProductManager } from "@/features/admin/components/product-manager";
 
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 
 export default async function ManageProductsPage() {
   // Load the catalog (max backend limit) and filter/sort/paginate client-side.
-  const { items } = await listAdminProducts({ page: 1, limit: 100 });
+  const [{ items }, categories] = await Promise.all([
+    listAdminProducts({ page: 1, limit: 100 }),
+    listCategories(),
+  ]);
   return (
     <>
       <AdminTopbar
@@ -30,7 +34,7 @@ export default async function ManageProductsPage() {
       />
 
       <div className="flex flex-col gap-[18px] p-4 md:p-8">
-        <ProductManager rows={items} />
+        <ProductManager rows={items} categories={categories.map((c) => c.name)} />
       </div>
     </>
   );
