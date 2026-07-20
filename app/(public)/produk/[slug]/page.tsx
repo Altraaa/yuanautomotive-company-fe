@@ -13,7 +13,7 @@ import {
   getProductBySlug,
   getRelatedProducts,
 } from "@/services/products";
-import { formatIDR } from "@/lib/utils";
+// import { formatIDR } from "@/lib/utils"; // harga disembunyikan sementara
 import { site, waLink } from "@/lib/site";
 import { withBrand } from "@/lib/seo-keywords";
 
@@ -90,9 +90,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
     ],
   };
 
-  const orderMessage = `Halo ${site.name}, saya tertarik memesan produk "${product.name}" (${formatIDR(
-    product.price
-  )}). Apakah stok tersedia?`;
+  const orderMessage = `Halo ${site.name}, saya tertarik memesan produk "${product.name}". Boleh info harga dan ketersediaan stoknya?`;
 
   return (
     <>
@@ -131,9 +129,10 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
               {product.name}
             </h1>
 
-            <span className="font-display text-3xl font-bold text-gold">
+            {/* Harga disembunyikan sementara untuk end user */}
+            {/* <span className="font-display text-3xl font-bold text-gold">
               {formatIDR(product.price)}
-            </span>
+            </span> */}
 
             <p className="font-sans text-base leading-relaxed text-fg-muted">
               {product.description}
