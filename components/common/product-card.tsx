@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { ProductCardData } from "@/types/ui/product";
 import { Badge } from "@/components/common/badge";
-import { formatIDR } from "@/lib/utils";
+// import { formatIDR } from "@/lib/utils"; // harga disembunyikan sementara
 
 type ProductCardProps = {
   product: ProductCardData;
@@ -47,10 +47,11 @@ export function ProductCard({ product, action }: ProductCardProps) {
             {product.name}
           </Link>
         </h3>
-        <span className="mt-auto pt-1 font-display text-[15px] font-bold text-gold">
+        {/* Harga disembunyikan sementara untuk end user */}
+        {/* <span className="mt-auto pt-1 font-display text-[15px] font-bold text-gold">
           {formatIDR(product.price)}
-        </span>
-        {action ? <div className="relative z-20 pt-3">{action}</div> : null}
+        </span> */}
+        {action ? <div className="relative z-20 mt-auto pt-3">{action}</div> : null}
       </div>
     </div>
   );

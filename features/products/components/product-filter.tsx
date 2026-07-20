@@ -13,6 +13,9 @@ import { Eyebrow } from "@/components/common/eyebrow";
 import { PriceRangeSlider } from "@/components/common/price-range-slider";
 import { cn } from "@/lib/utils";
 
+// Harga disembunyikan sementara untuk end user — set true untuk menampilkan lagi.
+const SHOW_PRICE_FILTER = false;
+
 type Row = { key: string | undefined; label: string };
 
 const categoryRows: Row[] = [
@@ -76,7 +79,8 @@ export function ProductFilter() {
     commitPrice(pair);
   }
 
-  const activeCount = (activeCategory ? 1 : 0) + (priceActive ? 1 : 0);
+  const activeCount =
+    (activeCategory ? 1 : 0) + (SHOW_PRICE_FILTER && priceActive ? 1 : 0);
 
   const panel = (
     <div className="flex flex-col gap-8">
@@ -87,38 +91,40 @@ export function ProductFilter() {
         onSelect={(key) => setParam("kategori", key)}
       />
 
-      <div className="flex flex-col gap-4">
-        <Eyebrow>Rentang Harga</Eyebrow>
-        <PriceRangeSlider
-          min={priceBounds.min}
-          max={priceBounds.max}
-          step={PRICE_STEP}
-          value={range}
-          onChange={setRange}
-          onCommit={commitPrice}
-        />
-        <div className="flex flex-wrap gap-2">
-          {pricePresets.map((preset) => {
-            const selected =
-              range[0] === clampToBounds(preset.min) && range[1] === clampToBounds(preset.max);
-            return (
-              <button
-                key={preset.label}
-                type="button"
-                onClick={() => applyPreset(preset.min, preset.max)}
-                className={cn(
-                  "-skew-x-[8deg] border px-2.5 py-1.5 font-sans text-xs transition-colors",
-                  selected
-                    ? "border-gold bg-gold/10 text-gold"
-                    : "border-border bg-surface text-fg-muted hover:border-gold/60 hover:text-fg"
-                )}
-              >
-                <span className="inline-block skew-x-[8deg]">{preset.label}</span>
-              </button>
-            );
-          })}
+      {SHOW_PRICE_FILTER ? (
+        <div className="flex flex-col gap-4">
+          <Eyebrow>Rentang Harga</Eyebrow>
+          <PriceRangeSlider
+            min={priceBounds.min}
+            max={priceBounds.max}
+            step={PRICE_STEP}
+            value={range}
+            onChange={setRange}
+            onCommit={commitPrice}
+          />
+          <div className="flex flex-wrap gap-2">
+            {pricePresets.map((preset) => {
+              const selected =
+                range[0] === clampToBounds(preset.min) && range[1] === clampToBounds(preset.max);
+              return (
+                <button
+                  key={preset.label}
+                  type="button"
+                  onClick={() => applyPreset(preset.min, preset.max)}
+                  className={cn(
+                    "-skew-x-[8deg] border px-2.5 py-1.5 font-sans text-xs transition-colors",
+                    selected
+                      ? "border-gold bg-gold/10 text-gold"
+                      : "border-border bg-surface text-fg-muted hover:border-gold/60 hover:text-fg"
+                  )}
+                >
+                  <span className="inline-block skew-x-[8deg]">{preset.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      ) : null}
 
       {activeCount > 0 ? (
         <button
