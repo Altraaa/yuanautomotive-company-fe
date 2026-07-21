@@ -50,7 +50,9 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
         <main className="min-w-0">{children}</main>
       </div>
-      <Toaster />
+      {/* Top-right so the toast never sits over the bottom action bar (Simpan) —
+          admin can save again immediately without waiting for it to dismiss. */}
+      <Toaster position="top-right" />
     </SidebarContext.Provider>
   );
 }
