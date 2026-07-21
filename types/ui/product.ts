@@ -14,6 +14,8 @@ export type ProductCardData = {
   price: number;
   imageUrl: string;
   badge?: ProductBadge;
+  /** Compact, deduped compatible-vehicle brands for the card "Untuk …" chip. */
+  fitmentBrands?: string[];
 };
 
 export type ProductSpec = {
@@ -35,6 +37,25 @@ export type VehicleFitment = {
 export function fitmentLabel(f: VehicleFitment): string {
   const head = `${f.brand} ${f.model}`.trim();
   return f.years ? `${head} (${f.years})` : head;
+}
+
+/**
+ * Unique compatible-vehicle brands in first-seen order — powers the compact
+ * "Untuk BYD, Wuling …" chip on product cards (dedupes multiple models of the
+ * same brand). Case-insensitive de-dup, keeps the admin's original ordering.
+ */
+export function fitmentBrands(fitments: VehicleFitment[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const f of fitments) {
+    const brand = f.brand.trim();
+    const key = brand.toLowerCase();
+    if (brand && !seen.has(key)) {
+      seen.add(key);
+      out.push(brand);
+    }
+  }
+  return out;
 }
 
 export type ProductDetailData = ProductCardData & {

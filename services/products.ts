@@ -11,7 +11,7 @@ import type {
   ProductDetailData,
   VehicleFitment,
 } from "@/types/ui/product";
-import { isRecentlyAdded } from "@/types/ui/product";
+import { fitmentBrands, isRecentlyAdded } from "@/types/ui/product";
 import * as mock from "@/features/products/data";
 import { PRODUCTS_PER_PAGE, type ProductFilters } from "@/features/products/data";
 
@@ -52,6 +52,11 @@ function toCard(p: ApiProductCard): ProductCardData {
     // Manual promo badge wins; otherwise flag recently-added items as "BARU"
     // (backend derives no BARU badge — it sends created_at for exactly this).
     badge: toBadge(p.badge) ?? (isRecentlyAdded(p.created_at) ? "BARU" : undefined),
+    // Deduped compatible-vehicle brands for the card "Untuk …" chip. Absent
+    // until the backend adds `fitment_brands` to the list projection → chip hides.
+    fitmentBrands: p.fitment_brands
+      ? fitmentBrands(p.fitment_brands.map((brand) => ({ brand, model: "" })))
+      : undefined,
   };
 }
 

@@ -3,6 +3,7 @@ import type {
   ProductCategory,
   ProductDetailData,
 } from "@/types/ui/product";
+import { fitmentBrands } from "@/types/ui/product";
 
 /**
  * MOCK product catalog — stands in for the RSC `await service()` fetch until the
@@ -205,7 +206,7 @@ export const featuredSlugs = [
 
 function toCard(p: ProductDetailData): ProductCardData {
   const { slug, name, category, price, imageUrl, badge } = p;
-  return { slug, name, category, price, imageUrl, badge };
+  return { slug, name, category, price, imageUrl, badge, fitmentBrands: fitmentBrands(p.compatibility) };
 }
 
 export function getAllProductCards(): ProductCardData[] {

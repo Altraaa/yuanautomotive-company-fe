@@ -14,6 +14,11 @@ export type ApiProductCard = {
   badge: string | null;
   /** ISO timestamp; powers the date-based "BARU" flag on the FE. */
   created_at: string;
+  /** Compact, deduped compatible-vehicle brands for the card "Untuk …" chip.
+   *  Optional until the backend adds it to the list projection (see
+   *  PRODUCT-COMPATIBILITY-BACKEND-SPEC.md §3). Full fitment objects stay off
+   *  the list payload — cards only need brand names. */
+  fitment_brands?: string[] | null;
 };
 
 export type ApiProductDetail = ApiProductCard & {

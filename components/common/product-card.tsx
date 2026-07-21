@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { ProductCardData } from "@/types/ui/product";
 import { Badge } from "@/components/common/badge";
+import { FitmentBrands } from "@/components/common/fitment-brands";
 // import { formatIDR } from "@/lib/utils"; // harga disembunyikan sementara
 
 type ProductCardProps = {
@@ -51,6 +52,9 @@ export function ProductCard({ product, action }: ProductCardProps) {
         {/* <span className="mt-auto pt-1 font-display text-[15px] font-bold text-gold">
           {formatIDR(product.price)}
         </span> */}
+        {product.fitmentBrands && product.fitmentBrands.length > 0 ? (
+          <FitmentBrands brands={product.fitmentBrands} />
+        ) : null}
         {action ? <div className="relative z-20 mt-auto pt-3">{action}</div> : null}
       </div>
     </div>
