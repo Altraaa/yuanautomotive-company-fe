@@ -63,7 +63,6 @@ export function ProductEditForm({
 }: ProductEditFormProps) {
   const router = useRouter();
   const formCtx = useFormSubmit();
-  const [compatDraft, setCompatDraft] = useState("");
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isDeleting, startDelete] = useTransition();
   const [images, setImages] = useState<ProductMedia[]>(initialImages);
@@ -113,25 +112,14 @@ export function ProductEditForm({
   });
 
   const { fields, append, remove } = useFieldArray({ control, name: "specs" });
+  const {
+    fields: compatFields,
+    append: appendCompat,
+    remove: removeCompat,
+  } = useFieldArray({ control, name: "compatibility" });
 
   const status = watch("status");
   const featured = watch("featured");
-  const compatibility = watch("compatibility");
-
-  function addCompat() {
-    const value = compatDraft.trim();
-    if (!value || compatibility.includes(value)) return;
-    setValue("compatibility", [...compatibility, value], { shouldDirty: true });
-    setCompatDraft("");
-  }
-
-  function removeCompat(tag: string) {
-    setValue(
-      "compatibility",
-      compatibility.filter((c) => c !== tag),
-      { shouldDirty: true }
-    );
-  }
 
   async function onSubmit(values: ProductFormValues) {
     formCtx?.setSubmitting(true);
@@ -291,33 +279,61 @@ export function ProductEditForm({
           ))}
         </SectionCard>
 
-        <SectionCard title="Kompatibilitas Kendaraan" topAccent="red" bodyClassName="flex flex-wrap items-center gap-2.5 md:px-[22px]">
-          {compatibility.map((tag) => (
-            <span
-              key={tag}
-              className="inline-flex items-center gap-2 border border-gold/40 bg-surface-raised px-3 py-2 font-sans text-xs font-semibold text-gold"
+        <SectionCard
+          title="Kompatibilitas Kendaraan"
+          topAccent="red"
+          bodyClassName="flex flex-col gap-2.5 md:px-[22px]"
+          action={
+            <button
+              type="button"
+              onClick={() => appendCompat({ brand: "", model: "", years: "" })}
+              className="font-display text-[11px] font-bold uppercase tracking-[0.06em] text-gold transition-colors hover:text-gold-soft"
             >
-              {tag}
-              <button type="button" onClick={() => removeCompat(tag)} aria-label={`Hapus ${tag}`} className="text-red-soft">
-                <X className="h-3 w-3" />
-              </button>
-            </span>
-          ))}
-          <div className="inline-flex h-[37px] items-center gap-1.5 border border-dashed border-border-strong bg-surface-sunken px-3 focus-within:border-gold">
-            <Plus className="h-3.5 w-3.5 text-gold" />
-            <Input
-              value={compatDraft}
-              onChange={(e) => setCompatDraft(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  addCompat();
-                }
-              }}
-              placeholder="Tambah kendaraan…"
-              className="h-auto w-36 border-0 bg-transparent px-0 py-0 text-xs placeholder:text-fg-faint focus:border-transparent"
-            />
-          </div>
+              + Tambah Kendaraan
+            </button>
+          }
+        >
+          {compatFields.length === 0 ? (
+            <p className="font-sans text-xs text-fg-faint">
+              Belum ada kendaraan. Tambahkan mobil yang cocok dengan produk ini.
+            </p>
+          ) : (
+            <>
+              <div className="hidden grid-cols-[1fr_1fr_120px_36px] gap-2.5 sm:grid">
+                <span className={labelClass}>Merek</span>
+                <span className={labelClass}>Model</span>
+                <span className={labelClass}>Tahun</span>
+                <span />
+              </div>
+              {compatFields.map((field, i) => (
+                <div
+                  key={field.id}
+                  className="grid grid-cols-[1fr_1fr_36px] items-center gap-2.5 sm:grid-cols-[1fr_1fr_120px_36px]"
+                >
+                  <div className={cn(boxClass, "h-[42px]")}>
+                    <Input {...register(`compatibility.${i}.brand`)} className={cn(inputClass, "text-[13px] font-semibold")} placeholder="Wuling" />
+                  </div>
+                  <div className={cn(boxClass, "h-[42px]")}>
+                    <Input {...register(`compatibility.${i}.model`)} className={cn(inputClass, "text-[13px]")} placeholder="Air EV" />
+                  </div>
+                  <div className={cn(boxClass, "col-span-2 h-[42px] sm:col-span-1")}>
+                    <Input {...register(`compatibility.${i}.years`)} className={cn(inputClass, "text-[13px]")} placeholder="2022–2024" />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeCompat(i)}
+                    aria-label="Hapus kendaraan"
+                    className="grid h-[42px] place-items-center border border-border bg-surface-sunken text-red-soft transition-colors hover:border-red/50"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ))}
+              <p className="font-sans text-[11px] text-fg-faint">
+                Merek &amp; model wajib. Tahun opsional — baris kosong tidak disimpan.
+              </p>
+            </>
+          )}
         </SectionCard>
       </div>
 

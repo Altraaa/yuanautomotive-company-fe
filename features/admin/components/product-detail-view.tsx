@@ -1,5 +1,6 @@
 import { Badge } from "@/components/common/badge";
 import type { AdminProductDetail } from "@/types/ui/admin";
+import { fitmentLabel } from "@/types/ui/product";
 import { formatIDR } from "@/lib/utils";
 import { AdminMetric } from "./admin-metric";
 import { ProductGallery } from "./product-gallery";
@@ -57,10 +58,10 @@ export function ProductDetailView({ detail }: { detail: AdminProductDetail }) {
             <div className="flex flex-wrap gap-1.5">
               {detail.compatibility.map((c) => (
                 <span
-                  key={c}
+                  key={fitmentLabel(c)}
                   className="border border-gold/40 bg-surface-raised px-2.5 py-1 font-sans text-[11.5px] font-semibold text-gold"
                 >
-                  {c}
+                  {fitmentLabel(c)}
                 </span>
               ))}
             </div>

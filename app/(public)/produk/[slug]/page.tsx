@@ -6,13 +6,15 @@ import { CtaButton } from "@/components/common/cta-button";
 import { SectionHeading } from "@/components/common/section-heading";
 import { ProductCard } from "@/components/common/product-card";
 import { ProductGallery } from "@/features/products/components/product-gallery";
-import { ProductTabs } from "@/features/products/components/product-tabs";
+import { ProductSpecTable } from "@/features/products/components/product-spec-table";
+import { VehicleCompatibility } from "@/features/products/components/vehicle-compatibility";
 import { AddToCartButton } from "@/features/preorder/components/add-to-cart-button";
 import {
   getAllProductSlugs,
   getProductBySlug,
   getRelatedProducts,
 } from "@/services/products";
+import { fitmentLabel } from "@/types/ui/product";
 // import { formatIDR } from "@/lib/utils"; // harga disembunyikan sementara
 import { site, waLink } from "@/lib/site";
 import { withBrand } from "@/lib/seo-keywords";
@@ -37,7 +39,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     keywords: withBrand([
       product.name,
       `${product.category} ${product.name}`,
-      ...product.compatibility.map((brand) => `sparepart ${brand}`),
+      ...product.compatibility.map((f) => `sparepart ${f.brand} ${f.model}`.trim()),
     ]),
     alternates: { canonical: `${site.url}/produk/${product.slug}` },
     openGraph: {
@@ -66,7 +68,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
     keywords: [
       product.name,
       `${product.category} ${product.name}`,
-      ...product.compatibility.map((brand) => `sparepart ${brand}`),
+      ...product.compatibility.map((f) => `sparepart ${f.brand} ${f.model}`.trim()),
       "sparepart mobil Cina",
       "aksesoris mobil Cina",
     ].join(", "),
@@ -138,6 +140,8 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
               {product.description}
             </p>
 
+            <VehicleCompatibility fitments={product.compatibility} />
+
             <div className="mt-2 flex flex-col gap-3">
               <AddToCartButton
                 product={{
@@ -161,11 +165,14 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
               </CtaButton>
             </div>
 
-            <div className="mt-6">
-              <ProductTabs specs={product.specs} compatibility={product.compatibility} />
-            </div>
           </div>
         </div>
+
+        {product.specs.length > 0 ? (
+          <section className="mt-12">
+            <ProductSpecTable specs={product.specs} />
+          </section>
+        ) : null}
 
         {related.length > 0 ? (
           <section className="mt-16">

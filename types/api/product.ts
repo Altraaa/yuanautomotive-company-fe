@@ -1,5 +1,8 @@
 export type ApiProductSpec = { label: string; value: string };
 
+/** A single compatible vehicle. `years` is an optional free-form range. */
+export type ApiVehicleFitment = { brand: string; model: string; years?: string | null };
+
 export type ApiProductCard = {
   slug: string;
   name: string;
@@ -16,7 +19,7 @@ export type ApiProductCard = {
 export type ApiProductDetail = ApiProductCard & {
   description: string;
   specs: ApiProductSpec[];
-  compatibility: string[];
+  compatibility: ApiVehicleFitment[];
   gallery: string[];
 };
 
@@ -47,7 +50,7 @@ export type ApiAdminProductDetail = {
   is_featured: boolean;
   description: string;
   specs: ApiProductSpec[];
-  compatibility: string[];
+  compatibility: ApiVehicleFitment[];
   gallery: string[];
   /** Same images/order as `gallery`, but each item carries its media uuid. */
   gallery_media?: { uuid: string; url: string }[];

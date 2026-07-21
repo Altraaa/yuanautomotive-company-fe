@@ -4,7 +4,7 @@
  * by mappers in the service layer once the API is wired.
  */
 
-import type { ProductBadge, ProductCategory, ProductSpec } from "@/types/ui/product";
+import type { ProductBadge, ProductCategory, ProductSpec, VehicleFitment } from "@/types/ui/product";
 
 /** Shared colour intents used by charts, pills and legends → mapped to design tokens. */
 export type Tone = "red" | "gold" | "green" | "grey" | "muted";
@@ -112,7 +112,7 @@ export type AdminProductDetail = {
   stock: number;
   description: string;
   specs: ProductSpec[];
-  compatibility: string[];
+  compatibility: VehicleFitment[];
   /** Existing product images (uuid + url), in display order. */
   galleryMedia: ProductMedia[];
   featured: boolean;

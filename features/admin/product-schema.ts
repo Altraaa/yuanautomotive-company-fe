@@ -17,7 +17,13 @@ export const productFormSchema = z.object({
   wholesalePrice: z.string().optional(),
   stock: z.string().min(1, "Stok wajib diisi"),
   specs: z.array(z.object({ label: z.string(), value: z.string() })),
-  compatibility: z.array(z.string()),
+  compatibility: z.array(
+    z.object({
+      brand: z.string(),
+      model: z.string(),
+      years: z.string().optional(),
+    })
+  ),
   status: z.enum(["Published", "Draft"]),
   badge: z.string(),
   featured: z.boolean(),

@@ -21,10 +21,26 @@ export type ProductSpec = {
   value: string;
 };
 
+/**
+ * A single vehicle this product fits. `years` is an optional free-form range
+ * (e.g. "2022–2024"); brand + model are always present.
+ */
+export type VehicleFitment = {
+  brand: string;
+  model: string;
+  years?: string;
+};
+
+/** One-line human label for a fitment — used for chips, keywords, JSON-LD. */
+export function fitmentLabel(f: VehicleFitment): string {
+  const head = `${f.brand} ${f.model}`.trim();
+  return f.years ? `${head} (${f.years})` : head;
+}
+
 export type ProductDetailData = ProductCardData & {
   description: string;
   specs: ProductSpec[];
-  compatibility: string[];
+  compatibility: VehicleFitment[];
   gallery: string[];
 };
 

@@ -34,7 +34,13 @@ export const products: ProductDetailData[] = [
       { label: "Proteksi", value: "OVP / OCP / OTP / Leakage" },
       { label: "Sertifikasi", value: "CE, TUV" },
     ],
-    compatibility: ["Wuling", "Hyundai", "BYD", "Neta", "MG"],
+    compatibility: [
+      { brand: "Wuling", model: "Air EV", years: "2022–2024" },
+      { brand: "Hyundai", model: "Ioniq 5", years: "2021–2025" },
+      { brand: "BYD", model: "Atto 3", years: "2022–2025" },
+      { brand: "Neta", model: "V", years: "2023–2025" },
+      { brand: "MG", model: "4 EV", years: "2023–2025" },
+    ],
     gallery: [
       "/placeholder-product-1.png",
       "/placeholder-product-3.png",
@@ -55,7 +61,11 @@ export const products: ProductDetailData[] = [
       { label: "Suhu Kerja", value: "-40°C s/d 650°C" },
       { label: "Low Dust", value: "Ya" },
     ],
-    compatibility: ["Wuling Air EV", "Hyundai Ioniq 5", "Ioniq 6"],
+    compatibility: [
+      { brand: "Wuling", model: "Air EV", years: "2022–2024" },
+      { brand: "Hyundai", model: "Ioniq 5", years: "2021–2025" },
+      { brand: "Hyundai", model: "Ioniq 6", years: "2023–2025" },
+    ],
     gallery: ["/placeholder-product-2.png", "/placeholder-product-4.png"],
   },
   {
@@ -74,7 +84,11 @@ export const products: ProductDetailData[] = [
       { label: "Finishing", value: "Gunmetal Matte" },
       { label: "Konstruksi", value: "Flow-Formed" },
     ],
-    compatibility: ["Hyundai Ioniq 5", "Kia EV6", "BYD Atto 3"],
+    compatibility: [
+      { brand: "Hyundai", model: "Ioniq 5", years: "2021–2025" },
+      { brand: "Kia", model: "EV6", years: "2022–2025" },
+      { brand: "BYD", model: "Atto 3", years: "2022–2025" },
+    ],
     gallery: [
       "/placeholder-product-3.png",
       "/placeholder-product-1.png",
@@ -95,7 +109,11 @@ export const products: ProductDetailData[] = [
       { label: "Anti Air", value: "Ya" },
       { label: "Isi", value: "Depan + Belakang + Bagasi" },
     ],
-    compatibility: ["Wuling Air EV", "Wuling BinguoEV", "Seres"],
+    compatibility: [
+      { brand: "Wuling", model: "Air EV", years: "2022–2024" },
+      { brand: "Wuling", model: "BinguoEV", years: "2023–2025" },
+      { brand: "Seres", model: "E1", years: "2023–2025" },
+    ],
     gallery: ["/placeholder-product-4.png", "/placeholder-product-2.png"],
   },
   {
@@ -113,7 +131,7 @@ export const products: ProductDetailData[] = [
       { label: "Layar", value: "7\" Touchscreen" },
       { label: "Konektivitas", value: "WiFi / RS485 / OCPP 1.6" },
     ],
-    compatibility: ["Universal CCS2"],
+    compatibility: [{ brand: "Universal", model: "CCS2" }],
     gallery: ["/placeholder-product-5.png", "/placeholder-product-3.png"],
   },
   {
@@ -130,7 +148,12 @@ export const products: ProductDetailData[] = [
       { label: "Airbag Ready", value: "Ya" },
       { label: "Isi", value: "Full-Set 5 Kursi" },
     ],
-    compatibility: ["Wuling", "Hyundai", "MG", "Chery"],
+    compatibility: [
+      { brand: "Wuling", model: "Air EV", years: "2022–2024" },
+      { brand: "Hyundai", model: "Ioniq 5", years: "2021–2025" },
+      { brand: "MG", model: "4 EV", years: "2023–2025" },
+      { brand: "Chery", model: "Omoda E5", years: "2024–2025" },
+    ],
     gallery: ["/placeholder-product-6.png", "/placeholder-product-4.png"],
   },
   {
@@ -147,7 +170,10 @@ export const products: ProductDetailData[] = [
       { label: "Pemasangan", value: "3M Tape + Bracket" },
       { label: "Warna", value: "Carbon Gloss" },
     ],
-    compatibility: ["Hyundai Ioniq 5", "BYD Seal"],
+    compatibility: [
+      { brand: "Hyundai", model: "Ioniq 5", years: "2021–2025" },
+      { brand: "BYD", model: "Seal", years: "2023–2025" },
+    ],
     gallery: ["/placeholder-product-1.png", "/placeholder-product-5.png"],
   },
   {
@@ -165,7 +191,7 @@ export const products: ProductDetailData[] = [
       { label: "Panjang", value: "5 meter" },
       { label: "Rating", value: "IP54" },
     ],
-    compatibility: ["Universal Type 2"],
+    compatibility: [{ brand: "Universal", model: "Type 2" }],
     gallery: ["/placeholder-product-2.png", "/placeholder-product-6.png"],
   },
 ];

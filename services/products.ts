@@ -3,12 +3,13 @@ import { endpoints } from "@/lib/endpoint";
 import { withFallback } from "@/lib/api-fallback";
 import { flattenPage } from "@/lib/paginate";
 import type { ApiPaginated } from "@/types/api/common";
-import type { ApiProductCard, ApiProductDetail } from "@/types/api/product";
+import type { ApiProductCard, ApiProductDetail, ApiVehicleFitment } from "@/types/api/product";
 import type {
   ProductBadge,
   ProductCardData,
   ProductCategory,
   ProductDetailData,
+  VehicleFitment,
 } from "@/types/ui/product";
 import { isRecentlyAdded } from "@/types/ui/product";
 import * as mock from "@/features/products/data";
@@ -26,6 +27,20 @@ import { PRODUCTS_PER_PAGE, type ProductFilters } from "@/features/products/data
 const ALLOWED_SORTS = new Set(["terbaru", "termurah", "termahal"]);
 
 const toBadge = (b: string | null): ProductBadge | undefined => (b ? (b as ProductBadge) : undefined);
+
+/**
+ * Map API fitments → UI fitments. Tolerant of the legacy `string[]` shape (a
+ * bare vehicle name) so older backend records / cached payloads still render.
+ */
+export function toFitments(raw: ApiVehicleFitment[] | string[] | null | undefined): VehicleFitment[] {
+  if (!raw) return [];
+  return raw
+    .map((f): VehicleFitment => {
+      if (typeof f === "string") return { brand: f.trim(), model: "" };
+      return { brand: f.brand.trim(), model: f.model.trim(), years: f.years?.trim() || undefined };
+    })
+    .filter((f) => f.brand || f.model);
+}
 
 function toCard(p: ApiProductCard): ProductCardData {
   return {
@@ -45,7 +60,7 @@ function toDetail(p: ApiProductDetail): ProductDetailData {
     ...toCard(p),
     description: p.description,
     specs: p.specs,
-    compatibility: p.compatibility,
+    compatibility: toFitments(p.compatibility),
     gallery: p.gallery,
   };
 }

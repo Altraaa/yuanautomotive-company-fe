@@ -8,6 +8,7 @@ import type { AdminProductDetail, AdminProductRow } from "@/types/ui/admin";
 import type { ProductBadge, ProductCategory } from "@/types/ui/product";
 import type { ProductFormValues } from "@/features/admin/product-schema";
 import type { CategoryOption } from "@/services/categories";
+import { toFitments } from "@/services/products";
 import * as mock from "@/features/admin/data";
 
 /**
@@ -46,7 +47,7 @@ function toDetail(d: ApiAdminProductDetail): AdminProductDetail {
     stock: d.stock,
     description: d.description,
     specs: d.specs,
-    compatibility: d.compatibility,
+    compatibility: toFitments(d.compatibility),
     galleryMedia: d.gallery_media ?? [],
     featured: d.is_featured,
     views: d.view_count,
@@ -127,7 +128,14 @@ export function toProductPayload(
     stock: Number(digits(v.stock) || "0"),
     badge: v.badge ? v.badge.replace("-", "_") : undefined, // "PRE-ORDER" → "PRE_ORDER"
     description: v.description,
-    compatibility: v.compatibility,
+    // Drop blank rows and normalise: brand + model required, years optional.
+    compatibility: v.compatibility
+      .map((f) => ({
+        brand: f.brand.trim(),
+        model: f.model.trim(),
+        years: f.years?.trim() || undefined,
+      }))
+      .filter((f) => f.brand && f.model),
     specs: v.specs
       .filter((s) => s.label && s.value)
       .map((s, i) => ({ label: s.label, value: s.value, sort_order: i })),
