@@ -1,7 +1,6 @@
 import { apiClient, ApiError } from "@/services/api";
 import { endpoints } from "@/lib/endpoint";
 import { withFallback } from "@/lib/api-fallback";
-import { flattenPage } from "@/lib/paginate";
 import type { ApiPaginated } from "@/types/api/common";
 import type { ApiProductCard, ApiProductDetail, ApiVehicleFitment } from "@/types/api/product";
 import type {
@@ -25,6 +24,12 @@ import { PRODUCTS_PER_PAGE, type ProductFilters } from "@/features/products/data
 
 /** Sort tokens the backend accepts (`@IsIn` there → invalid values 400). */
 const ALLOWED_SORTS = new Set(["terbaru", "termurah", "termahal"]);
+
+/**
+ * Backend max page size (`@Max(100)` on the list DTO). We fetch the whole
+ * filtered set at this ceiling and paginate in the RSC — see `queryProducts`.
+ */
+const CATALOG_FETCH_LIMIT = 100;
 
 const toBadge = (b: string | null): ProductBadge | undefined => (b ? (b as ProductBadge) : undefined);
 
@@ -71,11 +76,18 @@ function toDetail(p: ApiProductDetail): ProductDetailData {
 }
 
 /**
- * Filter + sort + paginate the catalog — all server-side. Search params from
- * the URL (category, price range, sort, page) are forwarded as query params;
- * the backend filters at the DB level and returns the correct `meta.total`.
- * An unrecognised `sort` is dropped (the backend would 400 on it). The mock
- * fallback mirrors this in memory when the backend is down.
+ * Filter + sort + paginate the catalog. Category filter + sort still run
+ * server-side (DB level), but pagination is done here in the RSC.
+ *
+ * Why not server-side paging: the backend's paginated `meta.total` /
+ * `meta.total_pages` is unreliable for small limits — it varies by `page`/`limit`
+ * (e.g. `limit=10` reports `total: 7` on page 1 and `total: 17` on page 2 for the
+ * same 36-item catalog), so the FE saw a truncated list with no pager. The count
+ * IS correct at the DTO max (`limit=100`), so we fetch the full filtered set once
+ * and slice it here with a correct total. Revert to `flattenPage` + server paging
+ * once the backend count query is fixed. Ceiling: a single filtered result set
+ * over 100 items would be capped — fine for the current catalog, revisit if it
+ * grows past that. The mock fallback mirrors this in memory when the backend is down.
  */
 export function queryProducts(filters: ProductFilters) {
   return withFallback(
@@ -88,11 +100,15 @@ export function queryProducts(filters: ProductFilters) {
           price_min: filters.priceMin,
           price_max: filters.priceMax,
           sort: filters.sort && ALLOWED_SORTS.has(filters.sort) ? filters.sort : undefined,
-          page: filters.page ?? 1,
-          limit: PRODUCTS_PER_PAGE,
+          limit: CATALOG_FETCH_LIMIT,
         },
       });
-      return flattenPage(res, toCard);
+      const all = res.items.map(toCard);
+      const total = all.length;
+      const totalPages = Math.max(1, Math.ceil(total / PRODUCTS_PER_PAGE));
+      const page = Math.min(Math.max(1, filters.page ?? 1), totalPages);
+      const start = (page - 1) * PRODUCTS_PER_PAGE;
+      return { items: all.slice(start, start + PRODUCTS_PER_PAGE), total, totalPages, page };
     },
     () => mock.queryProducts(filters)
   );
@@ -138,10 +154,12 @@ export function getRelatedProducts(
 ): Promise<ProductCardData[]> {
   return withFallback(
     async () => {
+      // Fetch the category set at the reliable ceiling (small limits under-fill
+      // due to the backend list bug — see `queryProducts`) and slice 4 here.
       const res = await apiClient.get<ApiPaginated<ApiProductCard>>(endpoints.products.list, {
         revalidate: 3600,
         tags: ["products"],
-        query: { category: category.toLowerCase(), limit: 5 },
+        query: { category: category.toLowerCase(), limit: CATALOG_FETCH_LIMIT },
       });
       return res.items
         .map(toCard)
