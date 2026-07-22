@@ -50,7 +50,10 @@ export const metadata: Metadata = {
     description: site.description,
   },
   robots: { index: true, follow: true },
-  alternates: { canonical: site.url },
+  // No global `alternates.canonical` fallback on purpose: Next doesn't deep-merge
+  // `alternates`, so a page without its own canonical would inherit the homepage
+  // URL (a wrong, non-self-referencing canonical). Every indexable page sets its
+  // OWN self-referencing canonical; noindex pages (admin/login) need none.
   other: {
     "geo.region": site.geo.region,
     "geo.placename": site.geo.placename,
